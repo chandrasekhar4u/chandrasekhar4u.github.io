@@ -1,0 +1,17 @@
+_site/
+.sass-cache/
+_drafts/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Backups
+*.bak
+
+# OSX
+.DS_store
+
+# RCS
+RCS
