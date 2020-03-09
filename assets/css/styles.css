@@ -304,11 +304,11 @@ body * { visibility: hidden; }
   visibility: visible;
 }
 .main-wrapper .section {
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 .main-wrapper {
     background: #fff;
-    padding: 35px;
+    padding: 30px;
     padding-right: 32%;
 }
 .sidebar-wrapper .container-block {
