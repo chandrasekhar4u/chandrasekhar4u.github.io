@@ -294,6 +294,19 @@ p {
     top: 1px;
   }
 }
+
+/* Progress bar ease on page load */
+.progress .progress-bar {
+    animation-name: animateBar;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in;
+    animation-duration: .4s;
+}
+@keyframes animateBar {
+    0% {transform: translateX(-100%);}
+    100% {transform: translateX(0);}
+}
+
 /* Large devices (large desktops, 1200px and up) */
 /* Ex-Large devices (large desktops, 1200px and up) */
 
@@ -304,11 +317,11 @@ body * { visibility: hidden; }
   visibility: visible;
 }
 .main-wrapper .section {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 .main-wrapper {
     background: #fff;
-    padding: 30px;
+    padding: 28px;
     padding-right: 32%;
 }
 .sidebar-wrapper .container-block {
@@ -316,3 +329,5 @@ body * { visibility: hidden; }
 }
 
 }
+
+
