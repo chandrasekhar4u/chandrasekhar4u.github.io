@@ -1,5 +1,11 @@
 {
- "name": "Chandra CV",
+ "name": "kakarla.in",
+  "short_name": "kakarla.in",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#3740ff",
+  "theme_color": "#fff",
  "icons": [
   {
    "src": "\/assets\/images\/android-icon-36x36.png",
@@ -36,6 +42,11 @@
    "sizes": "192x192",
    "type": "image\/png",
    "density": "4.0"
-  }
+  },
+    {
+      "src": "\/assets\/images\/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
  ]
 }
