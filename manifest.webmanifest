@@ -1,0 +1,21 @@
+{
+  "name": "kakarla.in",
+  "short_name": "kakarla.in",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#3740ff",
+  "theme_color": "#fff",
+  "icons": [
+    {
+      "src": "/assets/images/android-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/chandrasekhar.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+  }
