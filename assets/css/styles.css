@@ -70,7 +70,9 @@ p {
   color: #fff;
 }
 .img-circle {
-    border-radius: 50%;
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
 }
 .sidebar-wrapper .name {
   font-size: 32px;
