@@ -174,7 +174,11 @@ Currently no known issues. All tests pass successfully.
 ## 🔄 Continuous Testing
 
 ### GitHub Actions Integration
-Consider adding this workflow for automated testing:
+This repository includes automated testing via GitHub Actions with the following workflow:
+
+**Workflow File**: `.github/workflows/test.yml`
+
+The workflow automatically runs on every push and pull request, executing the complete test suite across multiple browsers.
 
 ```yaml
 name: Theme Toggle Tests
