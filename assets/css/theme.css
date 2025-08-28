@@ -101,11 +101,13 @@ body {
   background: var(--background);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
-  padding: 30px;
+  padding: var(--spacing-xl);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-display: swap;
   transition: background-color var(--transition-base), color var(--transition-base);
+  min-height: 100vh;
+  scroll-behavior: smooth;
 }
 
 /* Fluid Typography */
@@ -357,6 +359,8 @@ button:focus-visible,
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: var(--spacing-sm);
+  position: relative;
 }
 
 .skillset .progress-bar {
@@ -364,6 +368,24 @@ button:focus-visible,
   background: linear-gradient(45deg, var(--success), var(--primary-color));
   border-radius: var(--radius-md);
   transition: width var(--transition-slow) ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: var(--spacing-xs);
+  color: var(--background-alt);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Ensure progress bars are visible */
+.progress-bar[style*="width"] {
+  min-width: 2px;
+}
+
+/* Add pattern for striped effect */
+.progress-bar-striped {
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-size: 1rem 1rem;
 }
 
 /* Respect reduced motion preference */
@@ -511,11 +533,42 @@ button:focus-visible,
     width: 100%;
     min-height: auto;
     padding-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
   }
   
   .main-wrapper {
     padding: var(--spacing-xl);
     margin-right: 0;
+  }
+  
+  .main-wrapper .time {
+    position: static !important;
+    display: block !important;
+    margin-top: var(--spacing-xs) !important;
+    color: var(--text-muted) !important;
+  }
+  
+  .main-wrapper .upper-row {
+    margin-bottom: 0 !important;
+  }
+  
+  .theme-toggle {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 44px;
+    height: 44px;
+  }
+  
+  .skillset .level-title {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: var(--spacing-xs) !important;
+  }
+  
+  .skillset .progress {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: var(--spacing-md) !important;
   }
   
   .main-wrapper .time {
