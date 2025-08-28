@@ -193,14 +193,6 @@
 
     // Add event listener for theme toggle
     themeToggle.addEventListener('click', toggleTheme);
-    
-    // Handle keyboard navigation
-    themeToggle.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleTheme();
-      }
-    });
 
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
