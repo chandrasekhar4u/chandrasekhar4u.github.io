@@ -1,0 +1,21 @@
+# Test artifacts
+test-results/
+playwright-report/
+test-results.json
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Temporary files
+/tmp/
+.DS_Store
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
