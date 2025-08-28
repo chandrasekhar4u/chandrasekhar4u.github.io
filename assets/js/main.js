@@ -145,11 +145,21 @@
 
     // Get current theme from localStorage or system preference
     function getCurrentTheme() {
-      var savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        return savedTheme;
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+          return savedTheme;
+        }
+      } catch (e) {
+        console.error('Error accessing localStorage:', e);
       }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      
+      try {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      } catch (e) {
+        console.error('Error accessing matchMedia:', e);
+        return 'light'; // Default fallback
+      }
     }
 
     // Apply theme to document
@@ -171,29 +181,49 @@
 
     // Toggle theme
     function toggleTheme() {
-      var currentTheme = getCurrentTheme();
-      var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      console.log('Toggling theme from', currentTheme, 'to', newTheme);
-      localStorage.setItem('theme', newTheme);
-      applyTheme(newTheme);
-      
-      // Announce theme change to screen readers
-      var announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
-      announceToScreenReader(announcement);
+      try {
+        var currentTheme = getCurrentTheme();
+        var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        console.log('Toggling theme from', currentTheme, 'to', newTheme);
+        
+        try {
+          localStorage.setItem('theme', newTheme);
+        } catch (e) {
+          console.error('Error saving theme to localStorage:', e);
+        }
+        
+        applyTheme(newTheme);
+        
+        // Announce theme change to screen readers
+        var announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
+        announceToScreenReader(announcement);
+      } catch (e) {
+        console.error('Error in toggleTheme:', e);
+      }
     }
 
     // Announce changes to screen readers
     function announceToScreenReader(message) {
-      var announcement = document.createElement('div');
-      announcement.setAttribute('aria-live', 'polite');
-      announcement.setAttribute('aria-atomic', 'true');
-      announcement.className = 'visually-hidden';
-      announcement.textContent = message;
-      document.body.appendChild(announcement);
-      
-      setTimeout(function() {
-        document.body.removeChild(announcement);
-      }, 1000);
+      try {
+        var announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.className = 'visually-hidden';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+        
+        setTimeout(function() {
+          try {
+            if (announcement.parentNode) {
+              document.body.removeChild(announcement);
+            }
+          } catch (e) {
+            console.error('Error removing announcement element:', e);
+          }
+        }, 1000);
+      } catch (e) {
+        console.error('Error creating announcement element:', e);
+      }
     }
 
     // Initialize theme on page load
@@ -205,19 +235,31 @@
     themeToggle.addEventListener('click', toggleTheme);
 
     // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-      // Only auto-switch if user hasn't manually set a preference
-      if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches ? 'dark' : 'light');
-      }
-    });
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        // Only auto-switch if user hasn't manually set a preference
+        try {
+          if (!localStorage.getItem('theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        } catch (err) {
+          console.error('Error in system theme change handler:', err);
+        }
+      });
+    } catch (e) {
+      console.error('Error setting up system theme listener:', e);
+    }
   }
 
   // Initialize theme toggle when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThemeToggle, { once: true });
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add a small delay to ensure FontAwesome is loaded
+      setTimeout(initThemeToggle, 100);
+    }, { once: true });
   } else {
-    initThemeToggle();
+    // Add a small delay to ensure FontAwesome is loaded
+    setTimeout(initThemeToggle, 100);
   }
 
 })();
