@@ -136,10 +136,8 @@
     var themeToggle = document.getElementById('theme-toggle');
     var themeIcon = document.getElementById('theme-icon');
     
-    console.log('Theme toggle initialization - Button:', themeToggle, 'Icon:', themeIcon);
-    
     if (!themeToggle || !themeIcon) {
-      console.error('Theme toggle elements not found! Button:', themeToggle, 'Icon:', themeIcon);
+      console.warn('Theme toggle elements not found. Theme toggle will not be available.');
       return;
     }
 
@@ -164,7 +162,6 @@
 
     // Apply theme to document
     function applyTheme(theme) {
-      console.log('Applying theme:', theme);
       if (theme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         themeIcon.className = 'fa fa-sun-o';
@@ -176,7 +173,6 @@
         themeToggle.setAttribute('aria-label', 'Switch to dark theme');
         themeToggle.setAttribute('title', 'Switch to dark theme');
       }
-      console.log('Theme applied. Current data-theme:', document.documentElement.getAttribute('data-theme'));
     }
 
     // Toggle theme
@@ -184,7 +180,6 @@
       try {
         var currentTheme = getCurrentTheme();
         var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        console.log('Toggling theme from', currentTheme, 'to', newTheme);
         
         try {
           localStorage.setItem('theme', newTheme);
@@ -228,7 +223,6 @@
 
     // Initialize theme on page load
     var initialTheme = getCurrentTheme();
-    console.log('Initializing with theme:', initialTheme);
     applyTheme(initialTheme);
 
     // Add event listener for theme toggle
