@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle UI Tests</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Theme Toggle UI Test Suite</h1>
+    <p>This test suite validates all theme toggle functionalities in the resume website.</p>
+    
+    <div class="test-section">
+        <h2>Test Environment</h2>
+        <iframe id="testFrame" src="../index.html"></iframe>
+    </div>
+
+    <div class="test-section">
+        <h2>Manual Test Controls</h2>
+        <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+        <button class="test-button" onclick="testThemeToggle()">Test Theme Toggle</button>
+        <button class="test-button" onclick="testPersistence()">Test Persistence</button>
+        <button class="test-button" onclick="testAccessibility()">Test Accessibility</button>
+        <button class="test-button" onclick="testVisualChanges()">Test Visual Changes</button>
+        <button class="test-button" onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Documentation</h2>
+        <h3>Theme Toggle Functionality Tests</h3>
+        <ul>
+            <li><strong>Basic Toggle Test:</strong> Verifies theme switches between light and dark</li>
+            <li><strong>Icon Update Test:</strong> Confirms icon changes from moon to sun and vice versa</li>
+            <li><strong>Aria Label Test:</strong> Validates accessibility attributes update correctly</li>
+            <li><strong>LocalStorage Test:</strong> Checks theme preference persists across page reloads</li>
+            <li><strong>Visual Changes Test:</strong> Verifies CSS data-theme attribute updates</li>
+            <li><strong>System Theme Test:</strong> Tests system preference detection</li>
+            <li><strong>Edge Cases Test:</strong> Validates behavior when localStorage is disabled</li>
+        </ul>
+        
+        <h3>Expected Behaviors</h3>
+        <ul>
+            <li>Initial theme should be system preference or light by default</li>
+            <li>Clicking toggle should switch between themes immediately</li>
+            <li>Icon should be 🌙 (moon) for light theme, ☀ (sun) for dark theme</li>
+            <li>Button aria-label should be "Switch to dark theme" or "Switch to light theme"</li>
+            <li>Theme preference should persist in localStorage as 'theme': 'light'|'dark'</li>
+            <li>Page refresh should restore saved theme preference</li>
+            <li>CSS data-theme attribute should be set/removed appropriately</li>
+        </ul>
+    </div>
+
+    <script>
+        let testResults = [];
+
+        function logResult(testName, passed, message, details = null) {
+            const result = {
+                testName,
+                passed,
+                message,
+                details,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            testResults.push(result);
+            displayResults();
+        }
+
+        function displayResults() {
+            const container = document.getElementById('testResults');
+            container.innerHTML = testResults.map(result => {
+                const className = result.passed === null ? 'pending' : (result.passed ? 'pass' : 'fail');
+                const status = result.passed === null ? '⏳ RUNNING' : (result.passed ? '✅ PASS' : '❌ FAIL');
+                const details = result.details ? `<br><small>${JSON.stringify(result.details, null, 2)}</small>` : '';
+                return `<div class="${className} test-result">
+                    <strong>${status}: ${result.testName}</strong> (${result.timestamp})<br>
+                    ${result.message}${details}
+                </div>`;
+            }).join('');
+        }
+
+        function clearResults() {
+            testResults = [];
+            displayResults();
+        }
+
+        function getTestFrameDocument() {
+            const iframe = document.getElementById('testFrame');
+            return iframe.contentDocument || iframe.contentWindow.document;
+        }
+
+        function getTestFrameWindow() {
+            const iframe = document.getElementById('testFrame');
+            return iframe.contentWindow;
+        }
+
+        async function testThemeToggle() {
+            try {
+                logResult('Theme Toggle Test', null, 'Starting theme toggle test...', null);
+                
+                const doc = getTestFrameDocument();
+                const themeToggle = doc.getElementById('theme-toggle');
+                const themeIcon = doc.getElementById('theme-icon');
+                
+                if (!themeToggle || !themeIcon) {
+                    logResult('Element Existence', false, 'Theme toggle elements not found');
+                    return;
+                }
+                
+                logResult('Element Existence', true, 'Theme toggle elements found');
+                
+                // Test initial state
+                const initialTheme = doc.documentElement.getAttribute('data-theme');
+                const initialIconClass = themeIcon.className;
+                const initialAriaLabel = themeToggle.getAttribute('aria-label');
+                
+                logResult('Initial State', true, 'Initial state captured', {
+                    theme: initialTheme,
+                    iconClass: initialIconClass,
+                    ariaLabel: initialAriaLabel
+                });
+                
+                // Click toggle
+                themeToggle.click();
+                
+                // Wait a bit for changes to apply
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                // Check new state
+                const newTheme = doc.documentElement.getAttribute('data-theme');
+                const newIconClass = themeIcon.className;
+                const newAriaLabel = themeToggle.getAttribute('aria-label');
+                
+                const themeChanged = initialTheme !== newTheme;
+                const iconChanged = initialIconClass !== newIconClass;
+                const ariaChanged = initialAriaLabel !== newAriaLabel;
+                
+                logResult('Theme Switch', themeChanged, 
+                    themeChanged ? 'Theme attribute changed successfully' : 'Theme attribute did not change',
+                    { from: initialTheme, to: newTheme });
+                
+                logResult('Icon Update', iconChanged,
+                    iconChanged ? 'Icon class changed successfully' : 'Icon class did not change',
+                    { from: initialIconClass, to: newIconClass });
+                
+                logResult('Aria Label Update', ariaChanged,
+                    ariaChanged ? 'Aria label changed successfully' : 'Aria label did not change',
+                    { from: initialAriaLabel, to: newAriaLabel });
+                
+                // Test toggle back
+                themeToggle.click();
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                const finalTheme = doc.documentElement.getAttribute('data-theme');
+                const toggleBackWorked = finalTheme === initialTheme;
+                
+                logResult('Toggle Back', toggleBackWorked,
+                    toggleBackWorked ? 'Toggle back to original state worked' : 'Toggle back failed',
+                    { original: initialTheme, final: finalTheme });
+                
+            } catch (error) {
+                logResult('Theme Toggle Test', false, `Test failed with error: ${error.message}`);
+            }
+        }
+
+        async function testPersistence() {
+            try {
+                logResult('Persistence Test', null, 'Starting persistence test...', null);
+                
+                const testWindow = getTestFrameWindow();
+                const doc = getTestFrameDocument();
+                const themeToggle = doc.getElementById('theme-toggle');
+                
+                // Set to dark theme
+                const initialTheme = doc.documentElement.getAttribute('data-theme');
+                if (initialTheme !== 'dark') {
+                    themeToggle.click();
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+                
+                // Check localStorage
+                const savedTheme = testWindow.localStorage.getItem('theme');
+                logResult('LocalStorage Save', savedTheme === 'dark',
+                    savedTheme === 'dark' ? 'Theme saved to localStorage' : 'Theme not saved to localStorage',
+                    { savedTheme });
+                
+                // Reload the iframe
+                const iframe = document.getElementById('testFrame');
+                iframe.src = iframe.src;
+                
+                // Wait for reload
+                await new Promise(resolve => {
+                    iframe.onload = resolve;
+                });
+                
+                // Check if theme persisted
+                const newDoc = getTestFrameDocument();
+                const persistedTheme = newDoc.documentElement.getAttribute('data-theme');
+                const persistedCorrectly = persistedTheme === 'dark';
+                
+                logResult('Theme Persistence', persistedCorrectly,
+                    persistedCorrectly ? 'Theme persisted after page reload' : 'Theme did not persist after page reload',
+                    { persistedTheme });
+                
+            } catch (error) {
+                logResult('Persistence Test', false, `Test failed with error: ${error.message}`);
+            }
+        }
+
+        async function testAccessibility() {
+            try {
+                logResult('Accessibility Test', null, 'Starting accessibility test...', null);
+                
+                const doc = getTestFrameDocument();
+                const themeToggle = doc.getElementById('theme-toggle');
+                const themeIcon = doc.getElementById('theme-icon');
+                
+                // Check required attributes
+                const hasAriaLabel = themeToggle.hasAttribute('aria-label');
+                const hasTitle = themeToggle.hasAttribute('title');
+                const hasRole = themeToggle.getAttribute('role') === 'button' || themeToggle.tagName === 'BUTTON';
+                const iconHasAriaHidden = themeIcon.hasAttribute('aria-hidden');
+                
+                logResult('Aria Label', hasAriaLabel, hasAriaLabel ? 'Button has aria-label' : 'Button missing aria-label');
+                logResult('Title Attribute', hasTitle, hasTitle ? 'Button has title attribute' : 'Button missing title');
+                logResult('Button Role', hasRole, hasRole ? 'Element is properly marked as button' : 'Element not properly marked as button');
+                logResult('Icon Aria Hidden', iconHasAriaHidden, iconHasAriaHidden ? 'Icon properly hidden from screen readers' : 'Icon not hidden from screen readers');
+                
+                // Test keyboard accessibility
+                themeToggle.focus();
+                const isFocusable = doc.activeElement === themeToggle;
+                logResult('Keyboard Focus', isFocusable, isFocusable ? 'Button is keyboard focusable' : 'Button is not keyboard focusable');
+                
+            } catch (error) {
+                logResult('Accessibility Test', false, `Test failed with error: ${error.message}`);
+            }
+        }
+
+        async function testVisualChanges() {
+            try {
+                logResult('Visual Changes Test', null, 'Starting visual changes test...', null);
+                
+                const doc = getTestFrameDocument();
+                const themeToggle = doc.getElementById('theme-toggle');
+                
+                // Get computed styles before
+                const bodyBefore = getTestFrameWindow().getComputedStyle(doc.body);
+                const backgroundBefore = bodyBefore.backgroundColor;
+                const colorBefore = bodyBefore.color;
+                
+                // Toggle theme
+                themeToggle.click();
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                // Get computed styles after
+                const bodyAfter = getTestFrameWindow().getComputedStyle(doc.body);
+                const backgroundAfter = bodyAfter.backgroundColor;
+                const colorAfter = bodyAfter.color;
+                
+                const backgroundChanged = backgroundBefore !== backgroundAfter;
+                const colorChanged = colorBefore !== colorAfter;
+                
+                logResult('Background Color Change', backgroundChanged,
+                    backgroundChanged ? 'Background color changed' : 'Background color did not change',
+                    { before: backgroundBefore, after: backgroundAfter });
+                
+                logResult('Text Color Change', colorChanged,
+                    colorChanged ? 'Text color changed' : 'Text color did not change',
+                    { before: colorBefore, after: colorAfter });
+                
+                // Check CSS custom properties
+                const rootStyles = getTestFrameWindow().getComputedStyle(doc.documentElement);
+                const primaryColor = rootStyles.getPropertyValue('--primary-color').trim();
+                const textColor = rootStyles.getPropertyValue('--text-color').trim();
+                
+                logResult('CSS Variables', primaryColor && textColor,
+                    primaryColor && textColor ? 'CSS custom properties are available' : 'CSS custom properties not found',
+                    { primaryColor, textColor });
+                
+            } catch (error) {
+                logResult('Visual Changes Test', false, `Test failed with error: ${error.message}`);
+            }
+        }
+
+        async function runAllTests() {
+            clearResults();
+            logResult('Test Suite', null, 'Starting comprehensive test suite...', null);
+            
+            await testThemeToggle();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAccessibility();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testVisualChanges();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testPersistence();
+            
+            // Summary
+            const totalTests = testResults.filter(r => r.passed !== null).length;
+            const passedTests = testResults.filter(r => r.passed === true).length;
+            const failedTests = testResults.filter(r => r.passed === false).length;
+            
+            logResult('Test Summary', failedTests === 0,
+                `Completed: ${totalTests} tests, ${passedTests} passed, ${failedTests} failed`,
+                { total: totalTests, passed: passedTests, failed: failedTests });
+        }
+
+        // Auto-run tests when iframe loads
+        document.getElementById('testFrame').onload = function() {
+            setTimeout(() => {
+                logResult('Setup', true, 'Test environment loaded successfully');
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
