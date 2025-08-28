@@ -78,7 +78,7 @@
 
   function onDOMContentLoaded() {
     var bars = Array.prototype.slice.call(
-      document.querySelectorAll('.progress .progress-bar, .level-bar-inner')
+      document.querySelectorAll('.progress .progress-bar')
     );
 
     if (bars.length === 0) return;
