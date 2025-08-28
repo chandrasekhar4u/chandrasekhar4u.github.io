@@ -1,0 +1,124 @@
+/* Performance and Accessibility Enhancements */
+
+/* Improve focus management */
+*:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Enhance button accessibility */
+button {
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improve link accessibility */
+a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Add loading states for images */
+img {
+  transition: opacity var(--transition-fast);
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Enhance skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: var(--background-alt);
+  padding: 8px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  z-index: 1001;
+  font-weight: var(--font-weight-bold);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Performance optimizations */
+.wrapper {
+  contain: layout style;
+}
+
+.sidebar-wrapper {
+  contain: layout style;
+}
+
+.main-wrapper {
+  contain: layout style;
+}
+
+/* Smooth scroll for in-page navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .wrapper {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  .progress-bar {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .theme-toggle {
+    border-width: 1px;
+  }
+}
+
+/* Container queries for modern layout */
+@supports (container-type: inline-size) {
+  .skillset {
+    container-type: inline-size;
+  }
+  
+  @container (min-width: 400px) {
+    .skillset .level-title {
+      display: inline-block;
+      width: 30%;
+      float: left;
+    }
+    
+    .skillset .progress {
+      display: inline-block;
+      width: 68%;
+      float: right;
+    }
+  }
+}
