@@ -125,4 +125,97 @@
   } else {
     onDOMContentLoaded();
   }
+
+})();
+
+/* Theme Toggle Functionality */
+(function() {
+  'use strict';
+
+  function initThemeToggle() {
+    var themeToggle = document.getElementById('theme-toggle');
+    var themeIcon = document.getElementById('theme-icon');
+    
+    if (!themeToggle || !themeIcon) return;
+
+    // Get current theme from localStorage or system preference
+    function getCurrentTheme() {
+      var savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        return savedTheme;
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Apply theme to document
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.className = 'fa fa-sun-o';
+        themeToggle.setAttribute('aria-label', 'Switch to light theme');
+        themeToggle.setAttribute('title', 'Switch to light theme');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.className = 'fa fa-moon-o';
+        themeToggle.setAttribute('aria-label', 'Switch to dark theme');
+        themeToggle.setAttribute('title', 'Switch to dark theme');
+      }
+    }
+
+    // Toggle theme
+    function toggleTheme() {
+      var currentTheme = getCurrentTheme();
+      var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', newTheme);
+      applyTheme(newTheme);
+      
+      // Announce theme change to screen readers
+      var announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
+      announceToScreenReader(announcement);
+    }
+
+    // Announce changes to screen readers
+    function announceToScreenReader(message) {
+      var announcement = document.createElement('div');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'visually-hidden';
+      announcement.textContent = message;
+      document.body.appendChild(announcement);
+      
+      setTimeout(function() {
+        document.body.removeChild(announcement);
+      }, 1000);
+    }
+
+    // Initialize theme on page load
+    applyTheme(getCurrentTheme());
+
+    // Add event listener for theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
+    
+    // Handle keyboard navigation
+    themeToggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      // Only auto-switch if user hasn't manually set a preference
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
+
+  // Initialize theme toggle when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle, { once: true });
+  } else {
+    initThemeToggle();
+  }
+
 })();
