@@ -12,7 +12,7 @@
     "test:manual": "echo 'Open tests/theme-toggle.test.html in your browser to run manual tests'"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.55.0"
   },
   "keywords": [
     "testing",
