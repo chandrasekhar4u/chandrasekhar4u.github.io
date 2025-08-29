@@ -2,7 +2,7 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
-  testDir: './tests',
+  testDir: './',
   timeout: 30000,
   expect: {
     timeout: 5000
@@ -47,9 +47,9 @@ module.exports = defineConfig({
   ],
 
   webServer: {
-    command: 'python3 -m http.server 8000',
+    command: 'cd .. && python3 -m http.server 8000',
     port: 8000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 10000
   },
 });

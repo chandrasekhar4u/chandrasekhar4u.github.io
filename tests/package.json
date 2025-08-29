@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "description": "UI tests for Chandra Sekhar's resume website theme toggle functionality",
   "scripts": {
-    "test": "playwright test",
+    "test": "npm run test:fallback || npm run test:playwright",
+    "test:playwright": "playwright test",
+    "test:fallback": "node test-runner-fallback.js",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "install:browsers": "playwright install",
     "serve": "python3 -m http.server 8000",
-    "test:manual": "echo 'Open tests/theme-toggle.test.html in your browser to run manual tests'"
+    "test:manual": "echo 'Open tests/theme-toggle.test.html in your browser to run manual tests'",
+    "test:validate": "node test-runner-fallback.js && echo '\n🔧 For full browser testing, run: npm run install:browsers && npm run test:playwright'"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0"
+    "@playwright/test": "^1.55.0"
   },
   "keywords": [
     "testing",
@@ -22,5 +25,8 @@
     "playwright"
   ],
   "author": "Chandra Sekhar Kakarla",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^26.1.0"
+  }
 }
