@@ -313,6 +313,8 @@ p {
     color-adjust: exact !important;                 /*Firefox*/
 }
 
+/* Legacy print styles - now handled by print.css */
+/*
 @media print {
 body * { visibility: hidden; }
 .wrapper * {
@@ -331,3 +333,4 @@ body * { visibility: hidden; }
 }
 
 }
+*/
