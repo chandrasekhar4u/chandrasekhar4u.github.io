@@ -1,11 +1,3 @@
-/*   
- * Template Name: Orbit - Responsive Resume/CV Template for Developers
- * Version: 2.0 - Bootstrap 5 + Modern Theme System
- * Original Author: Xiaoying Riley
- * Modernized with CSS variables, light/dark themes, and Bootstrap 5 compatibility
- * License: Creative Commons Attribution 3.0 License
- */
-
 /* ======= CSS Variables for Theme System ======= */
 :root {
   /* Colors */
@@ -54,11 +46,11 @@
   --radius-xl: 1rem;
   --radius-full: 50%;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 8px 15px rgba(0, 0, 0, 0.1);
+  /* Shadows - Enhanced for multi-layer effect */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
   
   /* Transitions */
   --transition-fast: 150ms ease-in-out;
@@ -66,23 +58,8 @@
   --transition-slow: 500ms ease-in-out;
 }
 
-/* Dark theme variables */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-color: #e2e8f0;
-    --text-secondary: #cbd5e0;
-    --text-muted: #a0aec0;
-    --background: #1a202c;
-    --background-alt: #2d3748;
-    --divider: #4a5568;
-    --primary-color: #63b3ed;
-    --primary-dark: #4299e1;
-    --primary-darker: #3182ce;
-  }
-}
-
 /* Manual dark theme toggle */
-[data-theme="dark"] {
+html[data-theme="dark"] {
   --text-color: #e2e8f0;
   --text-secondary: #cbd5e0;
   --text-muted: #a0aec0;
@@ -101,13 +78,14 @@ body {
   background: var(--background);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-md); /* Reduced padding */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-display: swap;
   transition: background-color var(--transition-base), color var(--transition-base);
   min-height: 100vh;
   scroll-behavior: smooth;
+  scroll-padding-top: 60px; /* prevents content from going under the nav bar */
 }
 
 /* Fluid Typography */
@@ -134,6 +112,8 @@ a {
 a:hover {
   text-decoration: underline;
   color: var(--primary-darker);
+  transform: translateY(-1px); /* Subtle lift on hover */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
 }
 
 a:focus {
@@ -168,6 +148,9 @@ button:focus-visible,
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: background-color var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - (var(--spacing-md) * 2)); /* Adjust wrapper min-height based on body padding */
 }
 
 .sidebar-wrapper {
@@ -175,11 +158,26 @@ button:focus-visible,
   position: absolute;
   right: 0;
   width: 30%;
-  height: 100%;
-  min-height: 800px;
+  /* min-height: 800px; */ /* Removed min-height */
   color: var(--background-alt);
   transition: background-color var(--transition-base);
 }
+
+ @media (max-width: 992px) {
+   .sidebar-wrapper {
+    width: 35%;
+  }
+ }
+
+  @media (max-width: 768px) {
+   .sidebar-wrapper {
+    width: 100%;
+    position: relative;
+    order: 1; /* place sidebar first */
+    
+    
+    }
+ }
 
 .sidebar-wrapper a {
   color: var(--background-alt);
@@ -239,12 +237,44 @@ button:focus-visible,
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  /* Make contact links more prominent */
+        font-size: var(--font-size-lg);
+        font-weight: 600; /* make the font more bolder */
+        text-decoration: underline; /* Underline for clarity */
+
+        
+
 }
 
 .sidebar-wrapper .contact-list li .fa {
   width: 18px;
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
+}
+
+/* Contact List Icons */
+.sidebar-wrapper .contact-list li.email .fa-envelope::before {
+    content: '\f0e0';
+}
+
+.sidebar-wrapper .contact-list li.website .fa-globe::before {
+    content: '\f0ac';
+}
+
+.sidebar-wrapper .contact-list li.linkedin .fa-linkedin::before {
+    content: '\f08c';
+}
+
+.sidebar-wrapper .contact-list li.github .fa-github::before {
+    content: '\f09b';
+}
+
+.sidebar-wrapper .contact-list li.stackoverflow .fa-stack-overflow::before {
+    content: '\f16c';
+}
+
+.sidebar-wrapper .contact-list li.twitter .fa-twitter::before {
+    content: '\f099';
 }
 
 .sidebar-wrapper .education-container .item {
@@ -273,14 +303,27 @@ button:focus-visible,
 
 .main-wrapper {
   background: var(--background-alt);
-  padding: var(--spacing-xxl);
+  padding: var(--spacing-xl); /* Reduced padding */
   margin-right: 30%;
-  min-height: 800px;
   transition: background-color var(--transition-base);
+  flex-grow: 1; /* Allow main-wrapper to take remaining vertical space */
 }
 
+ @media (max-width: 992px) {
+   .main-wrapper {
+    margin-right: 35%;
+  }
+ }
+
+  @media (max-width: 768px) {
+   .main-wrapper {
+    margin-right: 0;
+    padding: var(--spacing-md); }
+    order: 2;
+ }
+
 .main-wrapper .section {
-  margin-bottom: var(--spacing-xxl);
+  margin-bottom: var(--spacing-lg); /* Reduced from var(--spacing-xl) */
 }
 
 .main-wrapper .section-title {
@@ -288,7 +331,7 @@ button:focus-visible,
   font-size: var(--h4-size);
   font-weight: var(--font-weight-bold);
   color: var(--text-color);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg); /* Reduced from var(--spacing-xl) */
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -299,7 +342,7 @@ button:focus-visible,
 }
 
 .main-wrapper .item {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-md); /* Reduced from var(--spacing-lg) */
 }
 
 .main-wrapper .upper-row {
@@ -343,30 +386,43 @@ button:focus-visible,
 
 /* Skills Section */
 .skillset .item {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md); /* Reduced from var(--spacing-lg) */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .skillset .level-title {
   font-size: var(--font-size-base);
-  margin: 0 0 var(--spacing-md) 0;
+  margin: 0;
   font-weight: var(--font-weight-medium);
   color: var(--text-color);
 }
 
 .skillset .progress {
-  height: 12px;
+  height: 1.5rem; /* Increased height */
   background: var(--divider);
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   margin-bottom: var(--spacing-sm);
   position: relative;
+  flex-grow: 1;
+  margin-left: var(--spacing-md);
+}
+
+@media (max-width: 767px) {
+  .skillset .progress {
+    margin-left: 0;
+    margin-top: var(--spacing-xs);
+  }
 }
 
 .skillset .progress-bar {
   height: 100%;
   background: linear-gradient(45deg, var(--success), var(--primary-color));
-  border-radius: var(--radius-md);
+   border-radius: var(--radius-md); /* Rounded Corners */
   transition: width var(--transition-slow) ease;
   display: flex;
   align-items: center;
@@ -375,6 +431,7 @@ button:focus-visible,
   color: var(--background-alt);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  width: 0; /* set width to 0 initially */
 }
 
 /* Ensure progress bars are visible */
@@ -386,6 +443,7 @@ button:focus-visible,
 .progress-bar-striped {
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-size: 1rem 1rem;
+  animation:none; /* remove pulse */
 }
 
 /* Respect reduced motion preference */
@@ -405,15 +463,14 @@ button:focus-visible,
 
 /* Footer */
 .footer {
-  padding: var(--spacing-xl) var(--spacing-xxl);
-  background: var(--background-alt);
-  transition: background-color var(--transition-base);
+ display: none;
 }
 
 .footer .copyright {
   line-height: var(--line-height-base);
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
+  text-align: center; /* Center the text */
 }
 
 .footer .fa-heart {
@@ -442,7 +499,8 @@ button:focus-visible,
 .theme-toggle:hover {
   background: var(--primary-color);
   color: var(--background-alt);
-  transform: scale(1.1);
+  transform: scale(1.1) translateY(-2px); /* More pronounced lift and scale */
+  box-shadow: var(--shadow-lg); /* Deeper shadow on hover */
 }
 
 .theme-toggle:focus-visible {
@@ -515,132 +573,14 @@ button:focus-visible,
   .main-wrapper {
     margin-right: 0 !important;
     padding: 20pt !important;
-  }
 }
 
-/* Responsive Design */
-@media (max-width: 767px) {
-  body {
-    padding: var(--spacing-md);
-  }
-  
-  .wrapper {
-    border-radius: var(--radius-md);
-  }
-  
-  .sidebar-wrapper {
-    position: static;
-    width: 100%;
-    min-height: auto;
-    padding-bottom: var(--spacing-xl);
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  .main-wrapper {
-    padding: var(--spacing-xl);
-    margin-right: 0;
-  }
-  
-  .main-wrapper .time {
-    position: static !important;
-    display: block !important;
-    margin-top: var(--spacing-xs) !important;
-    color: var(--text-muted) !important;
-  }
-  
-  .main-wrapper .upper-row {
-    margin-bottom: 0 !important;
-  }
-  
-  .theme-toggle {
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    width: 44px;
-    height: 44px;
-  }
-  
-  .skillset .level-title {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: var(--spacing-xs) !important;
-  }
-  
-  .skillset .progress {
-    display: block !important;
-    width: 100% !important;
-    margin-bottom: var(--spacing-md) !important;
-  }
-  
-  .main-wrapper .time {
-    position: static;
-    display: block;
-    margin-top: var(--spacing-sm);
-  }
-  
-  .main-wrapper .upper-row {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .theme-toggle {
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
-    width: 40px;
-    height: 40px;
-  }
-}
-
-@media (min-width: 992px) {
-  .skillset .level-title {
-    display: inline-block;
-    float: left;
-    width: 30%;
-    margin-bottom: 0;
-  }
-  
-  .skillset .progress {
-    display: inline-block;
-    width: 70%;
-    float: left;
-    position: relative;
-    top: 1px;
-  }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  :root {
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 10px 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  a:focus,
-  button:focus,
-  .theme-toggle:focus {
-    outline: 3px solid currentColor !important;
-    outline-offset: 2px !important;
-  }
-}
-
-/* Loading Animation for Progress Bars */
-@keyframes progressLoad {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.progress-bar-animated {
-  animation: progressLoad var(--transition-slow) ease-in-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .progress-bar-animated {
-    animation: none;
-  }
+/* Make contact links even MORE prominent */
+.sidebar-wrapper .contact-list li a {
+    font-weight: 600; /* make the font more bolder */
+    text-decoration: underline; /* Underline for clarity */
+    color: white;
+    font-size: var(--font-size-lg); /* Enlarge contact links*/
+    font-weight: bolder; /* Add stronger font */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add subtle text shadow for emphasis */
 }
