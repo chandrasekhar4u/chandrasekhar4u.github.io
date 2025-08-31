@@ -446,7 +446,7 @@ button:focus-visible,
   animation:none; /* remove pulse */
 }
 
-/* Respect reduced motion preference */
+/* Respect reduced motion preference - Enhanced */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -454,10 +454,26 @@ button:focus-visible,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
   
   .skillset .progress-bar {
     transition: none !important;
+  }
+  
+  .theme-toggle,
+  .theme-toggle i,
+  .theme-toggle:hover {
+    transition: none !important;
+    transform: none !important;
+  }
+  
+  .sidebar-wrapper .profile-container .img-circle:hover {
+    transform: none !important;
+  }
+  
+  a:hover {
+    transform: none !important;
   }
 }
 
@@ -485,27 +501,68 @@ button:focus-visible,
   background: var(--background-alt);
   border: 2px solid var(--primary-color);
   border-radius: var(--radius-full);
-  width: 48px;
-  height: 48px;
+  width: 52px; /* Slightly larger for better touch targets */
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 1000;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base); /* Smoother transition */
   box-shadow: var(--shadow-md);
+  font-size: 18px; /* Ensure icon is properly sized */
+  color: var(--primary-color);
 }
 
 .theme-toggle:hover {
   background: var(--primary-color);
   color: var(--background-alt);
-  transform: scale(1.1) translateY(-2px); /* More pronounced lift and scale */
-  box-shadow: var(--shadow-lg); /* Deeper shadow on hover */
+  transform: scale(1.05) translateY(-1px); /* More subtle effect for better UX */
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-darker);
+}
+
+.theme-toggle:active {
+  transform: scale(0.98) translateY(0px); /* Pressed state feedback */
+  transition: all 0.1s ease;
 }
 
 .theme-toggle:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 4px;
+  box-shadow: var(--shadow-lg), 0 0 0 4px rgba(66, 168, 192, 0.25);
+}
+
+/* Enhanced icon transitions */
+.theme-toggle i {
+  transition: transform var(--transition-fast);
+}
+
+.theme-toggle:hover i {
+  transform: rotate(15deg); /* Subtle rotation on hover for playful interaction */
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    font-size: 16px;
+  }
+}
+
+/* Ensure proper contrast in both themes */
+html[data-theme="dark"] .theme-toggle {
+  background: var(--background-alt);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+  background: var(--primary-color);
+  color: var(--background);
 }
 
 /* Skip Link Enhancement */
