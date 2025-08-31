@@ -148,9 +148,33 @@ button:focus-visible,
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: background-color var(--transition-base);
-  display: flex;
-  flex-direction: column;
   min-height: calc(100vh - (var(--spacing-md) * 2)); /* Adjust wrapper min-height based on body padding */
+}
+
+/* Use flexbox for mobile layout only */
+@media (max-width: 768px) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* Desktop layout - override mobile styles */
+@media (min-width: 769px) {
+  .wrapper {
+    display: block; /* Ensure no flexbox on desktop */
+  }
+  
+  .sidebar-wrapper {
+    position: absolute !important;
+    width: 30% !important;
+    order: initial !important;
+  }
+  
+  .main-wrapper {
+    order: initial !important;
+    margin-right: 30% !important;
+  }
 }
 
 .sidebar-wrapper {
@@ -158,7 +182,8 @@ button:focus-visible,
   position: absolute;
   right: 0;
   width: 30%;
-  /* min-height: 800px; */ /* Removed min-height */
+  height: 100%;
+  min-height: 800px;
   color: var(--background-alt);
   transition: background-color var(--transition-base);
 }
@@ -174,8 +199,6 @@ button:focus-visible,
     width: 100%;
     position: relative;
     order: 1; /* place sidebar first */
-    
-    
     }
  }
 
@@ -303,24 +326,25 @@ button:focus-visible,
 
 .main-wrapper {
   background: var(--background-alt);
-  padding: var(--spacing-xl); /* Reduced padding */
+  padding: var(--spacing-xl);
   margin-right: 30%;
   transition: background-color var(--transition-base);
-  flex-grow: 1; /* Allow main-wrapper to take remaining vertical space */
 }
 
- @media (max-width: 992px) {
-   .main-wrapper {
+@media (max-width: 992px) {
+  .main-wrapper {
     margin-right: 35%;
   }
- }
+}
 
-  @media (max-width: 768px) {
-   .main-wrapper {
+@media (max-width: 768px) {
+  .main-wrapper {
     margin-right: 0;
-    padding: var(--spacing-md); }
+    padding: var(--spacing-md);
     order: 2;
- }
+    flex-grow: 1; /* Only use flex-grow on mobile when flexbox is active */
+  }
+}
 
 .main-wrapper .section {
   margin-bottom: var(--spacing-lg); /* Reduced from var(--spacing-xl) */
@@ -643,3 +667,55 @@ html[data-theme="dark"] .theme-toggle:hover {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add subtle text shadow for emphasis */
 }
 */
+
+/* CRITICAL: Desktop Layout Fix - MUST be at end of file */
+/* Force proper desktop layout on screens wider than 768px */
+@media (min-width: 769px) {
+  .wrapper {
+    display: block !important;
+    flex-direction: initial !important;
+  }
+  
+  .sidebar-wrapper {
+    position: absolute !important;
+    right: 0 !important;
+    width: 30% !important;
+    height: 100% !important;
+    min-height: 800px !important;
+    order: initial !important;
+    top: 0 !important;
+    bottom: auto !important;
+  }
+  
+  .main-wrapper {
+    margin-right: 30% !important;
+    order: initial !important;
+    position: static !important;
+    width: auto !important;
+  }
+}
+
+/* Extra specificity for larger screens */
+@media (min-width: 992px) {
+  .wrapper .sidebar-wrapper {
+    position: absolute !important;
+    right: 0 !important;
+    width: 30% !important;
+  }
+  
+  .wrapper .main-wrapper {
+    margin-right: 30% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  body .wrapper .sidebar-wrapper {
+    position: absolute !important;
+    right: 0 !important;
+    width: 30% !important;
+  }
+  
+  body .wrapper .main-wrapper {
+    margin-right: 30% !important;
+  }
+}
