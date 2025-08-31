@@ -77,7 +77,8 @@ html {
   }
 }
 
-/* Print optimizations */
+/* Legacy print optimizations - now handled by print.css */
+/*
 @media print {
     body * {
         visibility: hidden;
@@ -141,6 +142,7 @@ html {
         print-color-adjust: exact;
     }
 }
+*/
 
 /* High DPI display optimizations */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
