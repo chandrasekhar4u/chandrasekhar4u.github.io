@@ -93,21 +93,36 @@
         }
       }
 
+      // Debounce rapid theme toggles for better performance
+      let isToggling = false;
+      
       function toggleTheme() {
+        if (isToggling) return; // Prevent rapid toggling
+        
         try {
+          isToggling = true;
           const currentTheme = getCurrentTheme();
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          
           try {
             localStorage.setItem('theme', newTheme);
           } catch (e) {
             console.error('Error saving theme to localStorage:', e);
           }
+          
           applyTheme(newTheme);
 
           const announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
           announceToScreenReader(announcement);
+          
+          // Reset debounce flag after transition completes
+          setTimeout(() => {
+            isToggling = false;
+          }, 300); // Match CSS transition duration
+          
         } catch (e) {
           console.error('Error in toggleTheme:', e);
+          isToggling = false; // Reset on error
         }
       }
 

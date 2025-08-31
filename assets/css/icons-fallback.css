@@ -1,20 +1,21 @@
 /* FontAwesome Icons Fallback - Essential Icons Only
  * Provides fallback icons using CSS and Unicode when FontAwesome CDN is blocked
  * Uses system fonts and CSS pseudo-elements for icon rendering
+ * Updated for FontAwesome 6 compatibility
  */
 
-/* Base icon styling */
-.fa {
+/* Base icon styling for FA6 */
+.fa-solid, .fa-brands, .fa {
   display: inline-block;
   font-style: normal;
   font-variant: normal;
   text-rendering: auto;
   line-height: 1;
-  font-family: 'Font Awesome 5 Free', 'Font Awesome 5 Pro', sans-serif;
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Pro', 'Font Awesome 5 Free', 'Font Awesome 5 Pro', sans-serif;
 }
 
 /* Fallback when FontAwesome doesn't load - use Unicode symbols */
-.fa::before {
+.fa-solid::before, .fa-brands::before, .fa::before {
   font-family: inherit;
 }
 
@@ -31,17 +32,29 @@
 .fa-rocket::before { content: "🚀"; }
 .fa-heart::before { content: "💖"; }
 .fa-print::before { content: "🖨"; }
+
+/* Theme toggle icons - improved fallbacks */
+.fa-moon::before { content: "🌙"; }
+.fa-sun::before { content: "☀"; }
 .fa-moon-o::before { content: "🌙"; }
 .fa-sun-o::before { content: "☀"; }
 
 /* Theme toggle specific styling */
-.theme-toggle .fa {
+.theme-toggle .fa-solid, .theme-toggle .fa {
   font-size: 1.2em;
   transition: transform 0.3s ease;
 }
 
-.theme-toggle:hover .fa {
+.theme-toggle:hover .fa-solid, .theme-toggle:hover .fa {
   transform: scale(1.1);
+}
+
+/* Ensure proper spacing for contact icons */
+.sidebar-wrapper .contact-list .fa-solid,
+.sidebar-wrapper .contact-list .fa-brands {
+  width: 18px;
+  text-align: center;
+  margin-right: 8px;
 }
 
 /* Print icon styling */
