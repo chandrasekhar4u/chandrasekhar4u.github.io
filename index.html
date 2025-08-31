@@ -33,7 +33,7 @@
     
     <!-- Preconnect to CDN -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="preconnect" href="https://use.fontawesome.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico">
@@ -50,8 +50,8 @@
     <!-- Bootstrap fallback for when CDN is blocked -->
     <link rel="stylesheet" href="assets/css/bootstrap-fallback.css">
     
-    <!-- FontAwesome Icons fallback -->
-    <link rel="stylesheet" href="assets/css/icons-fallback.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <!-- Theme CSS -->  
     <link rel="stylesheet" href="assets/css/theme.css">
@@ -85,7 +85,7 @@
 		"@type": "Person",
 		"name": "Chandra Sekhar Kakarla",
 		"jobTitle": "Software Development Senior Specialist",
-		"description": "Experienced Full Stack Developer with 11+ years in Java/J2EE, Spring, and modern web technologies",
+		"description": "Experienced Software Development Senior Specialist with 11+ years in Java/J2EE, Spring, and modern web technologies",
 		"url": "https://kakarla.in/",
 		"image": "https://kakarla.in/assets/images/chandrasekhar.webp",
 		"worksFor": {
@@ -121,13 +121,9 @@
 
 <!-- Theme Toggle Button -->
 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">
-  <i class="fa fa-moon-o" id="theme-icon" aria-hidden="true"></i>
+  <i class="fa-solid fa-moon" id="theme-icon" aria-hidden="true"></i>
 </button>
 
-<!-- Print navigation -->
-<nav style="padding-right: 32%; text-align:right;" aria-label="Print navigation">
-  <a href="javascript:window.print()" class="fa fa-print d-print-none" aria-label="Print this page"> Print </a>
-</nav>
     <div class="wrapper">
         <aside class="sidebar-wrapper" role="complementary" aria-label="Personal information and contact details">
             <div class="profile-container">
@@ -138,13 +134,13 @@
             
             <div class="contact-container container-block">
                 <ul class="list-unstyled contact-list" role="list" aria-label="Contact information">
-                    <li class="email"><em class="fa fa-envelope" aria-hidden="true"></em> <a href="mailto:connect@kakarla.in">connect@kakarla.in</a></li>
-                    <!-- <li class="phone"><em class="fa fa-phone" aria-hidden="true"></em> <a href="tel:##########">#########</a></li> -->
-                    <li class="website"><em class="fa fa-globe" aria-hidden="true"></em> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer">kakarla.in</a></li>
-                    <li class="linkedin"><em class="fa fa-linkedin" aria-hidden="true"></em> <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
-                    <li class="github"><em class="fa fa-github" aria-hidden="true"></em> <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
-                	<li class="stackoverflow"><em class="fa fa-stack-overflow" aria-hidden="true"></em> <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer">chandrasekhar</a></li>
-                	<li class="twitter"><em class="fa fa-twitter" aria-hidden="true"></em> <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">@chandrasekhar4u</a></li>
+                    <li class="email"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <a href="mailto:connect@kakarla.in">connect@kakarla.in</a></li>
+                    <!-- <li class="phone"><i class="fa-solid fa-phone" aria-hidden="true"></i> <a href="tel:##########">#########</a></li> -->
+                    <li class="website"><i class="fa-solid fa-globe" aria-hidden="true"></i> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer">kakarla.in</a></li>
+                    <li class="linkedin"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
+                    <li class="github"><i class="fa-brands fa-github" aria-hidden="true"></i> <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
+                	<li class="stackoverflow"><i class="fa-brands fa-stack-overflow" aria-hidden="true"></i> <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer">chandrasekhar</a></li>
+                	<li class="twitter"><i class="fa-brands fa-twitter" aria-hidden="true"></i> <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">@chandrasekhar4u</a></li>
                 </ul>
             </div><!--//contact-container-->
             <div class="education-container container-block">
@@ -184,14 +180,20 @@
         <main class="main-wrapper" id="main-content" role="main" aria-label="Resume content">
             
             <section class="section summary-section">
-                <h2 class="section-title"><em class="fa fa-user" aria-hidden="true"></em>Career Profile</h2>
+                <h2 class="section-title"><i class="fa-solid fa-user" aria-hidden="true"></i>Career Profile</h2>
                 <div class="summary">
-                    <p>Having 11 years of experience in developing applications using Java/J2EE, spring, and JSF MVC Frameworks. Good front end experience using Thymeleaf, JSF, HTML, jQuery, and CSS. Hands on experience in development and deployment of J2EE applications on Web logic, Glassfish, JBoss EAP and Tomcat. Able to integrate, release project with strong domain knowledge in M.R.D, Finance and Telecom, and Ability to learn quickly new technologies and methodologies.</p>
+                 <ul>
+                      <li>11+ years in Java/J2EE, Spring, JSF MVC Frameworks</li>
+                      <li>Front end experience using Thymeleaf, JSF, HTML, jQuery, and CSS</li>
+                      <li>Experience in development and deployment of J2EE applications.</li>
+                      <li> Integrate, release project with strong domain knowledge in M.R.D, Finance and Telecom.</li>
+                      <li>Ability to learn quickly new technologies and methodologies.</li>
+                 </ul>
                 </div><!--//summary-->
             </section><!--//section-->
             
             <section class="section experiences-section">
-                <h2 class="section-title"><em class="fa fa-briefcase" aria-hidden="true"></em>Experiences</h2>
+                <h2 class="section-title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i>Experiences</h2>
                
                 <div class="item">
                     <div class="meta">
@@ -223,36 +225,36 @@
             </section><!--//section-->
             
             <section class="section projects-section">
-                <h2 class="section-title"><em class="fa fa-archive" aria-hidden="true"></em>Projects</h2>
+                <h2 class="section-title"><i class="fa-solid fa-archive" aria-hidden="true"></i>Projects</h2>
                 <div class="intro">
                     <p>I got privileges to work in different projects in different domains.</p>
                 </div><!--//intro-->
                 <div class="item">
-                    <span class="project-title"><a href="https://www.wellsfargo.com" target="_blank" rel="noopener noreferrer">Wells Fargo Public Site</a></span> - <span class="project-tagline">Wells Fargo Public Site (WWW) acts as gateway for other wells Fargo applications. Details about different LOB’s are available and navigated from public site. All default or evergreen offers are displayed in the site. All the Line of Business (LOB) is a division of Wells Fargo E.g. for Lob: Mortgage, Wholesale, Retail.</span>
+                    <span class="project-title"><a href="https://www.wellsfargo.com" target="_blank" rel="noopener noreferrer">Wells Fargo Public Site</a></span> - <span class="project-tagline">Wells Fargo Public Site.</span>
                 </div><!--//item-->
                 <div class="item">
                     <span class="project-title"><a href="https://www.smartdcc.co.uk" target="_blank" rel="noopener noreferrer">DCC</a></span> - 
-                    <span class="project-tagline">The Instant Energy (IE) subsystem implements the primary functions of the Data Services Provider (DSP) is routing requests to devices via the relevant Communications Services Provider (CSP), scheduling requests, routing responses, device-scheduled readings and alerts to service users, holding the “smart” status of metering installations. </span>
+                    <span class="project-tagline">Instant Energy (IE) subsystem implements primary functions. </span>
                 </div><!--//item-->
                 <div class="item">
-                    <span class="project-title"><a href="https://support.bell.ca/Billing-and-Accounts/Billing" target="_blank" rel="noopener noreferrer">OBE Web Tool</a></span> - <span class="project-tagline">The main objective of the OBE Web tool solution is to provide a new online presentation application for the SMB market segment. This solution will support the less complex needs of SMB customer accounts to view their invoices and AR balance.</span>
+                    <span class="project-title"><a href="https://support.bell.ca/Billing-and-Accounts/Billing" target="_blank" rel="noopener noreferrer">OBE Web Tool</a></span> - <span class="project-tagline">New online presentation application.</span>
                 </div><!--//item-->
                 <div class="item">
-                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase3</a></span> - <span class="project-tagline">Prodis Entry Exit Phase3 concentrates on gas transportation shipper related chapter’s capacity, financial security and billing sections in BGE. The Prodis Entry Exit is the main Transportation application which is part of the GTMS application suite. </span>
+                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase3</a></span> - <span class="project-tagline">Gas transportation shipper.</span>
                 </div><!--//item-->
                 <div class="item">
-                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase2</a></span> - <span class="project-tagline">Prodis Entry Exit Phase2 concentrates on gas transportation core functionality in BGE. BGE are responsible for the transportation of natural gas across Ireland. The framework contains customized exception handling and logger mechanism, prodis components provide extra view handling features and screen management. The Prodis Entry Exit is the main Transportation application which is part of the GTMS application suite.</span>
+                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase2</a></span> - <span class="project-tagline">Gas transportation core functionality.</span>
                 </div><!--//item-->
             </section><!--//section-->
             
             <section class="skills-section section">
-                <h2 class="section-title"><em class="fa fa-rocket" aria-hidden="true"></em>Skills &amp; Proficiency</h2>
+                <h2 class="section-title"><i class="fa-solid fa-rocket" aria-hidden="true"></i>Skills &amp; Proficiency</h2>
                 <div class="skillset">        
                     <div class="item">
                         <h3 class="level-title" id="corejava">Core Java</h3>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-labelledby="corejava" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%; background-color: #42A8C0;">
-                                <span class="sr-only">90% proficiency</span>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="corejava" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" >
+                                <span class="visually-hidden">90% proficiency</span>
                             </div>                                      
                         </div><!--//level-bar-->                                 
                     </div><!--//item-->
@@ -260,8 +262,8 @@
 					<div class="item">
                         <h3 class="level-title" id="j2ee">J2EE</h3>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-labelledby="j2ee" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%; background-color: #42A8C0;">
-                                <span class="sr-only">85% proficiency</span>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="j2ee" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" >
+                                <span class="visually-hidden">85% proficiency</span>
                             </div>                                      
                         </div><!--//level-bar-->                                 
                     </div><!--//item-->
@@ -269,8 +271,8 @@
                     <div class="item">
                         <h3 class="level-title" id="spring">Spring Framework</h3>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-labelledby="spring" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%; background-color: #42A8C0;">
-                                <span class="sr-only">85% proficiency</span>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="spring" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" >
+                                <span class="visually-hidden">85% proficiency</span>
                             </div>                                      
                         </div><!--//level-bar-->                                 
                     </div><!--//item-->
@@ -278,8 +280,8 @@
                     <div class="item">
                         <h3 class="level-title" id="jsf">JSF Framework</h3>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-labelledby="jsf" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%; background-color: #42A8C0;">
-                                <span class="sr-only">75% proficiency</span>
+                            <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="jsf" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" >
+                                <span class="visually-hidden">75% proficiency</span>
                             </div>                                      
                         </div><!--//level-bar-->                                 
                     </div><!--//item-->
@@ -287,8 +289,8 @@
                     <div class="item">
                         <h3 class="level-title" id="js">Javascript &amp; jQuery</h3>
 						<div class="progress">
-							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-labelledby="js" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%; background-color: #42A8C0;">
-                                <span class="sr-only">70% proficiency</span>
+							<div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="js" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
+                                <span class="visually-hidden">70% proficiency</span>
                             </div>
 						</div>
 						<!--//level-bar-->                                 
@@ -300,19 +302,10 @@
         </main><!--//main-wrapper-->
     </div>
  
-    <footer class="footer d-print-none" role="contentinfo">
-        <div class="text-center">
-                <!--/* Template attribution removed as requested */-->
-        </div><!--//container-->
-    </footer><!--//footer-->
-
-    <!-- FontAwesome -->
-    <script src="https://use.fontawesome.com/5bf3965f2c.js" defer></script>
-    
     <!-- Bootstrap 5.3.x JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
     
     <!-- Custom JS -->
     <script src="assets/js/main.js" defer></script>            
 </body>
-</html> 
+</html>
