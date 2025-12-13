@@ -76,7 +76,7 @@
             announcementEl.setAttribute('aria-atomic', 'true');
             announcementEl.className = 'visually-hidden';
             // Add inline visually-hidden styles as a fallback in case the class is not defined
-            announcementEl.style.cssText = 'position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0';
+            announcementEl.style.cssText = 'position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;';
             document.body.appendChild(announcementEl);
           }
           
@@ -184,8 +184,9 @@
           if (!progressBar) return;
           
           const skillValue = progressBar.getAttribute('aria-valuenow');
-          // Set both width and transition in one cssText assignment for better performance
-          progressBar.style.cssText += 'transition:width 1s ease-in-out;width:' + skillValue + '%';
+          // Set both width and transition in one style update for better performance
+          const currentStyle = progressBar.style.cssText;
+          progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-in-out;width:' + skillValue + '%';
           progressBar.textContent = skillValue + '%'; // Show value on bar
         } catch (e) {
           console.error('Error initializing skill bar:', e, item);
