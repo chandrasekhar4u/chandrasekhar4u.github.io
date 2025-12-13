@@ -106,7 +106,19 @@
           const toast = document.createElement('div');
           toast.className = 'theme-toast theme-toast-' + type;
           toast.setAttribute('role', 'alert');
-          toast.innerHTML = '<span class="toast-icon">' + (type === 'dark' ? '🌙' : '☀️') + '</span><span class="toast-message">' + message + '</span>';
+          
+          // Create icon element
+          const iconSpan = document.createElement('span');
+          iconSpan.className = 'toast-icon';
+          iconSpan.textContent = type === 'dark' ? '🌙' : '☀️';
+          
+          // Create message element - use textContent to prevent XSS
+          const messageSpan = document.createElement('span');
+          messageSpan.className = 'toast-message';
+          messageSpan.textContent = message;
+          
+          toast.appendChild(iconSpan);
+          toast.appendChild(messageSpan);
           document.body.appendChild(toast);
           
           // Trigger animation
@@ -299,7 +311,7 @@
       const toggleBackToTop = () => {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-          if (window.pageYOffset > 300) {
+          if (window.scrollY > 300) {
             backToTopBtn.classList.add('visible');
           } else {
             backToTopBtn.classList.remove('visible');
