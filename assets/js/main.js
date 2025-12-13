@@ -66,6 +66,7 @@
 
       // Reuse announcement element for better performance
       let announcementEl;
+      let toastTimeout;
       
       function announceToScreenReader(message) {
         try {
@@ -88,6 +89,36 @@
           }, 1000);
         } catch (e) {
           console.error('Error creating announcement element:', e);
+        }
+      }
+      
+      // Modern toast notification for visual feedback
+      function showToast(message, type = 'info') {
+        try {
+          // Remove existing toast if any
+          const existingToast = document.querySelector('.theme-toast');
+          if (existingToast) {
+            existingToast.remove();
+            clearTimeout(toastTimeout);
+          }
+          
+          // Create toast element
+          const toast = document.createElement('div');
+          toast.className = 'theme-toast theme-toast-' + type;
+          toast.setAttribute('role', 'alert');
+          toast.innerHTML = '<span class="toast-icon">' + (type === 'dark' ? '🌙' : '☀️') + '</span><span class="toast-message">' + message + '</span>';
+          document.body.appendChild(toast);
+          
+          // Trigger animation
+          setTimeout(() => toast.classList.add('show'), 10);
+          
+          // Auto-hide after 2 seconds
+          toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+          }, 2000);
+        } catch (e) {
+          console.error('Error showing toast:', e);
         }
       }
 
@@ -113,6 +144,9 @@
           const announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
           announceToScreenReader(announcement);
           
+          // Show modern toast notification
+          showToast(announcement, newTheme);
+          
           // Reset debounce flag after transition completes
           setTimeout(() => {
             isToggling = false;
@@ -127,9 +161,25 @@
       // Initial apply
       const initialTheme = getCurrentTheme();
       applyTheme(initialTheme);
+      
+      // Add subtle pulse animation on first load to draw attention (modern UX pattern)
+      if (!localStorage.getItem('theme-seen')) {
+        setTimeout(() => {
+          themeToggle.classList.add('initial-pulse');
+          setTimeout(() => {
+            themeToggle.classList.remove('initial-pulse');
+            localStorage.setItem('theme-seen', 'true');
+          }, 2000);
+        }, 1000);
+      }
 
-      // Click handler
-      themeToggle.addEventListener('click', toggleTheme);
+      // Click handler with visual feedback
+      themeToggle.addEventListener('click', function() {
+        // Add click animation for tactile feedback
+        themeToggle.classList.add('clicking');
+        setTimeout(() => themeToggle.classList.remove('clicking'), 300);
+        toggleTheme();
+      });
 
       // Keyboard accessibility for non-button elements
       themeToggle.addEventListener('keydown', function(e) {
@@ -177,21 +227,54 @@
     try {
       const skillItems = document.querySelectorAll('.skillset .item');
       
-      // Use forEach with optimized approach
-      skillItems.forEach(item => {
-        try {
-          const progressBar = item.querySelector('.progress-bar');
-          if (!progressBar) return;
-          
-          const skillValue = progressBar.getAttribute('aria-valuenow');
-          // Set both width and transition in one style update for better performance
-          const currentStyle = progressBar.style.cssText;
-          progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-in-out;width:' + skillValue + '%';
-          progressBar.textContent = skillValue + '%'; // Show value on bar
-        } catch (e) {
-          console.error('Error initializing skill bar:', e, item);
-        }
-      });
+      // Check if user prefers reduced motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Use Intersection Observer for scroll-triggered animations (modern UX pattern)
+      if ('IntersectionObserver' in window && !prefersReducedMotion) {
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.3 // Trigger when 30% visible
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const progressBar = entry.target.querySelector('.progress-bar');
+              if (!progressBar || progressBar.dataset.animated === 'true') return;
+              
+              const skillValue = progressBar.getAttribute('aria-valuenow');
+              // Animate skill bar on scroll
+              const currentStyle = progressBar.style.cssText;
+              progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-out;width:' + skillValue + '%';
+              progressBar.textContent = skillValue + '%';
+              progressBar.dataset.animated = 'true';
+              
+              // Unobserve after animation
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+        
+        skillItems.forEach(item => observer.observe(item));
+      } else {
+        // Fallback for older browsers or reduced motion preference
+        skillItems.forEach(item => {
+          try {
+            const progressBar = item.querySelector('.progress-bar');
+            if (!progressBar) return;
+            
+            const skillValue = progressBar.getAttribute('aria-valuenow');
+            const currentStyle = progressBar.style.cssText;
+            const transition = prefersReducedMotion ? '' : 'transition:width 1s ease-out;';
+            progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + transition + 'width:' + skillValue + '%';
+            progressBar.textContent = skillValue + '%';
+          } catch (e) {
+            console.error('Error initializing skill bar:', e, item);
+          }
+        });
+      }
     } catch (e) {
       console.error('Error initializing skill bars:', e);
     }
@@ -199,14 +282,55 @@
 
   // Removed Interests Icon list
 
+  // Initialize Back-to-Top Button (Modern UX Pattern)
+  function initBackToTop() {
+    try {
+      // Create back-to-top button
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.id = 'back-to-top';
+      backToTopBtn.className = 'back-to-top';
+      backToTopBtn.setAttribute('aria-label', 'Scroll back to top');
+      backToTopBtn.setAttribute('title', 'Back to top');
+      backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
+      document.body.appendChild(backToTopBtn);
+      
+      // Show/hide based on scroll position
+      let scrollTimeout;
+      const toggleBackToTop = () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('visible');
+          } else {
+            backToTopBtn.classList.remove('visible');
+          }
+        }, 100); // Debounce scroll events
+      };
+      
+      window.addEventListener('scroll', toggleBackToTop, { passive: true });
+      
+      // Smooth scroll to top on click
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    } catch (e) {
+      console.error('Error initializing back-to-top button:', e);
+    }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
       setTimeout(initThemeToggle, 100);
       initSkillBars();
+      initBackToTop();
     }, { once: true });
   } else {
     setTimeout(initThemeToggle, 100);
     initSkillBars();
+    initBackToTop();
   }
 })();

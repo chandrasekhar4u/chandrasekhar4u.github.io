@@ -559,11 +559,44 @@ button:focus-visible,
 
 /* Enhanced icon transitions */
 .theme-toggle i {
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
 .theme-toggle:hover i {
   transform: rotate(15deg); /* Subtle rotation on hover for playful interaction */
+}
+
+/* Click animation for better feedback */
+@keyframes theme-toggle-click {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.theme-toggle.clicking {
+  animation: theme-toggle-click 0.3s ease-out;
+}
+
+/* Pulse animation on initial load to draw attention */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes theme-toggle-pulse {
+    0%, 100% {
+      box-shadow: var(--shadow-md);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(66, 168, 192, 0.2);
+    }
+  }
+  
+  .theme-toggle.initial-pulse {
+    animation: theme-toggle-pulse 2s ease-in-out;
+  }
 }
 
 /* Mobile-specific improvements */
