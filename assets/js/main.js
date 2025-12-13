@@ -7,8 +7,16 @@
       const themeIcon = document.getElementById('theme-icon');
 
       if (!themeToggle || !themeIcon) {
-        console.warn('Theme toggle elements not found. Theme toggle will not be available. Theme toggle will not be available.');
+        console.warn('Theme toggle elements not found. Theme toggle will not be available.');
         return;
+      }
+
+      // Cache matchMedia query for better performance
+      let darkModeQuery;
+      try {
+        darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      } catch (e) {
+        console.error('Error accessing matchMedia:', e);
       }
 
       function getCurrentTheme() {
@@ -18,23 +26,18 @@
         } catch (e) {
           console.error('Error accessing localStorage:', e);
         }
-        try {
-          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        } catch (e) {
-          console.error('Error accessing matchMedia:', e);
-          return 'light';
+        // Use cached matchMedia query
+        if (darkModeQuery) {
+          return darkModeQuery.matches ? 'dark' : 'light';
         }
+        return 'light';
       }
 
       function setIcon(isDark) {
         try {
-          if (isDark) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-          } else {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-          }
+          // Use toggle for more efficient class manipulation
+          themeIcon.classList.toggle('fa-sun', isDark);
+          themeIcon.classList.toggle('fa-moon', !isDark);
         } catch (e) {
           console.error('Error setting theme icon:', e);
         }
@@ -61,32 +64,27 @@
         }
       }
 
+      // Reuse announcement element for better performance
+      let announcementEl;
+      
       function announceToScreenReader(message) {
         try {
-          const announcement = document.createElement('div');
-          announcement.setAttribute('role', 'status');
-          announcement.setAttribute('aria-live', 'polite');
-          announcement.setAttribute('aria-atomic', 'true');
-          announcement.className = 'visually-hidden';
-          // Add inline visually-hidden styles as a fallback in case the class is not defined
-          announcement.style.position = 'absolute';
-          announcement.style.width = '1px';
-          announcement.style.height = '1px';
-          announcement.style.margin = '-1px';
-          announcement.style.padding = '0';
-          announcement.style.overflow = 'hidden';
-          announcement.style.clip = 'rect(0 0 0 0)';
-          announcement.style.whiteSpace = 'nowrap';
-          announcement.style.border = '0';
-          announcement.textContent = message;
-
-          document.body.appendChild(announcement);
+          if (!announcementEl) {
+            announcementEl = document.createElement('div');
+            announcementEl.setAttribute('role', 'status');
+            announcementEl.setAttribute('aria-live', 'polite');
+            announcementEl.setAttribute('aria-atomic', 'true');
+            announcementEl.className = 'visually-hidden';
+            // Add inline visually-hidden styles as a fallback in case the class is not defined
+            announcementEl.style.cssText = 'position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0';
+            document.body.appendChild(announcementEl);
+          }
+          
+          announcementEl.textContent = message;
+          
+          // Clear message after announcement
           setTimeout(function() {
-            try {
-              if (announcement.parentNode) document.body.removeChild(announcement);
-            } catch (e) {
-              console.error('Error removing announcement element:', e);
-            }
+            if (announcementEl) announcementEl.textContent = '';
           }, 1000);
         } catch (e) {
           console.error('Error creating announcement element:', e);
@@ -143,8 +141,7 @@
       });
 
       // Listen to system color scheme changes (with addEventListener/addListener fallback)
-      try {
-        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+      if (darkModeQuery) {
         const systemChangeHandler = function(e) {
           try {
             // Only auto-apply if user hasn't explicitly chosen a theme
@@ -156,14 +153,12 @@
           }
         };
 
-        if (typeof mql.addEventListener === 'function') {
-          mql.addEventListener('change', systemChangeHandler);
-        } else if (typeof mql.addListener === 'function') {
+        if (typeof darkModeQuery.addEventListener === 'function') {
+          darkModeQuery.addEventListener('change', systemChangeHandler);
+        } else if (typeof darkModeQuery.addListener === 'function') {
           // Safari < 14 fallback
-          mql.addListener(systemChangeHandler);
+          darkModeQuery.addListener(systemChangeHandler);
         }
-      } catch (e) {
-        console.error('Error setting up system theme listener:', e);
       }
 
       // Keep theme in sync across tabs/windows
@@ -179,41 +174,38 @@
   }
 
   function initSkillBars() {
-      try {
-    const skillItems = document.querySelectorAll('.skillset .item');
-
-    skillItems.forEach(item => {
-      try {
-        const progressBar = item.querySelector('.progress-bar');
-        const skillValue = progressBar.getAttribute('aria-valuenow');
-        progressBar.style.transition = 'width 1s ease-in-out'; // Add smooth transition
-        progressBar.style.width = skillValue + '%';
-        progressBar.textContent = skillValue + '%'; // Show value on bar
-      } catch (e) {
-        console.error('Error initializing skill bar:', e, item);
-      }
-    });
+    try {
+      const skillItems = document.querySelectorAll('.skillset .item');
+      
+      // Use forEach with optimized approach
+      skillItems.forEach(item => {
+        try {
+          const progressBar = item.querySelector('.progress-bar');
+          if (!progressBar) return;
+          
+          const skillValue = progressBar.getAttribute('aria-valuenow');
+          // Set both width and transition in one cssText assignment for better performance
+          progressBar.style.cssText += 'transition:width 1s ease-in-out;width:' + skillValue + '%';
+          progressBar.textContent = skillValue + '%'; // Show value on bar
+        } catch (e) {
+          console.error('Error initializing skill bar:', e, item);
+        }
+      });
     } catch (e) {
-        console.error('Error initializing skill bars:', e);
+      console.error('Error initializing skill bars:', e);
     }
   }
 
   // Removed Interests Icon list
 
-        initSkillBars(); // call it here
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
       setTimeout(initThemeToggle, 100);
-          initSkillBars();
-
-     // Initialize skill bars after theme toggle
+      initSkillBars();
     }, { once: true });
   } else {
     setTimeout(initThemeToggle, 100);
-          initSkillBars();
-
-     // Initialize skill bars after theme toggle
+    initSkillBars();
   }
 })();
