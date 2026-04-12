@@ -452,10 +452,10 @@
       toast.appendChild(icon);
       toast.appendChild(msg);
       document.body.appendChild(toast);
-      setTimeout(() => toast.classList.add('show'), 10);
-      setTimeout(() => {
+      setTimeout(function() { toast.classList.add('show'); }, 10);
+      setTimeout(function() {
         toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(function() { toast.remove(); }, 300);
       }, 2500);
     } catch (e) { /* ignore */ }
   }
