@@ -303,7 +303,10 @@
       backToTopBtn.className = 'back-to-top';
       backToTopBtn.setAttribute('aria-label', 'Scroll back to top');
       backToTopBtn.setAttribute('title', 'Back to top');
-      backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
+      const arrowIcon = document.createElement('i');
+      arrowIcon.className = 'fa-solid fa-arrow-up';
+      arrowIcon.setAttribute('aria-hidden', 'true');
+      backToTopBtn.appendChild(arrowIcon);
       document.body.appendChild(backToTopBtn);
       
       // Show/hide based on scroll position

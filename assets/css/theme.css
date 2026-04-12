@@ -159,24 +159,6 @@ button:focus-visible,
   }
 }
 
-/* Desktop layout - override mobile styles */
-@media (min-width: 769px) {
-  .wrapper {
-    display: block; /* Ensure no flexbox on desktop */
-  }
-  
-  .sidebar-wrapper {
-    position: absolute !important;
-    width: 30% !important;
-    order: initial !important;
-  }
-  
-  .main-wrapper {
-    order: initial !important;
-    margin-right: 30% !important;
-  }
-}
-
 .sidebar-wrapper {
   background: var(--primary-color);
   position: absolute;
@@ -260,13 +242,6 @@ button:focus-visible,
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  /* Make contact links more prominent */
-        font-size: var(--font-size-lg);
-        font-weight: 600; /* make the font more bolder */
-        text-decoration: underline; /* Underline for clarity */
-
-        
-
 }
 
 .sidebar-wrapper .contact-list li .fa {
@@ -296,8 +271,8 @@ button:focus-visible,
     content: '\f16c';
 }
 
-.sidebar-wrapper .contact-list li.twitter .fa-twitter::before {
-    content: '\f099';
+.sidebar-wrapper .contact-list li.twitter .fa-x-twitter::before {
+    content: '\e61b';
 }
 
 .sidebar-wrapper .education-container .item {
@@ -656,99 +631,35 @@ html[data-theme="dark"] .theme-toggle:hover {
   font-size: var(--font-size-base) !important;
 }
 
-/* Legacy Print Styles - now handled by print.css */
-/*
-@media print {
-  .theme-toggle,
-  .d-print-none {
-    display: none !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
-    font-size: 12pt !important;
-    padding: 0 !important;
-  }
-  
-  .wrapper {
-    background: white !important;
-    box-shadow: none !important;
-    max-width: none !important;
-  }
-  
-  .sidebar-wrapper {
-    background: #f8f9fa !important;
-    color: black !important;
-    position: static !important;
-    width: 100% !important;
-    min-height: auto !important;
-  }
-  
-  .main-wrapper {
-    margin-right: 0 !important;
-    padding: 20pt !important;
-}
-
-/* Make contact links even MORE prominent */
+/* Contact link styling */
 .sidebar-wrapper .contact-list li a {
-    font-weight: 600; /* make the font more bolder */
-    text-decoration: underline; /* Underline for clarity */
-    color: white;
-    font-size: var(--font-size-lg); /* Enlarge contact links*/
-    font-weight: bolder; /* Add stronger font */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add subtle text shadow for emphasis */
+  color: var(--background-alt);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: var(--font-weight-medium);
+  transition: opacity var(--transition-fast);
 }
-*/
 
-/* CRITICAL: Desktop Layout Fix - MUST be at end of file */
-/* Force proper desktop layout on screens wider than 768px */
+.sidebar-wrapper .contact-list li a:hover {
+  opacity: 0.85;
+}
+
+/* Desktop Layout Fix - ensures correct sidebar/main layout on wider screens */
 @media (min-width: 769px) {
   .wrapper {
     display: block !important;
-    flex-direction: initial !important;
   }
-  
+
   .sidebar-wrapper {
     position: absolute !important;
     right: 0 !important;
     width: 30% !important;
     height: 100% !important;
     min-height: 800px !important;
-    order: initial !important;
     top: 0 !important;
-    bottom: auto !important;
   }
-  
+
   .main-wrapper {
-    margin-right: 30% !important;
-    order: initial !important;
-    position: static !important;
-    width: auto !important;
-  }
-}
-
-/* Extra specificity for larger screens */
-@media (min-width: 992px) {
-  .wrapper .sidebar-wrapper {
-    position: absolute !important;
-    right: 0 !important;
-    width: 30% !important;
-  }
-  
-  .wrapper .main-wrapper {
-    margin-right: 30% !important;
-  }
-}
-
-@media (min-width: 1200px) {
-  body .wrapper .sidebar-wrapper {
-    position: absolute !important;
-    right: 0 !important;
-    width: 30% !important;
-  }
-  
-  body .wrapper .main-wrapper {
     margin-right: 30% !important;
   }
 }

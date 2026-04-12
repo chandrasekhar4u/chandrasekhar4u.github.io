@@ -75,7 +75,7 @@ test.describe('Theme Toggle Functionality', () => {
     // Test light theme (moon icon)
     const lightTheme = await page.getAttribute('html', 'data-theme');
     if (lightTheme === null || lightTheme === 'light') {
-      await expect(themeIcon).toHaveClass(/fa-moon-o/);
+      await expect(themeIcon).toHaveClass(/fa-moon/);
       await expect(themeToggle).toHaveAttribute('aria-label', /Switch to dark theme/);
     }
 
@@ -84,7 +84,7 @@ test.describe('Theme Toggle Functionality', () => {
     await page.waitForTimeout(200);
 
     // Test dark theme (sun icon)
-    await expect(themeIcon).toHaveClass(/fa-sun-o/);
+    await expect(themeIcon).toHaveClass(/fa-sun/);
     await expect(themeToggle).toHaveAttribute('aria-label', /Switch to light theme/);
   });
 
@@ -110,7 +110,7 @@ test.describe('Theme Toggle Functionality', () => {
 
     // Verify UI state matches
     const themeIcon = page.locator('#theme-icon');
-    await expect(themeIcon).toHaveClass(/fa-sun-o/);
+    await expect(themeIcon).toHaveClass(/fa-sun/);
     await expect(themeToggle).toHaveAttribute('aria-label', /Switch to light theme/);
   });
 
@@ -264,10 +264,10 @@ test.describe('Theme Toggle Functionality', () => {
 
     // Verify consistency between theme, icon, and aria-label
     if (finalTheme === 'dark') {
-      expect(iconClass).toContain('fa-sun-o');
+      expect(iconClass).toContain('fa-sun');
       expect(ariaLabel).toContain('Switch to light theme');
     } else {
-      expect(iconClass).toContain('fa-moon-o');
+      expect(iconClass).toContain('fa-moon');
       expect(ariaLabel).toContain('Switch to dark theme');
     }
   });
