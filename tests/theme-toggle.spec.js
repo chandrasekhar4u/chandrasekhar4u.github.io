@@ -22,9 +22,9 @@ test.describe('Theme Toggle Functionality', () => {
     const themeToggle = page.locator('#theme-toggle');
     await expect(themeToggle).toBeVisible();
 
-    // Check if theme icon exists
+    // Check if theme icon exists and has expected class
     const themeIcon = page.locator('#theme-icon');
-    await expect(themeIcon).toBeVisible();
+    await expect(themeIcon).toHaveClass(/fa-solid/);
 
     // Check if button has proper accessibility attributes
     await expect(themeToggle).toHaveAttribute('aria-label');
@@ -163,7 +163,7 @@ test.describe('Theme Toggle Functionality', () => {
     
     // Press Enter to activate
     await page.keyboard.press('Enter');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(400); // Wait longer than the 300ms debounce
 
     const newTheme = await page.getAttribute('html', 'data-theme');
     expect(newTheme).not.toBe(initialTheme);
@@ -171,7 +171,7 @@ test.describe('Theme Toggle Functionality', () => {
     // Test with Space key
     await themeToggle.focus();
     await page.keyboard.press('Space');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(400); // Wait longer than the 300ms debounce
 
     const finalTheme = await page.getAttribute('html', 'data-theme');
     expect(finalTheme).toBe(initialTheme);
@@ -297,9 +297,10 @@ test.describe('Theme Toggle Functionality', () => {
     const themeWithLightPreference = await page.getAttribute('html', 'data-theme');
     
     // Verify system preferences are respected
-    // Note: The actual behavior depends on the CSS media query implementation
-    expect(typeof themeWithDarkPreference).toBe('string');
-    expect(typeof themeWithLightPreference).toBe('string');
+    // Dark preference should apply dark theme
+    expect(themeWithDarkPreference).toBe('dark');
+    // Light preference: data-theme is not set (removeAttribute) so it's null, not 'dark'
+    expect(themeWithLightPreference).not.toBe('dark');
   });
 });
 

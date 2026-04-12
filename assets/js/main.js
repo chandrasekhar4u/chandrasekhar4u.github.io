@@ -175,12 +175,14 @@
       applyTheme(initialTheme);
       
       // Add subtle pulse animation on first load to draw attention (modern UX pattern)
-      if (!localStorage.getItem('theme-seen')) {
+      let hasSeenTheme = false;
+      try { hasSeenTheme = !!localStorage.getItem('theme-seen'); } catch (e) { /* ignore */ }
+      if (!hasSeenTheme) {
         setTimeout(() => {
           themeToggle.classList.add('initial-pulse');
           setTimeout(() => {
             themeToggle.classList.remove('initial-pulse');
-            localStorage.setItem('theme-seen', 'true');
+            try { localStorage.setItem('theme-seen', 'true'); } catch (e) { /* ignore */ }
           }, 2000);
         }, 1000);
       }
