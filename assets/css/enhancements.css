@@ -84,15 +84,15 @@ html {
   right: 2rem;
   width: 48px;
   height: 48px;
-  background: var(--primary-color);
-  color: var(--background-alt);
+  background: var(--primary-dark);
+  color: #fff;
   border: none;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(66, 168, 192, 0.3);
+  box-shadow: 0 4px 12px var(--primary-glow);
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px) scale(0.9);
@@ -108,9 +108,9 @@ html {
 }
 
 .back-to-top:hover {
-  background: var(--primary-dark);
+  background: var(--primary-darker);
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 6px 20px rgba(66, 168, 192, 0.4);
+  box-shadow: 0 6px 20px var(--primary-glow);
 }
 
 .back-to-top:active {
