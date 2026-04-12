@@ -338,16 +338,27 @@
     }
   }
 
+  function updateCopyrightYear() {
+    try {
+      const yearEl = document.getElementById('current-year');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+    } catch (e) {
+      console.error('Error updating copyright year:', e);
+    }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
       setTimeout(initThemeToggle, 100);
       initSkillBars();
       initBackToTop();
+      updateCopyrightYear();
     }, { once: true });
   } else {
     setTimeout(initThemeToggle, 100);
     initSkillBars();
     initBackToTop();
+    updateCopyrightYear();
   }
 })();
