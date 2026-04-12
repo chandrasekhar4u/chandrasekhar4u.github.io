@@ -358,13 +358,83 @@
     }
   }
 
-  // ─── NEW: Print button ─────────────────────────────────────────────────
+  // ─── NEW: Print button & before/after print hooks ─────────────────────
   function initPrintButton() {
     try {
       const printBtn = document.getElementById('print-btn');
-      if (!printBtn) return;
-      printBtn.addEventListener('click', function() {
-        window.print();
+      if (printBtn) {
+        printBtn.addEventListener('click', function() {
+          window.print();
+        });
+      }
+
+      // State captured just before printing, restored afterwards.
+      var printState = null;
+
+      // beforeprint — ensure the DOM is fully ready for printing
+      window.addEventListener('beforeprint', function() {
+        try {
+          // Mark <html> so CSS can target the printing state if needed
+          document.documentElement.classList.add('printing');
+
+          // Snapshot which <details> were already open before we touch them
+          var allDetails = Array.from(document.querySelectorAll('details'));
+          var alreadyOpen = allDetails.filter(function(el) {
+            return el.hasAttribute('open');
+          });
+
+          // Force all <details> open so their content is visible in print
+          allDetails.forEach(function(el) {
+            el.setAttribute('open', '');
+          });
+
+          // Snapshot existing inline widths on skill bars, then set final values
+          var bars = Array.from(document.querySelectorAll('.skillset .progress-bar'));
+          var barWidths = bars.map(function(bar) {
+            return bar.style.width; // '' if no inline style
+          });
+          bars.forEach(function(bar) {
+            var value = bar.getAttribute('aria-valuenow');
+            if (value) {
+              bar.style.width = value + '%';
+            }
+          });
+
+          // Save everything so afterprint can restore the page to its prior state
+          printState = {
+            allDetails: allDetails,
+            alreadyOpen: alreadyOpen,
+            bars: bars,
+            barWidths: barWidths
+          };
+        } catch (e) {
+          console.error('Error in beforeprint handler:', e);
+        }
+      });
+
+      // afterprint — restore page to the state it was in before printing
+      window.addEventListener('afterprint', function() {
+        try {
+          document.documentElement.classList.remove('printing');
+
+          if (printState) {
+            // Close any <details> that were closed before we forced them open
+            printState.allDetails.forEach(function(el) {
+              if (printState.alreadyOpen.indexOf(el) === -1) {
+                el.removeAttribute('open');
+              }
+            });
+
+            // Restore original inline widths on skill bars
+            printState.bars.forEach(function(bar, i) {
+              bar.style.width = printState.barWidths[i];
+            });
+
+            printState = null;
+          }
+        } catch (e) {
+          console.error('Error in afterprint handler:', e);
+        }
       });
 
     } catch (e) {
