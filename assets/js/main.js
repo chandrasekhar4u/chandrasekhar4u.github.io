@@ -294,8 +294,6 @@
     }
   }
 
-  // Removed Interests Icon list
-
   // Initialize Back-to-Top Button (Modern UX Pattern)
   function initBackToTop() {
     try {
@@ -347,6 +345,192 @@
     }
   }
 
+  // ─── NEW: Update footer last-updated date ──────────────────────────────
+  function updateLastUpdated() {
+    try {
+      const el = document.getElementById('last-updated');
+      if (!el) return;
+      const now = new Date();
+      const opts = { month: 'long', year: 'numeric' };
+      el.textContent = now.toLocaleDateString('en-US', opts);
+    } catch (e) {
+      console.error('Error updating last-updated:', e);
+    }
+  }
+
+  // ─── NEW: Print button ─────────────────────────────────────────────────
+  function initPrintButton() {
+    try {
+      const printBtn = document.getElementById('print-btn');
+      if (!printBtn) return;
+      printBtn.addEventListener('click', function() {
+        window.print();
+      });
+
+      const downloadBtn = document.getElementById('download-resume');
+      if (!downloadBtn) return;
+      downloadBtn.addEventListener('click', function() {
+        window.print();
+      });
+    } catch (e) {
+      console.error('Error initializing print button:', e);
+    }
+  }
+
+  // ─── NEW: Copy email to clipboard ─────────────────────────────────────
+  function initCopyEmail() {
+    try {
+      const copyBtns = document.querySelectorAll('.copy-email-btn');
+      copyBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const email = btn.getAttribute('data-email');
+          if (!email) return;
+
+          const handleSuccess = function() {
+            try {
+              btn.classList.add('copied');
+              const origIcon = btn.querySelector('i');
+              if (origIcon) {
+                origIcon.className = 'fa-solid fa-check';
+              }
+              setTimeout(function() {
+                btn.classList.remove('copied');
+                if (origIcon) origIcon.className = 'fa-solid fa-copy';
+              }, 2000);
+              // Show toast
+              showEmailCopiedToast();
+            } catch (e) { /* ignore */ }
+          };
+
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(email).then(handleSuccess).catch(function() {
+              fallbackCopy(email, handleSuccess);
+            });
+          } else {
+            fallbackCopy(email, handleSuccess);
+          }
+        });
+      });
+    } catch (e) {
+      console.error('Error initializing copy email:', e);
+    }
+  }
+
+  function fallbackCopy(text, callback) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (callback) callback();
+    } catch (e) {
+      console.error('Fallback copy failed:', e);
+    }
+  }
+
+  function showEmailCopiedToast() {
+    try {
+      const existing = document.querySelector('.email-copy-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'theme-toast email-copy-toast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+
+      const icon = document.createElement('span');
+      icon.className = 'toast-icon';
+      icon.textContent = '✅';
+      const msg = document.createElement('span');
+      msg.className = 'toast-message';
+      msg.textContent = 'Email copied to clipboard!';
+
+      toast.appendChild(icon);
+      toast.appendChild(msg);
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.classList.add('show'); }, 10);
+      setTimeout(function() {
+        toast.classList.remove('show');
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 2500);
+    } catch (e) { /* ignore */ }
+  }
+
+  // ─── NEW: Scroll-Spy for Sidebar Nav ──────────────────────────────────
+  function initScrollSpy() {
+    try {
+      const navLinks = document.querySelectorAll('.sidebar-nav-link[data-target]');
+      if (!navLinks.length) return;
+
+      const sections = [];
+      navLinks.forEach(function(link) {
+        const targetClass = link.getAttribute('data-target');
+        const section = document.querySelector('.' + targetClass);
+        if (section) {
+          sections.push({ link: link, section: section });
+        }
+      });
+      if (!sections.length) return;
+
+      function updateActiveNav() {
+        const scrollPos = window.scrollY + 80; // offset for fixed header
+        let current = sections[0];
+        sections.forEach(function(item) {
+          const top = item.section.getBoundingClientRect().top + window.scrollY;
+          if (scrollPos >= top) current = item;
+        });
+        navLinks.forEach(function(l) { l.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+
+      window.addEventListener('scroll', updateActiveNav, { passive: true });
+      updateActiveNav(); // run on load
+
+      // Smooth scroll for nav links
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          const href = link.getAttribute('href');
+          if (!href || !href.startsWith('#')) return;
+          const target = document.getElementById(href.slice(1));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update active immediately
+            navLinks.forEach(function(l) { l.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      });
+    } catch (e) {
+      console.error('Error initializing scroll-spy:', e);
+    }
+  }
+
+  // ─── NEW: Ensure mobile-collapsible details stay open on desktop ───────
+  function initMobileAccordion() {
+    try {
+      function ensureOpenOnDesktop() {
+        if (window.innerWidth >= 769) {
+          document.querySelectorAll('details.mobile-collapsible').forEach(function(el) {
+            el.setAttribute('open', '');
+          });
+        }
+      }
+      ensureOpenOnDesktop();
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(ensureOpenOnDesktop, 150);
+      });
+    } catch (e) {
+      console.error('Error initializing mobile accordion:', e);
+    }
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
@@ -354,11 +538,21 @@
       initSkillBars();
       initBackToTop();
       updateCopyrightYear();
+      updateLastUpdated();
+      initPrintButton();
+      initCopyEmail();
+      initScrollSpy();
+      initMobileAccordion();
     }, { once: true });
   } else {
     setTimeout(initThemeToggle, 100);
     initSkillBars();
     initBackToTop();
     updateCopyrightYear();
+    updateLastUpdated();
+    initPrintButton();
+    initCopyEmail();
+    initScrollSpy();
+    initMobileAccordion();
   }
 })();

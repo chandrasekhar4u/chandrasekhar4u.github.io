@@ -13,8 +13,16 @@
 @media print {
     /* Hide non-print elements */
     .theme-toggle,
+    .print-btn,
     .d-print-none,
-    .skip-link {
+    .skip-link,
+    .back-to-top,
+    .sidebar-nav,
+    .copy-email-btn,
+    .btn-download-resume,
+    .details-summary,
+    .project-card-cta,
+    .availability-badge {
         display: none !important;
     }
 
@@ -144,15 +152,23 @@
     .interests-container {
         margin-bottom: 15pt !important;
         page-break-inside: avoid !important;
+        /* ensure details elements show content in print */
+        display: block !important;
     }
 
-    .container-block-title {
+    details.mobile-collapsible > *:not(summary) {
+        display: block !important;
+    }
+
+    .container-block-title,
+    .mobile-collapsible-header {
         font-size: 12pt !important;
         font-weight: bold !important;
         margin-bottom: 8pt !important;
         color: black !important;
         border-bottom: 1px solid #ddd !important;
         padding-bottom: 3pt !important;
+        list-style: none !important;
     }
 
     .education-container .item {
@@ -181,6 +197,7 @@
     .section {
         margin-bottom: 15pt !important;
         page-break-inside: avoid !important;
+        content-visibility: visible !important;
     }
 
     .section-title {
@@ -206,6 +223,10 @@
         margin-bottom: 4pt !important;
         font-size: 10pt !important;
         line-height: 1.3 !important;
+    }
+
+    .summary li::before {
+        display: none !important;
     }
 
     /* Experience section */
@@ -235,6 +256,9 @@
         position: static !important;
         margin-left: 10pt !important;
         flex-shrink: 0 !important;
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
     }
 
     .experiences-section .company {
@@ -244,39 +268,82 @@
         font-style: italic !important;
     }
 
-    .experiences-section .details p {
+    /* Show details-body content in print */
+    .details-block {
+        display: block !important;
+    }
+    .details-block > .details-body {
+        display: block !important;
+    }
+
+    .details-body p {
         font-size: 10pt !important;
         line-height: 1.3 !important;
         margin-bottom: 3pt !important;
     }
 
-    /* Projects section */
-    .projects-section .intro {
+    /* Tech tags in print */
+    .tech-tags {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 3pt !important;
+        margin-top: 4pt !important;
+    }
+    .tech-tag {
+        font-size: 8pt !important;
+        padding: 1pt 5pt !important;
+        border: 1px solid #ccc !important;
+        color: #333 !important;
+        background: #f5f5f5 !important;
+    }
+
+    /* Projects section - show as list in print */
+    .project-cards {
+        display: block !important;
+    }
+    .project-card {
         margin-bottom: 8pt !important;
+        padding: 6pt !important;
+        border: 1px solid #ddd !important;
+        background: white !important;
+        page-break-inside: avoid !important;
+        transform: none !important;
+        box-shadow: none !important;
     }
-
-    .projects-section .intro p {
-        font-size: 10pt !important;
-        margin-bottom: 5pt !important;
+    .project-card::before { display: none !important; }
+    .project-card-icon { display: none !important; }
+    .project-card-title {
+        font-size: 11pt !important;
+        font-weight: bold !important;
+        margin: 0 0 3pt !important;
     }
-
-    .projects-section .item {
-        margin-bottom: 6pt !important;
-        font-size: 10pt !important;
-        line-height: 1.3 !important;
-    }
-
-    .projects-section .project-title a {
+    .project-card-title a {
         color: black !important;
         text-decoration: none !important;
         font-weight: bold !important;
     }
-
-    .projects-section .project-tagline {
-        color: #333 !important;
+    .project-card-desc {
+        font-size: 9pt !important;
+        color: #444 !important;
+        margin: 0 !important;
+    }
+    .project-domain-badge {
+        font-size: 8pt !important;
+        background: #eee !important;
+        color: #555 !important;
+        border: 1px solid #ccc !important;
     }
 
     /* Skills section */
+    .skill-category { margin-bottom: 8pt !important; border: none !important; }
+    .skill-category-title {
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        color: #555 !important;
+        margin-bottom: 5pt !important;
+        text-transform: uppercase !important;
+    }
+
     .skills-section .skillset {
         margin: 0 !important;
     }
@@ -305,6 +372,8 @@
         margin-left: 10pt !important;
         position: relative !important;
         flex-grow: 1 !important;
+        margin-right: 0 !important;
+        overflow: visible !important;
     }
 
     .skills-section .progress-bar {
@@ -325,12 +394,27 @@
     .progress-bar::after {
         content: attr(aria-valuenow) "%" !important;
         position: absolute !important;
-        right: 3pt !important;
+        right: -30pt !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
         font-size: 8pt !important;
-        color: white !important;
+        color: #333 !important;
         font-weight: bold !important;
+    }
+    /* Remove glowing dot in print */
+    .progress-bar::before { display: none !important; }
+
+    /* Show URLs for links in print */
+    .main-wrapper a[href^="http"]::after {
+        content: " (" attr(href) ")" !important;
+        font-size: 8pt !important;
+        color: #666 !important;
+        font-weight: normal !important;
+        word-break: break-all !important;
+    }
+    .project-card-cta[href]::after,
+    .project-card-title a[href]::after {
+        content: "" !important; /* suppress for project cards to save space */
     }
 
     /* Hide screen reader text in print */
@@ -346,6 +430,10 @@
     .page-break-after {
         page-break-after: always !important;
     }
+
+    /* Section page break control */
+    .experiences-section { page-break-after: auto !important; }
+    .projects-section { page-break-before: auto !important; }
 
     /* Prevent orphans and widows */
     h1, h2, h3, h4, h5, h6 {
@@ -366,7 +454,10 @@
     }
 
     /* Ensure proper text contrast */
-    * {
+
+    /* Ensure proper text contrast - using targeted selectors instead of universal to avoid conflicts */
+    .main-wrapper,
+    .main-wrapper *:not(.project-domain-badge):not(.tech-tag) {
         color: black !important;
         background: transparent !important;
     }
