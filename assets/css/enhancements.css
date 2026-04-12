@@ -1,26 +1,10 @@
 /* Performance and Accessibility Enhancements */
 
-/* Improve focus management */
-*:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* Enhance button accessibility */
+/* Enhance button accessibility - minimum touch target size per WCAG 2.5.8 */
 button {
   cursor: pointer;
   min-height: 44px;
   min-width: 44px;
-}
-
-/* Improve standalone interactive link accessibility (touch targets) */
-.contact-list a,
-.project-title a,
-.print-btn,
-.scroll-to-top,
-.theme-toggle {
-  min-height: 44px;
 }
 
 /* Add loading states for images */
@@ -79,28 +63,202 @@ html {
   }
 }
 
-/* Print optimizations */
-@media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-  }
-  
-  .wrapper {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
-  
-  .progress-bar {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-}
-
 /* High DPI display optimizations */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
   .theme-toggle {
     border-width: 1px;
+  }
+}
+
+/* ======= Modern UI Enhancements ======= */
+
+/* Toast animation distance */
+:root {
+  --toast-slide-distance: 400px;
+}
+
+/* Back to Top Button - Modern UX Pattern */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-dark);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px var(--primary-glow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
+  font-size: 18px;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top:hover {
+  background: var(--primary-darker);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.back-to-top:active {
+  transform: translateY(-2px) scale(1);
+  transition: all 0.1s ease;
+}
+
+.back-to-top:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 4px;
+}
+
+/* Mobile optimization for back-to-top */
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+}
+
+/* Toast Notification - Modern Feedback Pattern */
+.theme-toast {
+  position: fixed;
+  top: 5rem;
+  right: 2rem;
+  background: var(--background-alt);
+  color: var(--text-color);
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateX(var(--toast-slide-distance));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  border: 1px solid var(--divider);
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 200px;
+}
+
+.theme-toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.theme-toast .toast-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.theme-toast .toast-message {
+  flex: 1;
+}
+
+/* Dark theme specific toast styling */
+html[data-theme="dark"] .theme-toast {
+  background: var(--background-alt);
+  color: var(--text-color);
+  border-color: var(--divider);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile optimization for toast */
+@media (max-width: 768px) {
+  .theme-toast {
+    top: 4rem;
+    right: 1rem;
+    left: 1rem;
+    min-width: auto;
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* Skill Bar Animations - Progressive Enhancement */
+.skillset .progress-bar {
+  will-change: width;
+}
+
+/* Loading state skeleton for progressive disclosure */
+.skillset .item.loading .progress-bar {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading-skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+html[data-theme="dark"] .skillset .item.loading .progress-bar {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+/* Smooth entrance animations for sections */
+@media (prefers-reduced-motion: no-preference) {
+  .section {
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  .section:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  
+  .section:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  
+  .section:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toast,
+  .back-to-top {
+    transition: opacity 0.1s linear, visibility 0.1s linear;
+  }
+  
+  .section {
+    animation: none;
+  }
+  
+  .skillset .item.loading .progress-bar {
+    animation: none;
   }
 }
 
