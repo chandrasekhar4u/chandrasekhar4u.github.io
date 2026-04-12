@@ -125,8 +125,8 @@
 </button>
 
 <!-- Print navigation -->
-<nav style="padding-right: 32%; text-align:right;" aria-label="Print navigation">
-  <a href="javascript:window.print()" class="fa fa-print d-print-none" aria-label="Print this page"> Print </a>
+<nav class="print-nav d-print-none" aria-label="Print navigation">
+  <a href="javascript:window.print()" class="print-btn" aria-label="Print this page"><span class="fa fa-print" aria-hidden="true"></span> Print</a>
 </nav>
     <div class="wrapper">
         <aside class="sidebar-wrapper" role="complementary" aria-label="Personal information and contact details">
@@ -302,9 +302,14 @@
  
     <footer class="footer d-print-none" role="contentinfo">
         <div class="text-center">
-                <!--/* Template attribution removed as requested */-->
-        </div><!--//container-->
+            <p class="copyright">&copy; <span id="current-year">2024</span> Chandra Sekhar Kakarla. All rights reserved.</p>
+        </div>
     </footer><!--//footer-->
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top d-print-none" id="scroll-to-top" aria-label="Scroll to top" title="Back to top">
+      <span aria-hidden="true">&#8593;</span>
+    </button>
 
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/5bf3965f2c.js" defer></script>

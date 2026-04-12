@@ -159,12 +159,67 @@
     });
   }
 
+  function initScrollToTop() {
+    var scrollBtn = document.getElementById('scroll-to-top');
+    if (!scrollBtn) return;
+
+    function toggleScrollButton() {
+      if (window.scrollY > 300) {
+        scrollBtn.classList.add('visible');
+      } else {
+        scrollBtn.classList.remove('visible');
+      }
+    }
+
+    window.addEventListener('scroll', toggleScrollButton, { passive: true });
+    toggleScrollButton();
+
+    scrollBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  function initSectionAnimations() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (prefersReducedMotion.matches) return;
+
+    var sections = document.querySelectorAll('.main-wrapper .section');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(function(section) {
+      section.style.opacity = '0';
+      observer.observe(section);
+    });
+  }
+
+  function updateCopyrightYear() {
+    var yearEl = document.getElementById('current-year');
+    if (yearEl) {
+      yearEl.textContent = new Date().getFullYear();
+    }
+  }
+
+  function initAll() {
+    initThemeToggle();
+    initScrollToTop();
+    initSectionAnimations();
+    updateCopyrightYear();
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
-      setTimeout(initThemeToggle, 100);
+      setTimeout(initAll, 100);
     }, { once: true });
   } else {
-    setTimeout(initThemeToggle, 100);
+    setTimeout(initAll, 100);
   }
 })();
