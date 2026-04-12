@@ -191,10 +191,6 @@ html[data-theme="dark"] .theme-toast {
 }
 
 /* Skill Bar Animations - Progressive Enhancement */
-.skillset .progress-bar {
-  will-change: auto;
-}
-
 /* Only apply will-change during animation to save GPU memory */
 .skillset .progress-bar[style*="transition"] {
   will-change: width;
