@@ -1,16 +1,20 @@
-/* 
- * Enhanced Print Styles for Professional Resume Layout
- * Optimized for letter-size (8.5" x 11") printing with good user experience
+/*
+ * Professional Single-Page Print Styles for Resume/CV
+ * Target: US Letter 8.5" × 11" — fits all content on one page
+ * Design: Clean two-column layout with sky-blue (#38BDF8) accent branding
  */
 
-/* Global print color adjustment */
+/* ─── Ensure accurate color rendering globally ───────────────────────────── */
 * {
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
 }
 
 @media print {
-    /* Hide non-print elements */
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       HIDE INTERACTIVE / SCREEN-ONLY ELEMENTS
+    ═══════════════════════════════════════════════════════════════════════ */
     .theme-toggle,
     .print-btn,
     .d-print-none,
@@ -20,107 +24,170 @@
     .copy-email-btn,
     .details-summary,
     .project-card-cta,
-    .availability-badge {
+    .availability-badge,
+    .interests-container,        /* save vertical space */
+    .projects-section .intro {   /* redundant intro text */
         display: none !important;
     }
 
-    /* Reset page and body for optimal printing */
+    /* ═══════════════════════════════════════════════════════════════════════
+       PAGE SIZE & MARGINS
+       Tight margins reclaim ≈ 0.4" per axis vs. the old 0.5in default
+    ═══════════════════════════════════════════════════════════════════════ */
     @page {
-        size: letter; /* 8.5" x 11" */
-        margin: 0.5in; /* Standard print margins for letter size */
+        size: letter;            /* 8.5" × 11" */
+        margin: 0.3in 0.35in;   /* top/bottom 0.3" · left/right 0.35" */
     }
 
+    /* ═══════════════════════════════════════════════════════════════════════
+       BASE RESET
+    ═══════════════════════════════════════════════════════════════════════ */
     html,
     body {
         height: auto !important;
         overflow: visible !important;
-        background: white !important;
-        color: black !important;
-        font-size: 11pt !important; /* Optimal size for print */
-        line-height: 1.4 !important;
+        background: #fff !important;
+        color: #1a1a1a !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+        font-size: 8.5pt !important;
+        line-height: 1.25 !important;
+        font-feature-settings: 'kern' 1, 'liga' 1 !important;
         padding: 0 !important;
         margin: 0 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
     }
 
-    /* Main wrapper - use full width */
+    /* Prevent any page break inside the entire document */
+    html {
+        page-break-inside: avoid !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       TWO-COLUMN WRAPPER  (30 % sidebar | 70 % main)
+    ═══════════════════════════════════════════════════════════════════════ */
     .wrapper {
         max-width: none !important;
         width: 100% !important;
-        background: white !important;
+        background: #fff !important;
         box-shadow: none !important;
         padding: 0 !important;
         margin: 0 !important;
         display: flex !important;
-        flex-direction: row !important; /* Side by side layout */
+        flex-direction: row !important;
         gap: 0 !important;
         position: relative !important;
         left: 0 !important;
         top: 0 !important;
+        page-break-inside: avoid !important;
+        contain: none !important; /* override screen-only contain: layout */
     }
 
-    /* Sidebar - left column (about 35% width) */
+    /* ─── Sidebar — 30 % ─────────────────────────────────────────────────── */
     .sidebar-wrapper {
         position: static !important;
-        width: 35% !important;
-        min-width: 35% !important;
-        max-width: 35% !important;
+        width: 30% !important;
+        min-width: 30% !important;
+        max-width: 30% !important;
         float: none !important;
-        background: #f8f9fa !important;
-        color: black !important;
+        /* Subtle professional slate-blue tint with right divider */
+        background: #f0f4f8 !important;
+        border-right: 2pt solid #38BDF8 !important;
+        color: #1a1a1a !important;
         min-height: auto !important;
-        padding: 15pt !important;
+        padding: 10pt 10pt 10pt 10pt !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
         order: 1 !important;
         page-break-inside: avoid !important;
+        contain: none !important;
     }
 
-    /* Main content - right column (about 65% width) */
+    /* ─── Main content — 70 % ───────────────────────────────────────────── */
     .main-wrapper {
         position: static !important;
-        width: 65% !important;
-        min-width: 65% !important;
-        max-width: 65% !important;
+        width: 70% !important;
+        min-width: 70% !important;
+        max-width: 70% !important;
         margin: 0 !important;
-        padding: 15pt !important;
-        background: white !important;
-        color: black !important;
+        padding: 10pt 10pt 10pt 12pt !important;
+        background: #fff !important;
+        color: #1a1a1a !important;
         flex-shrink: 0 !important;
         order: 2 !important;
+        contain: none !important;
     }
 
-    /* Profile section optimization */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — PROFILE
+    ═══════════════════════════════════════════════════════════════════════ */
     .profile-container {
         text-align: center !important;
-        margin-bottom: 15pt !important;
-        padding: 10pt !important;
-        background: rgba(0, 0, 0, 0.05) !important;
+        margin-bottom: 8pt !important;
+        padding: 6pt 6pt 8pt !important;
+        /* Accent header stripe above name */
+        border-top: 2pt solid #38BDF8 !important;
+        background: rgba(56, 189, 248, 0.06) !important;
     }
 
     .profile-container .img-circle {
-        width: 80pt !important;
-        height: 80pt !important;
-        margin-bottom: 8pt !important;
+        width: 50pt !important;
+        height: 50pt !important;
+        border-radius: 50% !important;
+        margin-bottom: 5pt !important;
+        border: 1.5pt solid #38BDF8 !important;
     }
 
     .profile-container .name {
-        font-size: 16pt !important;
-        font-weight: bold !important;
-        margin: 5pt 0 !important;
-        color: black !important;
+        font-size: 12pt !important;
+        font-weight: 700 !important;
+        margin: 4pt 0 2pt !important;
+        color: #0F172A !important;
+        letter-spacing: -0.01em !important;
     }
 
     .profile-container .tagline {
-        font-size: 12pt !important;
-        margin: 0 0 10pt 0 !important;
-        color: #333 !important;
+        font-size: 7.5pt !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+        color: #334155 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.04em !important;
     }
 
-    /* Contact section */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — SHARED SECTION TITLES
+    ═══════════════════════════════════════════════════════════════════════ */
+    .container-block-title,
+    .mobile-collapsible-header {
+        font-size: 7pt !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.07em !important;
+        color: #38BDF8 !important;
+        margin: 0 0 4pt !important;
+        padding: 0 0 2pt !important;
+        border-bottom: 0.75pt solid #CBD5E1 !important;
+        list-style: none !important;
+    }
+
+    /* ensure <details> content always shows */
+    .education-container,
+    .languages-container {
+        display: block !important;
+        margin-bottom: 8pt !important;
+        page-break-inside: avoid !important;
+    }
+
+    details.mobile-collapsible > *:not(summary) {
+        display: block !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — CONTACT
+    ═══════════════════════════════════════════════════════════════════════ */
     .contact-container {
-        margin-bottom: 15pt !important;
+        margin-bottom: 8pt !important;
     }
 
     .contact-list {
@@ -129,130 +196,166 @@
     }
 
     .contact-list li {
-        margin-bottom: 5pt !important;
-        font-size: 10pt !important;
-        line-height: 1.3 !important;
+        margin-bottom: 3pt !important;
+        font-size: 7.5pt !important;
+        line-height: 1.25 !important;
+        color: #1a1a1a !important;
+    }
+
+    /* hide FontAwesome icons — let text labels stand alone cleanly */
+    .contact-list li i {
+        display: none !important;
     }
 
     .contact-list li a {
-        color: black !important;
+        color: #0E7490 !important;
         text-decoration: none !important;
         font-weight: 600 !important;
     }
 
-    .contact-list li a:after {
+    /* suppress URL expansion for contact links */
+    .contact-list li a::after {
         content: "" !important;
     }
 
-    /* Education, Languages, Interests sections */
-    .education-container,
-    .languages-container,
-    .interests-container {
-        margin-bottom: 15pt !important;
-        page-break-inside: avoid !important;
-        /* ensure details elements show content in print */
-        display: block !important;
-    }
-
-    details.mobile-collapsible > *:not(summary) {
-        display: block !important;
-    }
-
-    .container-block-title,
-    .mobile-collapsible-header {
-        font-size: 12pt !important;
-        font-weight: bold !important;
-        margin-bottom: 8pt !important;
-        color: black !important;
-        border-bottom: 1px solid #ddd !important;
-        padding-bottom: 3pt !important;
-        list-style: none !important;
-    }
-
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — EDUCATION
+    ═══════════════════════════════════════════════════════════════════════ */
     .education-container .item {
-        margin-bottom: 10pt !important;
+        margin-bottom: 5pt !important;
     }
 
     .education-container .degree {
-        font-size: 11pt !important;
-        font-weight: bold !important;
-        margin-bottom: 2pt !important;
-        color: black !important;
+        font-size: 7.5pt !important;
+        font-weight: 700 !important;
+        margin-bottom: 1pt !important;
+        color: #0F172A !important;
     }
 
     .education-container .meta {
-        font-size: 10pt !important;
-        color: #666 !important;
-        margin-bottom: 2pt !important;
+        font-size: 7pt !important;
+        color: #475569 !important;
+        margin-bottom: 0 !important;
     }
 
     .education-container .time {
-        font-size: 9pt !important;
-        color: #888 !important;
+        font-size: 6.5pt !important;
+        color: #64748B !important;
     }
 
-    /* Main content sections */
+    /* ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — LANGUAGES (inline comma-separated to save space)
+    ═══════════════════════════════════════════════════════════════════════ */
+    .languages-container {
+        margin-bottom: 8pt !important;
+    }
+
+    .languages-container .interests-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+    .languages-container .interests-list li {
+        font-size: 7.5pt !important;
+        color: #1a1a1a !important;
+    }
+
+    .languages-container .interests-list li:not(:last-child)::after {
+        content: ", " !important;
+        margin-right: 2pt !important;
+    }
+
+    .languages-container .lang-desc {
+        color: #64748B !important;
+        font-size: 7pt !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       GLOBAL SIDEBAR TEXT CONTRAST
+    ═══════════════════════════════════════════════════════════════════════ */
+    .sidebar-wrapper * {
+        color: #1a1a1a !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN — SECTION LAYOUT
+    ═══════════════════════════════════════════════════════════════════════ */
     .section {
-        margin-bottom: 15pt !important;
+        margin-bottom: 8pt !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
         content-visibility: visible !important;
     }
 
+    /* Modern left-border accent on section titles */
     .section-title {
-        font-size: 14pt !important;
-        font-weight: bold !important;
-        margin-bottom: 10pt !important;
-        color: black !important;
-        border-bottom: 2px solid #333 !important;
-        padding-bottom: 3pt !important;
+        font-size: 9pt !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        margin: 0 0 5pt !important;
+        padding: 0 0 0 6pt !important;
+        color: #0F172A !important;
+        border-left: 3pt solid #38BDF8 !important;
+        border-bottom: none !important;
     }
 
     .section-title i {
-        display: none !important; /* Hide icons in print */
+        display: none !important;
     }
 
-    /* Career Profile */
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN — CAREER PROFILE
+    ═══════════════════════════════════════════════════════════════════════ */
     .summary ul {
         margin: 0 !important;
-        padding-left: 15pt !important;
+        padding-left: 10pt !important;
     }
 
     .summary li {
-        margin-bottom: 4pt !important;
-        font-size: 10pt !important;
-        line-height: 1.3 !important;
+        margin-bottom: 2pt !important;
+        font-size: 8pt !important;
+        line-height: 1.25 !important;
+        color: #1a1a1a !important;
     }
 
     .summary li::before {
         display: none !important;
     }
 
-    /* Experience section */
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN — EXPERIENCE
+    ═══════════════════════════════════════════════════════════════════════ */
     .experiences-section .item {
-        margin-bottom: 12pt !important;
+        margin-bottom: 6pt !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
     .experiences-section .upper-row {
-        margin-bottom: 3pt !important;
+        margin-bottom: 1pt !important;
         display: flex !important;
         justify-content: space-between !important;
         align-items: baseline !important;
     }
 
     .experiences-section .job-title {
-        font-size: 12pt !important;
-        font-weight: bold !important;
-        color: black !important;
+        font-size: 9pt !important;
+        font-weight: 700 !important;
+        color: #0F172A !important;
         margin: 0 !important;
         flex-grow: 1 !important;
     }
 
     .experiences-section .time {
-        font-size: 9pt !important;
-        color: #666 !important;
+        font-size: 7pt !important;
+        color: #475569 !important;
         position: static !important;
-        margin-left: 10pt !important;
+        margin-left: 6pt !important;
         flex-shrink: 0 !important;
         background: none !important;
         border: none !important;
@@ -260,86 +363,127 @@
     }
 
     .experiences-section .company {
-        font-size: 10pt !important;
-        color: #666 !important;
-        margin-bottom: 5pt !important;
+        font-size: 7.5pt !important;
+        color: #475569 !important;
         font-style: italic !important;
+        margin-bottom: 3pt !important;
     }
 
-    /* Show details-body content in print */
+    /* Always show details-block content */
     .details-block {
         display: block !important;
     }
+
     .details-block > .details-body {
         display: block !important;
     }
 
     .details-body p {
-        font-size: 10pt !important;
-        line-height: 1.3 !important;
-        margin-bottom: 3pt !important;
+        font-size: 8pt !important;
+        line-height: 1.25 !important;
+        margin: 0 0 2pt !important;
+        color: #1a1a1a !important;
     }
 
-    /* Tech tags in print */
+    /* ─── Tech tags ──────────────────────────────────────────────────────── */
     .tech-tags {
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 3pt !important;
-        margin-top: 4pt !important;
-    }
-    .tech-tag {
-        font-size: 8pt !important;
-        padding: 1pt 5pt !important;
-        border: 1px solid #ccc !important;
-        color: #333 !important;
-        background: #f5f5f5 !important;
+        gap: 2pt !important;
+        margin-top: 3pt !important;
     }
 
-    /* Projects section - show as list in print */
-    .project-cards {
-        display: block !important;
+    .tech-tag {
+        font-size: 6.5pt !important;
+        font-weight: 500 !important;
+        padding: 0.5pt 4pt !important;
+        border: 0.75pt solid #CBD5E1 !important;
+        border-radius: 2pt !important;
+        color: #334155 !important;
+        background: #F8FAFC !important;
     }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN — PROJECTS
+    ═══════════════════════════════════════════════════════════════════════ */
+    .project-cards {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 4pt !important;
+    }
+
     .project-card {
-        margin-bottom: 8pt !important;
-        padding: 6pt !important;
-        border: 1px solid #ddd !important;
-        background: white !important;
+        flex: 1 1 45% !important;
+        margin: 0 !important;
+        padding: 4pt 6pt !important;
+        border: 0.75pt solid #E2E8F0 !important;
+        border-left: 2pt solid #38BDF8 !important;
+        background: #fff !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
         transform: none !important;
         box-shadow: none !important;
-    }
-    .project-card::before { display: none !important; }
-    .project-card-icon { display: none !important; }
-    .project-card-title {
-        font-size: 11pt !important;
-        font-weight: bold !important;
-        margin: 0 0 3pt !important;
-    }
-    .project-card-title a {
-        color: black !important;
-        text-decoration: none !important;
-        font-weight: bold !important;
-    }
-    .project-card-desc {
-        font-size: 9pt !important;
-        color: #444 !important;
-        margin: 0 !important;
-    }
-    .project-domain-badge {
-        font-size: 8pt !important;
-        background: #eee !important;
-        color: #555 !important;
-        border: 1px solid #ccc !important;
+        border-radius: 2pt !important;
     }
 
-    /* Skills section */
-    .skill-category { margin-bottom: 8pt !important; border: none !important; }
-    .skill-category-title {
-        font-size: 10pt !important;
-        font-weight: bold !important;
-        color: #555 !important;
+    .project-card::before {
+        display: none !important;
+    }
+
+    .project-card-icon {
+        display: none !important;
+    }
+
+    .project-card-header {
+        margin-bottom: 1pt !important;
+    }
+
+    .project-domain-badge {
+        display: none !important;
+    }
+
+    .project-card-title {
+        font-size: 8pt !important;
+        font-weight: 700 !important;
+        margin: 0 0 2pt !important;
+        color: #0F172A !important;
+    }
+
+    .project-card-title a {
+        color: #0E7490 !important;
+        text-decoration: none !important;
+        font-weight: 700 !important;
+    }
+
+    /* suppress URL after project links */
+    .project-card-title a::after {
+        content: "" !important;
+    }
+
+    .project-card-desc {
+        font-size: 7.5pt !important;
+        color: #334155 !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN — SKILLS
+    ═══════════════════════════════════════════════════════════════════════ */
+    .skill-category {
         margin-bottom: 5pt !important;
+        border: none !important;
+    }
+
+    .skill-category-title {
+        font-size: 7pt !important;
+        font-weight: 700 !important;
         text-transform: uppercase !important;
+        letter-spacing: 0.06em !important;
+        color: #38BDF8 !important;
+        margin-bottom: 3pt !important;
+        border-bottom: 0.5pt solid #E2E8F0 !important;
+        padding-bottom: 1.5pt !important;
     }
 
     .skills-section .skillset {
@@ -347,95 +491,91 @@
     }
 
     .skills-section .item {
-        margin-bottom: 8pt !important;
+        margin-bottom: 4pt !important;
         display: flex !important;
         align-items: center !important;
         page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 
     .skills-section .level-title {
-        font-size: 11pt !important;
-        font-weight: bold !important;
-        color: black !important;
+        font-size: 8pt !important;
+        font-weight: 600 !important;
+        color: #0F172A !important;
         margin: 0 !important;
         width: 40% !important;
         flex-shrink: 0 !important;
     }
 
     .skills-section .progress {
-        width: 60% !important;
-        height: 8pt !important;
-        background: #f0f0f0 !important;
-        border: 1px solid #ddd !important;
-        margin-left: 10pt !important;
-        position: relative !important;
         flex-grow: 1 !important;
-        margin-right: 0 !important;
+        height: 5pt !important;
+        background: #E2E8F0 !important;
+        border: 0.5pt solid #CBD5E1 !important;
+        border-radius: 2pt !important;
+        margin-left: 6pt !important;
+        position: relative !important;
         overflow: visible !important;
     }
 
     .skills-section .progress-bar {
         height: 100% !important;
-        background: #333 !important;
+        /* Professional navy-blue fill */
+        background: #0EA5E9 !important;
+        border-radius: 2pt !important;
         position: relative !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
 
-    /* Set specific widths for progress bars based on aria-valuenow */
+    /* Progress bar widths keyed to aria-valuenow */
     .progress-bar[aria-valuenow="90"] { width: 90% !important; }
     .progress-bar[aria-valuenow="85"] { width: 85% !important; }
     .progress-bar[aria-valuenow="75"] { width: 75% !important; }
     .progress-bar[aria-valuenow="70"] { width: 70% !important; }
 
-    /* Progress bar percentage display */
+    /* Clean percentage label beside each bar */
     .progress-bar::after {
         content: attr(aria-valuenow) "%" !important;
         position: absolute !important;
-        right: -30pt !important;
+        right: -22pt !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
-        font-size: 8pt !important;
-        color: #333 !important;
-        font-weight: bold !important;
-    }
-    /* Remove glowing dot in print */
-    .progress-bar::before { display: none !important; }
-
-    /* Show URLs for links in print */
-    .main-wrapper a[href^="http"]::after {
-        content: " (" attr(href) ")" !important;
-        font-size: 8pt !important;
-        color: #666 !important;
-        font-weight: normal !important;
-        word-break: break-all !important;
-    }
-    .project-card-cta[href]::after,
-    .project-card-title a[href]::after {
-        content: "" !important; /* suppress for project cards to save space */
+        font-size: 7pt !important;
+        color: #475569 !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
     }
 
-    /* Hide screen reader text in print */
+    /* Remove animated glow dot */
+    .progress-bar::before {
+        display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       SUPPRESS URL EXPANSION — keep single-page layout clean
+    ═══════════════════════════════════════════════════════════════════════ */
+    a::after {
+        content: "" !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════════
+       GLOBAL LINK & TEXT
+    ═══════════════════════════════════════════════════════════════════════ */
+    a {
+        text-decoration: none !important;
+    }
+
     .visually-hidden {
         display: none !important;
     }
 
-    /* Force page breaks where needed */
-    .page-break-before {
-        page-break-before: always !important;
-    }
-
-    .page-break-after {
-        page-break-after: always !important;
-    }
-
-    /* Section page break control */
-    .experiences-section { page-break-after: auto !important; }
-    .projects-section { page-break-before: auto !important; }
-
-    /* Prevent orphans and widows */
+    /* ═══════════════════════════════════════════════════════════════════════
+       ORPHANS / WIDOWS
+    ═══════════════════════════════════════════════════════════════════════ */
     h1, h2, h3, h4, h5, h6 {
         page-break-after: avoid !important;
+        break-after: avoid !important;
         orphans: 3 !important;
         widows: 3 !important;
     }
@@ -445,26 +585,13 @@
         widows: 2 !important;
     }
 
-    /* Link styling for print */
-    a {
-        color: black !important;
-        text-decoration: none !important;
-    }
-
-    /* Ensure proper text contrast */
-
-    /* Ensure proper text contrast - using targeted selectors instead of universal to avoid conflicts */
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN CONTENT TEXT CONTRAST
+    ═══════════════════════════════════════════════════════════════════════ */
     .main-wrapper,
-    .main-wrapper *:not(.project-domain-badge):not(.tech-tag) {
-        color: black !important;
+    .main-wrapper *:not(.tech-tag):not(.project-card-desc):not(.experiences-section .company) {
+        color: #1a1a1a !important;
         background: transparent !important;
     }
 
-    .sidebar-wrapper {
-        background: #f8f9fa !important;
-    }
-
-    .sidebar-wrapper * {
-        color: black !important;
-    }
 }

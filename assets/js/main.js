@@ -358,13 +358,47 @@
     }
   }
 
-  // ─── NEW: Print button ─────────────────────────────────────────────────
+  // ─── NEW: Print button & before/after print hooks ─────────────────────
   function initPrintButton() {
     try {
       const printBtn = document.getElementById('print-btn');
-      if (!printBtn) return;
-      printBtn.addEventListener('click', function() {
-        window.print();
+      if (printBtn) {
+        printBtn.addEventListener('click', function() {
+          window.print();
+        });
+      }
+
+      // beforeprint — ensure the DOM is fully ready for printing
+      window.addEventListener('beforeprint', function() {
+        try {
+          // Mark <html> so CSS can target the printing state if needed
+          document.documentElement.classList.add('printing');
+
+          // Force all <details> elements open so their content is visible
+          document.querySelectorAll('details').forEach(function(el) {
+            el.setAttribute('open', '');
+          });
+
+          // Ensure skill progress bars show their final width (in case the
+          // scroll-triggered animation hasn't fired yet)
+          document.querySelectorAll('.skillset .progress-bar').forEach(function(bar) {
+            var value = bar.getAttribute('aria-valuenow');
+            if (value) {
+              bar.style.width = value + '%';
+            }
+          });
+        } catch (e) {
+          console.error('Error in beforeprint handler:', e);
+        }
+      });
+
+      // afterprint — clean up any state added before printing
+      window.addEventListener('afterprint', function() {
+        try {
+          document.documentElement.classList.remove('printing');
+        } catch (e) {
+          console.error('Error in afterprint handler:', e);
+        }
       });
 
     } catch (e) {
