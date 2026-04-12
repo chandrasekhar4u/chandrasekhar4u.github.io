@@ -12,9 +12,10 @@
   --primary-color: #42A8C0;
   --primary-dark: #2d7788;
   --primary-darker: #1a454f;
+  --sidebar-bg: #2d7788;
   --text-color: #3F4650;
   --text-secondary: #545E6C;
-  --text-muted: #97AAC3;
+  --text-muted: #5c6d80;
   --background: #f5f5f5;
   --background-alt: #ffffff;
   --divider: #e8e8e8;
@@ -78,6 +79,7 @@
     --primary-color: #63b3ed;
     --primary-dark: #4299e1;
     --primary-darker: #3182ce;
+    --sidebar-bg: #1c3a44;
   }
 }
 
@@ -92,6 +94,7 @@
   --primary-color: #63b3ed;
   --primary-dark: #4299e1;
   --primary-darker: #3182ce;
+  --sidebar-bg: #1c3a44;
 }
 
 /* ======= Base Styles ======= */
@@ -104,7 +107,6 @@ body {
   padding: var(--spacing-xl);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-display: swap;
   transition: background-color var(--transition-base), color var(--transition-base);
   min-height: 100vh;
   scroll-behavior: smooth;
@@ -160,7 +162,7 @@ button:focus-visible,
 
 /* Layout */
 .wrapper {
-  background: var(--primary-color);
+  background: var(--sidebar-bg);
   max-width: 960px;
   margin: 0 auto;
   position: relative;
@@ -171,7 +173,7 @@ button:focus-visible,
 }
 
 .sidebar-wrapper {
-  background: var(--primary-color);
+  background: var(--sidebar-bg);
   position: absolute;
   right: 0;
   width: 30%;
@@ -211,7 +213,7 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .tagline {
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   margin-bottom: 0;
@@ -235,7 +237,7 @@ button:focus-visible,
 
 .sidebar-wrapper .contact-list li {
   margin-bottom: var(--spacing-md);
-  color: rgba(255, 255, 255, 0.9);
+  color: #ffffff;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -267,14 +269,14 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .meta {
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-xs);
   font-size: var(--font-size-sm);
 }
 
 .sidebar-wrapper .time {
-  color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
   font-weight: var(--font-weight-normal);
   font-size: var(--font-size-sm);
 }
@@ -539,6 +541,10 @@ button:focus-visible,
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
   color: var(--text-muted);
   font-size: var(--font-size-sm);
   text-decoration: none;
@@ -801,6 +807,12 @@ button:focus-visible,
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Only sections below initial viewport are pre-hidden via JS class */
+.section.will-animate {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .section.animate-in {

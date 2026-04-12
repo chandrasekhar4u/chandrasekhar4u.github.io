@@ -185,9 +185,19 @@
     if (prefersReducedMotion.matches) return;
 
     var sections = document.querySelectorAll('.main-wrapper .section');
+
+    // Only animate sections that start below the visible viewport to protect LCP
+    sections.forEach(function(section) {
+      var rect = section.getBoundingClientRect();
+      if (rect.top >= window.innerHeight) {
+        section.classList.add('will-animate');
+      }
+    });
+
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.target.classList.contains('will-animate')) {
+          entry.target.classList.remove('will-animate');
           entry.target.classList.add('animate-in');
           observer.unobserve(entry.target);
         }
@@ -195,8 +205,9 @@
     }, { threshold: 0.1 });
 
     sections.forEach(function(section) {
-      section.style.opacity = '0';
-      observer.observe(section);
+      if (section.classList.contains('will-animate')) {
+        observer.observe(section);
+      }
     });
   }
 

@@ -14,11 +14,13 @@ button {
   min-width: 44px;
 }
 
-/* Improve link accessibility */
-a {
+/* Improve standalone interactive link accessibility (touch targets) */
+.contact-list a,
+.project-title a,
+.print-btn,
+.scroll-to-top,
+.theme-toggle {
   min-height: 44px;
-  display: inline-flex;
-  align-items: center;
 }
 
 /* Add loading states for images */
