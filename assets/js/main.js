@@ -7,8 +7,16 @@
       const themeIcon = document.getElementById('theme-icon');
 
       if (!themeToggle || !themeIcon) {
-        console.warn('Theme toggle elements not found. Theme toggle will not be available. Theme toggle will not be available.');
+        console.warn('Theme toggle elements not found. Theme toggle will not be available.');
         return;
+      }
+
+      // Cache matchMedia query for better performance
+      let darkModeQuery;
+      try {
+        darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      } catch (e) {
+        console.error('Error accessing matchMedia:', e);
       }
 
       function getCurrentTheme() {
@@ -18,23 +26,18 @@
         } catch (e) {
           console.error('Error accessing localStorage:', e);
         }
-        try {
-          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        } catch (e) {
-          console.error('Error accessing matchMedia:', e);
-          return 'light';
+        // Use cached matchMedia query
+        if (darkModeQuery) {
+          return darkModeQuery.matches ? 'dark' : 'light';
         }
+        return 'light';
       }
 
       function setIcon(isDark) {
         try {
-          if (isDark) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-          } else {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-          }
+          // Use toggle for more efficient class manipulation
+          themeIcon.classList.toggle('fa-sun', isDark);
+          themeIcon.classList.toggle('fa-moon', !isDark);
         } catch (e) {
           console.error('Error setting theme icon:', e);
         }
@@ -61,35 +64,73 @@
         }
       }
 
+      // Reuse announcement element for better performance
+      let announcementEl;
+      let toastTimeout;
+      
       function announceToScreenReader(message) {
         try {
-          const announcement = document.createElement('div');
-          announcement.setAttribute('role', 'status');
-          announcement.setAttribute('aria-live', 'polite');
-          announcement.setAttribute('aria-atomic', 'true');
-          announcement.className = 'visually-hidden';
-          // Add inline visually-hidden styles as a fallback in case the class is not defined
-          announcement.style.position = 'absolute';
-          announcement.style.width = '1px';
-          announcement.style.height = '1px';
-          announcement.style.margin = '-1px';
-          announcement.style.padding = '0';
-          announcement.style.overflow = 'hidden';
-          announcement.style.clip = 'rect(0 0 0 0)';
-          announcement.style.whiteSpace = 'nowrap';
-          announcement.style.border = '0';
-          announcement.textContent = message;
-
-          document.body.appendChild(announcement);
+          if (!announcementEl) {
+            announcementEl = document.createElement('div');
+            announcementEl.setAttribute('role', 'status');
+            announcementEl.setAttribute('aria-live', 'polite');
+            announcementEl.setAttribute('aria-atomic', 'true');
+            announcementEl.className = 'visually-hidden';
+            // Add inline visually-hidden styles as a fallback in case the class is not defined
+            announcementEl.style.cssText = 'position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;';
+            document.body.appendChild(announcementEl);
+          }
+          
+          announcementEl.textContent = message;
+          
+          // Clear message after announcement
           setTimeout(function() {
-            try {
-              if (announcement.parentNode) document.body.removeChild(announcement);
-            } catch (e) {
-              console.error('Error removing announcement element:', e);
-            }
+            if (announcementEl) announcementEl.textContent = '';
           }, 1000);
         } catch (e) {
           console.error('Error creating announcement element:', e);
+        }
+      }
+      
+      // Modern toast notification for visual feedback
+      function showToast(message, type = 'info') {
+        try {
+          // Remove existing toast if any
+          const existingToast = document.querySelector('.theme-toast');
+          if (existingToast) {
+            existingToast.remove();
+            clearTimeout(toastTimeout);
+          }
+          
+          // Create toast element
+          const toast = document.createElement('div');
+          toast.className = 'theme-toast theme-toast-' + type;
+          toast.setAttribute('role', 'alert');
+          
+          // Create icon element
+          const iconSpan = document.createElement('span');
+          iconSpan.className = 'toast-icon';
+          iconSpan.textContent = type === 'dark' ? '🌙' : '☀️';
+          
+          // Create message element - use textContent to prevent XSS
+          const messageSpan = document.createElement('span');
+          messageSpan.className = 'toast-message';
+          messageSpan.textContent = message;
+          
+          toast.appendChild(iconSpan);
+          toast.appendChild(messageSpan);
+          document.body.appendChild(toast);
+          
+          // Trigger animation
+          setTimeout(() => toast.classList.add('show'), 10);
+          
+          // Auto-hide after 2 seconds
+          toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+          }, 2000);
+        } catch (e) {
+          console.error('Error showing toast:', e);
         }
       }
 
@@ -115,6 +156,9 @@
           const announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
           announceToScreenReader(announcement);
           
+          // Show modern toast notification
+          showToast(announcement, newTheme);
+          
           // Reset debounce flag after transition completes
           setTimeout(() => {
             isToggling = false;
@@ -129,9 +173,27 @@
       // Initial apply
       const initialTheme = getCurrentTheme();
       applyTheme(initialTheme);
+      
+      // Add subtle pulse animation on first load to draw attention (modern UX pattern)
+      let hasSeenTheme = false;
+      try { hasSeenTheme = !!localStorage.getItem('theme-seen'); } catch (e) { /* ignore */ }
+      if (!hasSeenTheme) {
+        setTimeout(() => {
+          themeToggle.classList.add('initial-pulse');
+          setTimeout(() => {
+            themeToggle.classList.remove('initial-pulse');
+            try { localStorage.setItem('theme-seen', 'true'); } catch (e) { /* ignore */ }
+          }, 2000);
+        }, 1000);
+      }
 
-      // Click handler
-      themeToggle.addEventListener('click', toggleTheme);
+      // Click handler with visual feedback
+      themeToggle.addEventListener('click', function() {
+        // Add click animation for tactile feedback
+        themeToggle.classList.add('clicking');
+        setTimeout(() => themeToggle.classList.remove('clicking'), 300);
+        toggleTheme();
+      });
 
       // Keyboard accessibility for non-button elements
       themeToggle.addEventListener('keydown', function(e) {
@@ -143,8 +205,7 @@
       });
 
       // Listen to system color scheme changes (with addEventListener/addListener fallback)
-      try {
-        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+      if (darkModeQuery) {
         const systemChangeHandler = function(e) {
           try {
             // Only auto-apply if user hasn't explicitly chosen a theme
@@ -156,14 +217,12 @@
           }
         };
 
-        if (typeof mql.addEventListener === 'function') {
-          mql.addEventListener('change', systemChangeHandler);
-        } else if (typeof mql.addListener === 'function') {
+        if (typeof darkModeQuery.addEventListener === 'function') {
+          darkModeQuery.addEventListener('change', systemChangeHandler);
+        } else if (typeof darkModeQuery.addListener === 'function') {
           // Safari < 14 fallback
-          mql.addListener(systemChangeHandler);
+          darkModeQuery.addListener(systemChangeHandler);
         }
-      } catch (e) {
-        console.error('Error setting up system theme listener:', e);
       }
 
       // Keep theme in sync across tabs/windows
@@ -179,41 +238,116 @@
   }
 
   function initSkillBars() {
-      try {
-    const skillItems = document.querySelectorAll('.skillset .item');
-
-    skillItems.forEach(item => {
-      try {
-        const progressBar = item.querySelector('.progress-bar');
-        const skillValue = progressBar.getAttribute('aria-valuenow');
-        progressBar.style.transition = 'width 1s ease-in-out'; // Add smooth transition
-        progressBar.style.width = skillValue + '%';
-        progressBar.textContent = skillValue + '%'; // Show value on bar
-      } catch (e) {
-        console.error('Error initializing skill bar:', e, item);
+    try {
+      const skillItems = document.querySelectorAll('.skillset .item');
+      
+      // Check if user prefers reduced motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Use Intersection Observer for scroll-triggered animations (modern UX pattern)
+      if ('IntersectionObserver' in window && !prefersReducedMotion) {
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.3 // Trigger when 30% visible
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const progressBar = entry.target.querySelector('.progress-bar');
+              if (!progressBar || progressBar.dataset.animated === 'true') return;
+              
+              const skillValue = progressBar.getAttribute('aria-valuenow');
+              // Animate skill bar on scroll
+              const currentStyle = progressBar.style.cssText;
+              progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-out;width:' + skillValue + '%';
+              progressBar.textContent = skillValue + '%';
+              progressBar.dataset.animated = 'true';
+              
+              // Unobserve after animation
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+        
+        skillItems.forEach(item => observer.observe(item));
+      } else {
+        // Fallback for older browsers or reduced motion preference
+        skillItems.forEach(item => {
+          try {
+            const progressBar = item.querySelector('.progress-bar');
+            if (!progressBar) return;
+            
+            const skillValue = progressBar.getAttribute('aria-valuenow');
+            const currentStyle = progressBar.style.cssText;
+            const transition = prefersReducedMotion ? '' : 'transition:width 1s ease-out;';
+            progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + transition + 'width:' + skillValue + '%';
+            progressBar.textContent = skillValue + '%';
+          } catch (e) {
+            console.error('Error initializing skill bar:', e, item);
+          }
+        });
       }
-    });
     } catch (e) {
-        console.error('Error initializing skill bars:', e);
+      console.error('Error initializing skill bars:', e);
     }
   }
 
   // Removed Interests Icon list
 
-        initSkillBars(); // call it here
+  // Initialize Back-to-Top Button (Modern UX Pattern)
+  function initBackToTop() {
+    try {
+      // Create back-to-top button
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.id = 'back-to-top';
+      backToTopBtn.className = 'back-to-top';
+      backToTopBtn.setAttribute('aria-label', 'Scroll back to top');
+      backToTopBtn.setAttribute('title', 'Back to top');
+      const arrowIcon = document.createElement('i');
+      arrowIcon.className = 'fa-solid fa-arrow-up';
+      arrowIcon.setAttribute('aria-hidden', 'true');
+      backToTopBtn.appendChild(arrowIcon);
+      document.body.appendChild(backToTopBtn);
+      
+      // Show/hide based on scroll position
+      let scrollTimeout;
+      const toggleBackToTop = () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+          } else {
+            backToTopBtn.classList.remove('visible');
+          }
+        }, 100); // Debounce scroll events
+      };
+      
+      window.addEventListener('scroll', toggleBackToTop, { passive: true });
+      
+      // Smooth scroll to top on click
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    } catch (e) {
+      console.error('Error initializing back-to-top button:', e);
+    }
+  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       // Small delay to ensure DOM is fully ready and to reduce any flicker
       setTimeout(initThemeToggle, 100);
-          initSkillBars();
-
-     // Initialize skill bars after theme toggle
+      initSkillBars();
+      initBackToTop();
     }, { once: true });
   } else {
     setTimeout(initThemeToggle, 100);
-          initSkillBars();
-
-     // Initialize skill bars after theme toggle
+    initSkillBars();
+    initBackToTop();
   }
 })();
