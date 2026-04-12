@@ -89,7 +89,8 @@
 	<link rel="manifest" href="manifest.webmanifest">
 	<meta name="msapplication-TileColor" content="#0F172A">
 	<meta name="msapplication-TileImage" content="assets/images/ms-icon-144x144.webp">
-	<meta name="theme-color" content="#0F172A">
+	<meta name="theme-color" content="#F1F5F9" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#0F172A" media="(prefers-color-scheme: dark)">
 	
 	<!-- Structured Data (Schema.org) -->
 	<script type="application/ld+json">
@@ -123,6 +124,14 @@
 		"knowsLanguage": ["Telugu", "English", "Hindi"]
 	}
 	</script>
+	<!-- Breadcrumb Schema -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		"itemListElement": [{"@type":"ListItem","position":1,"name":"Home","item":"https://kakarla.in/"}]
+	}
+	</script>
 </head> 
 
 <body>
@@ -137,27 +146,56 @@
   <i class="fa-solid fa-moon" id="theme-icon" aria-hidden="true"></i>
 </button>
 
+<!-- Print / Download Resume Button -->
+<button class="print-btn d-print-none" id="print-btn" aria-label="Print or save resume as PDF" title="Print / Save as PDF">
+  <i class="fa-solid fa-print" aria-hidden="true"></i>
+</button>
+
     <div class="wrapper">
         <aside class="sidebar-wrapper" role="complementary" aria-label="Personal information and contact details">
             <div class="profile-container">
                 <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" fetchpriority="high" loading="eager"/>
                 <h1 class="name">Chandra Sekhar Kakarla</h1>
                 <h2 class="tagline">Full Stack Developer</h2>
+                <div class="availability-badge" aria-label="Current employment status">
+                  <span class="availability-dot" aria-hidden="true"></span>
+                  Currently Employed · NTT DATA
+                </div>
+                <button class="btn-download-resume d-print-none" id="download-resume" aria-label="Print or download resume as PDF" title="Print / Save as PDF">
+                  <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+                  Download Resume
+                </button>
             </div><!--//profile-container-->
+
+            <!-- Sidebar Section Navigation (Scroll-Spy) -->
+            <nav class="sidebar-nav d-print-none" aria-label="Resume sections navigation">
+              <ul class="sidebar-nav-list" role="list">
+                <li><a href="#section-summary" class="sidebar-nav-link" data-target="summary-section">Career Profile</a></li>
+                <li><a href="#section-experience" class="sidebar-nav-link" data-target="experiences-section">Experience</a></li>
+                <li><a href="#section-projects" class="sidebar-nav-link" data-target="projects-section">Projects</a></li>
+                <li><a href="#section-skills" class="sidebar-nav-link" data-target="skills-section">Skills</a></li>
+              </ul>
+            </nav>
             
             <div class="contact-container container-block">
                 <ul class="list-unstyled contact-list" role="list" aria-label="Contact information">
-                    <li class="email"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <a href="mailto:connect@kakarla.in">connect@kakarla.in</a></li>
+                    <li class="email">
+                      <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                      <a href="mailto:connect@kakarla.in">connect@kakarla.in</a>
+                      <button class="copy-email-btn d-print-none" aria-label="Copy email address" title="Copy email address" data-email="connect@kakarla.in">
+                        <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                      </button>
+                    </li>
                     <!-- <li class="phone"><i class="fa-solid fa-phone" aria-hidden="true"></i> <a href="tel:##########">#########</a></li> -->
-                    <li class="website"><i class="fa-solid fa-globe" aria-hidden="true"></i> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer">kakarla.in</a></li>
+                    <li class="website"><i class="fa-solid fa-globe" aria-hidden="true"></i> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer" aria-current="page">kakarla.in</a></li>
                     <li class="linkedin"><i class="fa-brands fa-linkedin" aria-hidden="true"></i> <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
                     <li class="github"><i class="fa-brands fa-github" aria-hidden="true"></i> <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
                 	<li class="stackoverflow"><i class="fa-brands fa-stack-overflow" aria-hidden="true"></i> <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer">chandrasekhar</a></li>
                 	<li class="twitter"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i> <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">@chandrasekhar4u</a></li>
                 </ul>
             </div><!--//contact-container-->
-            <div class="education-container container-block">
-                <h2 class="container-block-title">Education</h2>
+            <details class="education-container container-block mobile-collapsible" open>
+                <summary class="container-block-title mobile-collapsible-header" role="heading" aria-level="2">Education</summary>
                 <div class="item">
                     <h3 class="degree">Master of Computer Applications</h3>
                     <h4 class="meta">J.K.C College, Guntur, A.P</h4>
@@ -168,44 +206,44 @@
                     <h4 class="meta">J.K.C College, Guntur, A.P</h4>
                     <div class="time">2003 - 2006</div>
                 </div><!--//item-->
-            </div><!--//education-container-->
+            </details><!--//education-container-->
             
-            <div class="languages-container container-block">
-                <h2 class="container-block-title">Languages</h2>
+            <details class="languages-container container-block mobile-collapsible" open>
+                <summary class="container-block-title mobile-collapsible-header" role="heading" aria-level="2">Languages</summary>
                 <ul class="list-unstyled interests-list" role="list" aria-label="Language proficiency">
                     <li>Telugu <span class="lang-desc">(Native)</span></li>
                     <li>English <span class="lang-desc">(Professional)</span></li>
                     <li>Hindi <span class="lang-desc">(Professional)</span></li>
                 </ul>
-            </div><!--//interests-->
+            </details><!--//languages-->
             
-            <div class="interests-container container-block">
-                <h2 class="container-block-title">Interests</h2>
+            <details class="interests-container container-block mobile-collapsible" open>
+                <summary class="container-block-title mobile-collapsible-header" role="heading" aria-level="2">Interests</summary>
                 <ul class="list-unstyled interests-list" role="list" aria-label="Personal interests">
-                	<li>Open source development </li>
+                	<li>Open source development</li>
                     <li>Drawing</li>
                     <li>Idea Analysis</li>
                 </ul>
-            </div><!--//interests-->
+            </details><!--//interests-->
             
         </aside><!--//sidebar-wrapper-->
         
         <main class="main-wrapper" id="main-content" role="main" aria-label="Resume content">
             
-            <section class="section summary-section">
+            <section class="section summary-section" id="section-summary">
                 <h2 class="section-title"><i class="fa-solid fa-user" aria-hidden="true"></i>Career Profile</h2>
                 <div class="summary">
                  <ul>
                       <li>11+ years in Java/J2EE, Spring, JSF MVC Frameworks</li>
                       <li>Front end experience using Thymeleaf, JSF, HTML, jQuery, and CSS</li>
                       <li>Experience in development and deployment of J2EE applications.</li>
-                      <li> Integrate, release project with strong domain knowledge in M.R.D, Finance and Telecom.</li>
+                      <li>Integrate, release project with strong domain knowledge in M.R.D, Finance and Telecom.</li>
                       <li>Ability to learn quickly new technologies and methodologies.</li>
                  </ul>
                 </div><!--//summary-->
             </section><!--//section-->
             
-            <section class="section experiences-section">
+            <section class="section experiences-section" id="section-experience">
                 <h2 class="section-title"><i class="fa-solid fa-briefcase" aria-hidden="true"></i>Experiences</h2>
                
                 <div class="item">
@@ -216,9 +254,19 @@
                         </div><!--//upper-row-->
                         <div class="company">NTT DATA, San Francisco</div>
                     </div><!--//meta-->
-                    <div class="details">
-                        <p>Design and Development of web applications using java, j2ee</p>
-                    </div><!--//details-->
+                    <details class="details-block" open>
+                      <summary class="details-summary">Details <i class="fa-solid fa-chevron-down details-chevron" aria-hidden="true"></i></summary>
+                      <div class="details-body">
+                        <p>Design and Development of web applications using Java, J2EE and Spring frameworks for enterprise Finance clients.</p>
+                        <div class="tech-tags" aria-label="Technologies used">
+                          <span class="tech-tag">Java</span>
+                          <span class="tech-tag">Spring</span>
+                          <span class="tech-tag">J2EE</span>
+                          <span class="tech-tag">Thymeleaf</span>
+                          <span class="tech-tag">REST APIs</span>
+                        </div>
+                      </div>
+                    </details>
                 </div><!--//item-->
                 
                 <div class="item">
@@ -229,94 +277,149 @@
                         </div><!--//upper-row-->
                         <div class="company">CGI, India</div>
                     </div><!--//meta-->
-                    <div class="details">
-                        <p>Developing web applications using java, j2ee.</p>  
-                    </div><!--//details-->
+                    <details class="details-block" open>
+                      <summary class="details-summary">Details <i class="fa-solid fa-chevron-down details-chevron" aria-hidden="true"></i></summary>
+                      <div class="details-body">
+                        <p>Developing web applications using Java, J2EE for clients in Energy and Telecom domains.</p>
+                        <div class="tech-tags" aria-label="Technologies used">
+                          <span class="tech-tag">Java</span>
+                          <span class="tech-tag">J2EE</span>
+                          <span class="tech-tag">JSF</span>
+                          <span class="tech-tag">Hibernate</span>
+                          <span class="tech-tag">Oracle DB</span>
+                        </div>
+                      </div>
+                    </details>
                 </div><!--//item-->
                 
             </section><!--//section-->
             
-            <section class="section projects-section">
+            <section class="section projects-section" id="section-projects">
                 <h2 class="section-title"><i class="fa-solid fa-archive" aria-hidden="true"></i>Projects</h2>
                 <div class="intro">
                     <p>I got privileges to work in different projects in different domains.</p>
                 </div><!--//intro-->
-                <div class="item">
-                    <span class="project-title"><a href="https://www.wellsfargo.com" target="_blank" rel="noopener noreferrer">Wells Fargo Public Site</a></span> - <span class="project-tagline">Wells Fargo Public Site.</span>
-                </div><!--//item-->
-                <div class="item">
-                    <span class="project-title"><a href="https://www.smartdcc.co.uk" target="_blank" rel="noopener noreferrer">DCC</a></span> - 
-                    <span class="project-tagline">Instant Energy (IE) subsystem implements primary functions. </span>
-                </div><!--//item-->
-                <div class="item">
-                    <span class="project-title"><a href="https://support.bell.ca/Billing-and-Accounts/Billing" target="_blank" rel="noopener noreferrer">OBE Web Tool</a></span> - <span class="project-tagline">New online presentation application.</span>
-                </div><!--//item-->
-                <div class="item">
-                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase3</a></span> - <span class="project-tagline">Gas transportation shipper.</span>
-                </div><!--//item-->
-                <div class="item">
-                    <span class="project-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase2</a></span> - <span class="project-tagline">Gas transportation core functionality.</span>
-                </div><!--//item-->
+                <div class="project-cards" role="list" aria-label="Projects">
+                  <div class="project-card" role="listitem">
+                    <div class="project-card-header">
+                      <div class="project-card-icon"><i class="fa-solid fa-landmark" aria-hidden="true"></i></div>
+                      <span class="project-domain-badge domain-finance">Finance</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="https://www.wellsfargo.com" target="_blank" rel="noopener noreferrer">Wells Fargo Public Site</a></h3>
+                    <p class="project-card-desc">Wells Fargo's public-facing web platform for banking and financial services.</p>
+                    <a href="https://www.wellsfargo.com" class="project-card-cta" target="_blank" rel="noopener noreferrer" aria-label="View Wells Fargo Public Site project">View Project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+                  <div class="project-card" role="listitem">
+                    <div class="project-card-header">
+                      <div class="project-card-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
+                      <span class="project-domain-badge domain-energy">Energy</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="https://www.smartdcc.co.uk" target="_blank" rel="noopener noreferrer">DCC</a></h3>
+                    <p class="project-card-desc">Instant Energy (IE) subsystem implementing primary smart meter functions.</p>
+                    <a href="https://www.smartdcc.co.uk" class="project-card-cta" target="_blank" rel="noopener noreferrer" aria-label="View DCC project">View Project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+                  <div class="project-card" role="listitem">
+                    <div class="project-card-header">
+                      <div class="project-card-icon"><i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i></div>
+                      <span class="project-domain-badge domain-telecom">Telecom</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="https://support.bell.ca/Billing-and-Accounts/Billing" target="_blank" rel="noopener noreferrer">OBE Web Tool</a></h3>
+                    <p class="project-card-desc">New online presentation application for Bell Canada billing management.</p>
+                    <a href="https://support.bell.ca/Billing-and-Accounts/Billing" class="project-card-cta" target="_blank" rel="noopener noreferrer" aria-label="View OBE Web Tool project">View Project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+                  <div class="project-card" role="listitem">
+                    <div class="project-card-header">
+                      <div class="project-card-icon"><i class="fa-solid fa-fire-flame-curved" aria-hidden="true"></i></div>
+                      <span class="project-domain-badge domain-energy">Energy</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase 3</a></h3>
+                    <p class="project-card-desc">Gas transportation shipper management system for Bord Gáis Energy.</p>
+                    <a href="https://www.bordgaisenergy.ie" class="project-card-cta" target="_blank" rel="noopener noreferrer" aria-label="View Prodis Entry Exit Phase 3 project">View Project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+                  <div class="project-card" role="listitem">
+                    <div class="project-card-header">
+                      <div class="project-card-icon"><i class="fa-solid fa-fire-flame-curved" aria-hidden="true"></i></div>
+                      <span class="project-domain-badge domain-energy">Energy</span>
+                    </div>
+                    <h3 class="project-card-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase 2</a></h3>
+                    <p class="project-card-desc">Gas transportation core functionality for Bord Gáis Energy's shipper platform.</p>
+                    <a href="https://www.bordgaisenergy.ie" class="project-card-cta" target="_blank" rel="noopener noreferrer" aria-label="View Prodis Entry Exit Phase 2 project">View Project <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  </div>
+                </div><!--//project-cards-->
             </section><!--//section-->
             
-            <section class="skills-section section">
+            <section class="skills-section section" id="section-skills">
                 <h2 class="section-title"><i class="fa-solid fa-rocket" aria-hidden="true"></i>Skills &amp; Proficiency</h2>
-                <div class="skillset">        
+                <div class="skillset">
+                  <div class="skill-category">
+                    <h4 class="skill-category-title">Backend</h4>
                     <div class="item">
-                        <h3 class="level-title" id="corejava">Core Java</h3>
+                        <h3 class="level-title" id="corejava" title="10+ years of Core Java development">Core Java</h3>
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="corejava" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" >
                                 <span class="visually-hidden">90% proficiency</span>
-                            </div>                                      
-                        </div><!--//level-bar-->                                 
+                            </div>
+                        </div><!--//level-bar-->
                     </div><!--//item-->
-					
-					<div class="item">
-                        <h3 class="level-title" id="j2ee">J2EE</h3>
+
+                    <div class="item">
+                        <h3 class="level-title" id="j2ee" title="8+ years of J2EE enterprise development">J2EE</h3>
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="j2ee" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" >
                                 <span class="visually-hidden">85% proficiency</span>
-                            </div>                                      
-                        </div><!--//level-bar-->                                 
+                            </div>
+                        </div><!--//level-bar-->
                     </div><!--//item-->
-                    
+
                     <div class="item">
-                        <h3 class="level-title" id="spring">Spring Framework</h3>
+                        <h3 class="level-title" id="spring" title="8+ years with Spring Framework ecosystem">Spring Framework</h3>
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="spring" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" >
                                 <span class="visually-hidden">85% proficiency</span>
-                            </div>                                      
-                        </div><!--//level-bar-->                                 
+                            </div>
+                        </div><!--//level-bar-->
                     </div><!--//item-->
-                    
+                  </div><!--//skill-category-->
+
+                  <div class="skill-category">
+                    <h4 class="skill-category-title">Frameworks &amp; Frontend</h4>
                     <div class="item">
-                        <h3 class="level-title" id="jsf">JSF Framework</h3>
+                        <h3 class="level-title" id="jsf" title="5+ years with JSF MVC Framework">JSF Framework</h3>
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="jsf" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" >
                                 <span class="visually-hidden">75% proficiency</span>
-                            </div>                                      
-                        </div><!--//level-bar-->                                 
+                            </div>
+                        </div><!--//level-bar-->
                     </div><!--//item-->
-                    
+
                     <div class="item">
-                        <h3 class="level-title" id="js">Javascript &amp; jQuery</h3>
-						<div class="progress">
-							<div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="js" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
+                        <h3 class="level-title" id="js" title="6+ years with JavaScript and jQuery">Javascript &amp; jQuery</h3>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped" role="progressbar" aria-labelledby="js" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" >
                                 <span class="visually-hidden">70% proficiency</span>
                             </div>
-						</div>
-						<!--//level-bar-->                                 
+                        </div><!--//level-bar-->
                     </div><!--//item-->
-                    
-                </div>  
+                  </div><!--//skill-category-->
+                </div>
             </section><!--//skills-section-->
             
         </main><!--//main-wrapper-->
     </div>
 
     <footer class="footer d-print-none" role="contentinfo">
-        <div class="text-center">
-            <p class="copyright">&copy; <span id="current-year">2026</span> Chandra Sekhar Kakarla. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-meta">
+                <p class="copyright">&copy; <span id="current-year">2026</span> Chandra Sekhar Kakarla. All rights reserved.</p>
+                <p class="footer-updated">Last updated: <span id="last-updated">2026</span></p>
+            </div>
+            <nav class="footer-social" aria-label="Social media links">
+                <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer" aria-label="Stack Overflow profile"><i class="fa-brands fa-stack-overflow" aria-hidden="true"></i></a>
+                <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter) profile"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+            </nav>
+            <p class="footer-built">Built with <i class="fa-solid fa-heart footer-heart" aria-hidden="true" title="love"></i> using <span class="footer-tech">HTML</span> <span class="footer-tech">CSS</span> <span class="footer-tech">JavaScript</span></p>
         </div>
     </footer><!--//footer-->
 
