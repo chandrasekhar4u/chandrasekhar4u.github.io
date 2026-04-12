@@ -59,7 +59,8 @@ test.describe('Performance - Core Web Vitals', () => {
   test('Google Fonts should be non-render-blocking', async ({ page }) => {
     const fontLink = page.locator('link[href*="fonts.googleapis.com"][rel="stylesheet"]').first();
     const media = await fontLink.getAttribute('media');
-    expect(media).toBe('print');
+    // media is 'print' before the stylesheet loads; once onload fires it becomes 'all'
+    expect(media === 'print' || media === 'all').toBeTruthy();
     const onload = await fontLink.getAttribute('onload');
     expect(onload).toContain("this.media='all'");
   });
