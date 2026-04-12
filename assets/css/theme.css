@@ -715,7 +715,16 @@ button:focus-visible,
 }
 
 /* ─── Footer ───────────────────────────────────────────────────────────── */
-.footer { display: none; }
+.footer {
+  padding: var(--spacing-md) 0;
+  text-align: center;
+}
+.footer .copyright {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  line-height: 1.6;
+}
 
 /* ─── Theme Toggle Button ──────────────────────────────────────────────── */
 .theme-toggle {
