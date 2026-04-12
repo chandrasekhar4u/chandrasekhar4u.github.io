@@ -36,7 +36,7 @@ test.describe('Print Layout', () => {
   test('print button should carry d-print-none class', async ({ page }) => {
     const printBtn = page.locator('#print-btn');
     await expect(printBtn).toHaveCount(1);
-    await expect(printBtn).toHaveClass(/print-btn/);
+    await expect(printBtn).toHaveClass(/d-print-none/);
   });
 
   test('footer should carry d-print-none class', async ({ page }) => {

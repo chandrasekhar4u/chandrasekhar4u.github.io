@@ -508,6 +508,7 @@
     }
 
     .skills-section .progress {
+        /* flex-grow: 1 fills the remaining width after the 40%-wide level-title */
         flex-grow: 1 !important;
         height: 5pt !important;
         background: #E2E8F0 !important;
