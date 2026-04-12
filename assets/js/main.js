@@ -367,11 +367,6 @@
         window.print();
       });
 
-      const downloadBtn = document.getElementById('download-resume');
-      if (!downloadBtn) return;
-      downloadBtn.addEventListener('click', function() {
-        window.print();
-      });
     } catch (e) {
       console.error('Error initializing print button:', e);
     }

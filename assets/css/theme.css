@@ -916,46 +916,6 @@ html[data-theme="dark"] body {
   }
 }
 
-/* ─── Download Resume Button ─────────────────────────────────────────────── */
-.btn-download-resume {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-full);
-  padding: 9px 20px;
-  font-size: 12px;
-  font-weight: var(--font-weight-semibold);
-  font-family: var(--font-family-base);
-  cursor: pointer;
-  margin-top: var(--spacing-md);
-  transition: all var(--transition-base);
-  box-shadow: 0 3px 10px rgba(56,189,248,.25);
-  letter-spacing: .02em;
-}
-.btn-download-resume:hover {
-  background: linear-gradient(135deg, var(--primary-darker), var(--primary-dark));
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(56,189,248,.35);
-  color: #fff;
-}
-.btn-download-resume:active {
-  transform: translateY(0);
-  transition: all .1s ease;
-}
-.btn-download-resume:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 3px;
-}
-.btn-download-resume i {
-  font-size: 13px;
-  transition: transform var(--transition-fast);
-}
-.btn-download-resume:hover i {
-  transform: translateY(2px);
-}
 
 /* ─── Print Button ──────────────────────────────────────────────────────── */
 .print-btn {
