@@ -9,6 +9,7 @@
   "background_color": "#0F172A",
   "theme_color": "#0F172A",
   "lang": "en",
+  "categories": ["business", "personalization"],
   "icons": [
     {
       "src": "/assets/images/android-icon-192x192.webp",

@@ -41,8 +41,8 @@
         line-height: 1.4 !important;
         padding: 0 !important;
         margin: 0 !important;
-        -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
     }
 
     /* Main wrapper - use full width */
