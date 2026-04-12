@@ -275,13 +275,6 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════════
-       GLOBAL SIDEBAR TEXT CONTRAST
-    ═══════════════════════════════════════════════════════════════════════ */
-    .sidebar-wrapper * {
-        color: #1a1a1a !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════════
        MAIN — SECTION LAYOUT
     ═══════════════════════════════════════════════════════════════════════ */
     .section {
@@ -590,9 +583,23 @@
        MAIN CONTENT TEXT CONTRAST
     ═══════════════════════════════════════════════════════════════════════ */
     .main-wrapper,
-    .main-wrapper *:not(.tech-tag):not(.project-card-desc):not(.experiences-section .company) {
+    .main-wrapper * {
         color: #1a1a1a !important;
         background: transparent !important;
+    }
+
+    /* Restore intentional muted / accent colors for specific child elements */
+    .main-wrapper .tech-tag {
+        color: #334155 !important;
+        background: #F8FAFC !important;
+    }
+
+    .main-wrapper .project-card-desc {
+        color: #334155 !important;
+    }
+
+    .main-wrapper .experiences-section .company {
+        color: #475569 !important;
     }
 
 }

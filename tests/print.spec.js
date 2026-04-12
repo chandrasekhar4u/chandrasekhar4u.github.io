@@ -26,11 +26,12 @@ test.describe('Print Layout', () => {
   // ── Elements hidden in print ─────────────────────────────────────────────
 
   test('theme toggle button should be hidden in print', async ({ page }) => {
-    // d-print-none hides the theme-toggle; verify the class or element exists
     const themeToggle = page.locator('#theme-toggle');
     await expect(themeToggle).toHaveCount(1);
-    // In screen mode it is visible; the print CSS will hide it
-    await expect(themeToggle).toBeVisible();
+
+    // Emulate print media and verify the element is hidden by the print stylesheet
+    await page.emulateMedia({ media: 'print' });
+    await expect(themeToggle).not.toBeVisible();
   });
 
   test('print button should carry d-print-none class', async ({ page }) => {
@@ -169,8 +170,10 @@ test.describe('Print Layout', () => {
     // Parse the raw PDF bytes to count pages.
     // PDFs contain "/Type /Page" entries for each page (one per content page).
     const pdfText = pdfBuffer.toString('latin1');
-    // Count leaf page objects – each real page has exactly one /Type /Page dict
-    const pageMatches = pdfText.match(/\/Type\s*\/Page[^s]/g);
+    // Count leaf page objects – each real page has exactly one /Type /Page dict.
+    // Negative lookahead excludes /Pages (the parent node) without consuming
+    // the following character, making the heuristic more robust.
+    const pageMatches = pdfText.match(/\/Type\s*\/Page(?!s)\b/g);
     const pageCount = pageMatches ? pageMatches.length : 0;
     expect(pageCount).toBe(1);
   });
