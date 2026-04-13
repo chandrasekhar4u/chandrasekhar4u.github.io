@@ -1,10 +1,6 @@
-# Chandra Sekhar Kakarla - Personal Portfolio
+# Personal Portfolio
 
 A modern, responsive personal portfolio website showcasing professional experience, skills, and projects.
-
-## 🚀 Live Site
-
-Visit the live site at: [https://kakarla.in](https://kakarla.in)
 
 ## 🛠️ Tech Stack
 
@@ -65,8 +61,8 @@ Consistent spacing system using CSS variables:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/chandrasekhar4u/chandrasekhar4u.github.io.git
-   cd chandrasekhar4u.github.io
+   git clone <repository-url>
+   cd <repository-directory>
    ```
 
 2. **Start a local server**
@@ -208,7 +204,7 @@ For other hosting providers:
 
 ## 📄 License
 
-This project is licensed under the Creative Commons Attribution 3.0 License - see the original template by [Xiaoying Riley](https://themes.3rdwavemedia.com).
+This project is licensed under the Creative Commons Attribution 3.0 License.
 
 ## 🤝 Contributing
 
@@ -217,13 +213,6 @@ This project is licensed under the Creative Commons Attribution 3.0 License - se
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## 📞 Contact
-
-- **Email**: connect@kakarla.in
-- **LinkedIn**: [chandrasekhar4u](https://in.linkedin.com/in/chandrasekhar4u)
-- **GitHub**: [chandrasekhar4u](https://github.com/chandrasekhar4u)
-- **Twitter**: [@chandrasekhar4u](https://twitter.com/chandrasekhar4u)
 
 ---
 
