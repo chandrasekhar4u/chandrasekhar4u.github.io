@@ -204,7 +204,7 @@ For other hosting providers:
 
 ## 📄 License
 
-This project is licensed under the Creative Commons Attribution 3.0 License.
+This project is licensed under the MIT License.
 
 ## 🤝 Contributing
 
