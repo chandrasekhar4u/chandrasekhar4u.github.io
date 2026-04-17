@@ -1172,6 +1172,9 @@ details.mobile-collapsible > *:not(summary) {
   letter-spacing: .03em;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .tech-tag:hover {
   background: rgba(56,189,248,.15);
@@ -1522,4 +1525,97 @@ details.mobile-collapsible,
   transition-property: background-color, color, border-color, box-shadow;
   transition-duration: var(--transition-base);
   transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AI REPRESENTATION THEME — Subtle, Professional AI Practitioner Indicators
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── AI Design Tokens ───────────────────────────────────────────────────── */
+:root {
+  --ai-color:       #A855F7;   /* Purple 500 — AI accent            */
+  --ai-dark:        #9333EA;   /* Purple 600                        */
+  --ai-light:       #D8B4FE;   /* Purple 200 — subtle tint          */
+  --ai-glow:        rgba(168, 85, 247, .15);
+}
+
+/* ─── AI Practitioner Badge (sidebar profile) ────────────────────────────── */
+.ai-practitioner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(168, 85, 247, .12);
+  border: 1px solid rgba(168, 85, 247, .28);
+  color: var(--ai-light);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  margin-top: var(--spacing-sm);
+  letter-spacing: .02em;
+  transition: all var(--transition-fast);
+}
+.ai-practitioner-badge i {
+  font-size: 11px;
+  color: var(--ai-light);
+}
+.ai-practitioner-badge:hover {
+  background: rgba(168, 85, 247, .20);
+  border-color: rgba(168, 85, 247, .45);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ai-practitioner-badge {
+    animation: nameReveal 0.6s 0.45s ease-out both;
+  }
+}
+
+/* ─── AI Skill Category — violet accent ─────────────────────────────────── */
+.skill-category.ai-category .skill-category-title {
+  color: var(--ai-color);
+}
+.skill-category.ai-category .skill-category-title i {
+  margin-right: var(--spacing-xs);
+  font-size: 10px;
+}
+.skill-category.ai-category .progress-bar {
+  background: linear-gradient(90deg, var(--ai-dark) 0%, var(--ai-color) 100%);
+}
+.skill-category.ai-category .progress-bar::before {
+  background: var(--ai-color);
+  box-shadow: 0 0 6px var(--ai-glow);
+}
+.skill-category.ai-category .progress-bar::after {
+  color: var(--ai-color);
+}
+html[data-theme="dark"] .skill-category.ai-category .skill-category-title {
+  color: var(--ai-light);
+}
+html[data-theme="dark"] .skill-category.ai-category .progress-bar::after {
+  color: var(--ai-light);
+}
+
+/* ─── Footer AI sparkle icon ─────────────────────────────────────────────── */
+.footer-ai {
+  color: var(--ai-color);
+  font-size: 12px;
+}
+html[data-theme="dark"] .footer-ai {
+  color: var(--ai-light);
+}
+
+/* ─── AI tech tag variant ────────────────────────────────────────────────── */
+.tech-tag.tech-tag-ai {
+  background: rgba(168, 85, 247, .08);
+  border-color: rgba(168, 85, 247, .22);
+  color: var(--ai-dark);
+}
+.tech-tag.tech-tag-ai:hover {
+  background: rgba(168, 85, 247, .15);
+  border-color: rgba(168, 85, 247, .4);
+}
+html[data-theme="dark"] .tech-tag.tech-tag-ai {
+  background: rgba(168, 85, 247, .12);
+  border-color: rgba(168, 85, 247, .28);
+  color: var(--ai-light);
 }
