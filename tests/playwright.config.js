@@ -12,6 +12,9 @@ module.exports = defineConfig({
   use: {
     baseURL: 'http://localhost:8000',
     trace: 'on-first-retry',
+    // Block service worker registration so SW caching does not interfere with
+    // test assertions about DOM attributes across retries.
+    serviceWorkers: 'block',
   },
 
   // Start the static file server from the repo root before running any tests.
@@ -25,6 +28,10 @@ module.exports = defineConfig({
   },
 
   projects: [
+    // Desktop
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // Mobile
+    { name: 'mobile-chrome', use: { ...devices['Pixel 5'] } },
+    { name: 'mobile-safari', use: { ...devices['iPhone 12'] } },
   ],
 });
