@@ -1,0 +1,28 @@
+{
+  "name": "chandrasekhar4u-github-io-quality",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quality gates for portfolio site",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "lint:html": "htmlhint index.html",
+    "lint:css": "stylelint \"assets/css/**/*.css\"",
+    "lint:js": "eslint assets/js/main.js tests/**/*.js",
+    "format:check": "prettier --check \"package*.json\" \"tests/package.json\" \".github/workflows/**/*.yml\" \".stylelintrc.json\" \".eslintrc.json\" \"lighthouserc.json\"",
+    "linkcheck": "linkinator . --recurse --markdown --timeout 15000 --retry-errors --retry-errors-count 2 --skip \"(node_modules|vendor|kakarla\\\\.in|cdn\\\\.jsdelivr\\\\.net|cdnjs\\\\.cloudflare\\\\.com|fonts\\\\.googleapis\\\\.com|fonts\\\\.gstatic\\\\.com|googletagmanager\\\\.com|linkedin\\\\.com|stackoverflow\\\\.com|wellsfargo\\\\.com|smartdcc\\\\.co\\\\.uk|support\\\\.bell\\\\.ca|bordgaisenergy\\\\.ie|twitter\\\\.com|x\\\\.com|facebook\\\\.com|github\\\\.com)\"",
+    "test:ui": "npm --prefix tests test",
+    "test:a11y": "npm --prefix tests test -- --grep \"Accessibility - WCAG Compliance\"",
+    "test:perf": "npm --prefix tests test -- --grep \"Performance - Core Web Vitals\"",
+    "lighthouse:ci": "lhci autorun --config=./lighthouserc.json"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "eslint": "^8.57.1",
+    "htmlhint": "^1.7.1",
+    "linkinator": "^6.1.4",
+    "prettier": "^3.6.2",
+    "stylelint": "^16.25.0",
+    "stylelint-config-standard": "^39.0.1"
+  }
+}

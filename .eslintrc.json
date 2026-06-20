@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended"],
+  "ignorePatterns": ["assets/js/min/**"],
+  "overrides": [
+    {
+      "files": ["tests/**/*.js"],
+      "env": {
+        "node": true
+      },
+      "globals": {
+        "test": "readonly",
+        "expect": "readonly"
+      }
+    }
+  ],
+  "rules": {
+    "no-inner-declarations": "off",
+    "no-console": "off",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  }
+}

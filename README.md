@@ -56,6 +56,7 @@ Consistent spacing system using CSS variables:
 ### Prerequisites
 - Modern web browser
 - Simple HTTP server (for local development)
+- Node.js 22+ and npm (for quality checks and automated tests)
 
 ### Local Development
 
@@ -90,6 +91,26 @@ Consistent spacing system using CSS variables:
    ```
    http://localhost:8080
    ```
+
+### Quality Checks (Local)
+
+Run from repository root:
+
+```bash
+npm install
+npm run lint
+npm run format:check
+npm run linkcheck
+npm run lighthouse:ci
+```
+
+Run Playwright UI regression/a11y tests:
+
+```bash
+npm --prefix tests ci
+npm --prefix tests exec playwright install --with-deps chromium
+npm --prefix tests test
+```
 
 ### File Structure
 ```
@@ -129,6 +150,8 @@ For other hosting providers:
 - **Accessibility**: ≥ 95  
 - **Best Practices**: ≥ 95
 - **SEO**: ≥ 95
+
+These thresholds are now enforced in CI using Lighthouse CI assertions.
 
 ### Optimizations
 - **Modern Image Formats**: WebP with AVIF fallbacks
@@ -210,9 +233,25 @@ This project is licensed under the MIT License.
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Run quality checks before committing:
+   ```bash
+   npm run lint
+   npm run format:check
+   npm run linkcheck
+   npm --prefix tests test
+   ```
+4. Commit your changes (`git commit -m 'Add amazing feature'`)
+5. Push to the branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+### CI Quality Gates (Pull Requests + Default Branch Pushes)
+
+The GitHub Actions workflow enforces:
+- HTML/CSS/JS linting
+- Formatting checks
+- Broken-link checks (with retries + ignore list for unstable social URLs)
+- Lighthouse CI performance/a11y/best-practices/SEO thresholds
+- Full Playwright UI regression suite (includes accessibility-focused assertions)
 
 ---
 

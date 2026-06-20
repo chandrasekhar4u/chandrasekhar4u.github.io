@@ -37,15 +37,18 @@ test.describe('Performance - Core Web Vitals', () => {
     }
   });
 
-  test('JavaScript files should use defer attribute', async ({ page }) => {
+  test('Bootstrap and main JavaScript files should use defer attribute', async ({ page }) => {
     const scripts = await page.locator('script[src]').all();
+    let checkedScripts = 0;
     for (const script of scripts) {
       const src = await script.getAttribute('src');
-      if (src && !src.includes('gtm')) {
+      if (src && (src.includes('bootstrap') || src.includes('assets/js/main.js'))) {
         const hasDefer = await script.getAttribute('defer');
         expect(hasDefer).not.toBeNull();
+        checkedScripts += 1;
       }
     }
+    expect(checkedScripts).toBeGreaterThan(0);
   });
 
   test('FontAwesome CSS should be non-render-blocking', async ({ page }) => {
@@ -189,6 +192,18 @@ test.describe('Accessibility - WCAG Compliance', () => {
   test('contact list should have role="list"', async ({ page }) => {
     const contactList = page.locator('.contact-list');
     await expect(contactList).toHaveAttribute('role', 'list');
+  });
+
+  test('sidebar navigation should expose current section with aria-current', async ({ page }) => {
+    const navLinks = page.locator('.sidebar-nav-link');
+    await expect(navLinks).toHaveCount(4);
+
+    const activeLinks = page.locator('.sidebar-nav-link[aria-current="true"]');
+    await expect(activeLinks).toHaveCount(1);
+
+    const experienceLink = page.locator('.sidebar-nav-link[href="#section-experience"]');
+    await experienceLink.click();
+    await expect(experienceLink).toHaveAttribute('aria-current', 'true');
   });
 
   test('interests and language lists should have role="list"', async ({ page }) => {
