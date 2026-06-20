@@ -12,9 +12,7 @@
 
 @media print {
 
-    /* ═══════════════════════════════════════════════════════════════════════
-       HIDE INTERACTIVE / SCREEN-ONLY ELEMENTS
-    ═══════════════════════════════════════════════════════════════════════ */
+    /* Hide interactive / screen-only elements */
     .theme-toggle,
     .print-btn,
     .d-print-none,
@@ -25,6 +23,8 @@
     .details-summary,
     .project-card-cta,
     .availability-badge,
+    .ai-practitioner-badge,      /* AI badge is screen-only branding  */
+    .skill-category.ai-category, /* AI skill category to keep 1 page  */
     .interests-container,        /* save vertical space */
     .projects-section .intro {   /* redundant intro text */
         display: none !important;

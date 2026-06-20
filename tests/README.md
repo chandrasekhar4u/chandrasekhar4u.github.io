@@ -190,7 +190,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
       - name: Install dependencies
         run: cd tests && npm install
       - name: Install Playwright browsers
