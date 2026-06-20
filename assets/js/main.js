@@ -630,3 +630,12 @@
     initMobileAccordion();
   }
 })();
+
+// Service Worker registration — provides offline caching equivalent to Expires headers.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (err) {
+      console.warn('Service Worker registration failed:', err);
+    });
+  });
+}
