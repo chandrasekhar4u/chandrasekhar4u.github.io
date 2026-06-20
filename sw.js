@@ -13,7 +13,8 @@
 'use strict';
 
 const CACHE_VERSION = 'v1';
-const CACHE_NAME = `kakarla-static-${CACHE_VERSION}`;
+const CACHE_PREFIX = 'kakarla-static-';
+const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
 /** Assets to pre-cache during the install phase. */
 const PRECACHE_ASSETS = [
@@ -49,7 +50,9 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter(
+              (key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME,
+            )
             .map((key) => caches.delete(key)),
         ),
       )
@@ -82,25 +85,29 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((networkResponse) => {
-          const clone = networkResponse.clone();
-          caches
-            .open(CACHE_NAME)
-            .then((cache) => cache.put(request, clone));
+          if (networkResponse.ok) {
+            const clone = networkResponse.clone();
+            event.waitUntil(
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, clone)),
+            );
+          }
           return networkResponse;
         })
-        .catch(() => caches.match(request)),
+        .catch(() => caches.match(request, { ignoreSearch: true })),
     );
   } else {
-    // Cache-first for static assets: serve cached copy; update cache in background.
+    // Cache-first for static assets: serve cached copy; cache network response on miss.
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
 
         return fetch(request).then((networkResponse) => {
-          const clone = networkResponse.clone();
-          caches
-            .open(CACHE_NAME)
-            .then((cache) => cache.put(request, clone));
+          if (networkResponse.ok) {
+            const clone = networkResponse.clone();
+            event.waitUntil(
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, clone)),
+            );
+          }
           return networkResponse;
         });
       }),
