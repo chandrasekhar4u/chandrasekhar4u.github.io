@@ -548,8 +548,14 @@
           const top = item.section.getBoundingClientRect().top + window.scrollY;
           if (scrollPos >= top) current = item;
         });
-        navLinks.forEach(function(l) { l.classList.remove('active'); });
-        if (current) current.link.classList.add('active');
+        navLinks.forEach(function(l) {
+          l.classList.remove('active');
+          l.removeAttribute('aria-current');
+        });
+        if (current) {
+          current.link.classList.add('active');
+          current.link.setAttribute('aria-current', 'true');
+        }
       }
 
       window.addEventListener('scroll', updateActiveNav, { passive: true });
@@ -565,8 +571,12 @@
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             // Update active immediately
-            navLinks.forEach(function(l) { l.classList.remove('active'); });
+            navLinks.forEach(function(l) {
+              l.classList.remove('active');
+              l.removeAttribute('aria-current');
+            });
             link.classList.add('active');
+            link.setAttribute('aria-current', 'true');
           }
         });
       });

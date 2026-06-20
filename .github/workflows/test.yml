@@ -1,27 +1,62 @@
-name: Theme Toggle Tests
+name: Quality Gates
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          
-      - name: Install dependencies
-        run: cd tests && npm install
-        
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install root quality dependencies
+        run: npm install
+
+      - name: Lint checks (HTML/CSS/JS)
+        run: npm run lint
+
+      - name: Formatting checks
+        run: npm run format:check
+
+      - name: Link checks
+        run: npm run linkcheck
+
+      - name: Lighthouse performance/a11y budgets
+        run: npm run lighthouse:ci
+
+  ui-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install Playwright test dependencies
+        run: npm --prefix tests ci
+
       - name: Install Playwright browsers
-        run: cd tests && npx playwright install --with-deps
-        
-      - name: Run tests
-        run: cd tests && npm test
-        
+        run: npm --prefix tests exec playwright install --with-deps chromium
+
+      - name: Run full Playwright suite (includes accessibility assertions)
+        run: npm --prefix tests test
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
