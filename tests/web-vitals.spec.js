@@ -37,7 +37,7 @@ test.describe('Performance - Core Web Vitals', () => {
     }
   });
 
-  test('JavaScript files should use defer attribute', async ({ page }) => {
+  test('Bootstrap and main JavaScript files should use defer attribute', async ({ page }) => {
     const scripts = await page.locator('script[src]').all();
     let checkedScripts = 0;
     for (const script of scripts) {
