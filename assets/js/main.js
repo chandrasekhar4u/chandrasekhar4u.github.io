@@ -608,8 +608,7 @@
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-      // Small delay to ensure DOM is fully ready and to reduce any flicker
-      setTimeout(initThemeToggle, 100);
+      initThemeToggle();
       initSkillBars();
       initBackToTop();
       updateCopyrightYear();
@@ -620,7 +619,7 @@
       initMobileAccordion();
     }, { once: true });
   } else {
-    setTimeout(initThemeToggle, 100);
+    initThemeToggle();
     initSkillBars();
     initBackToTop();
     updateCopyrightYear();
