@@ -11,6 +11,7 @@
   --primary-color: #38BDF8;         /* Sky 400 – main accent          */
   --primary-dark:  #0EA5E9;         /* Sky 500                        */
   --primary-darker:#0284C7;         /* Sky 600                        */
+  --primary-accessible: #0369A1;   /* Sky 700 – accessible text on light bg (4.5:1+) */
   --primary-glow:  rgba(56,189,248,.18);
 
   /* Sidebar */
@@ -96,10 +97,16 @@ html[data-theme="dark"] {
   --primary-color:  #38BDF8;
   --primary-dark:   #7DD3FC;
   --primary-darker: #BAE6FD;
+  --primary-accessible: #7DD3FC;   /* Sky 300 – accessible text on dark bg */
   --primary-glow:   rgba(56,189,248,.12);
 
   --shadow-md: 0 4px 8px rgba(0,0,0,.3),  0 2px 4px rgba(0,0,0,.2);
   --shadow-lg: 0 12px 24px rgba(0,0,0,.4), 0 4px 8px rgba(0,0,0,.3);
+}
+
+/* Restore muted-text colour for time badges in dark mode */
+html[data-theme="dark"] .main-wrapper .time {
+  color: var(--text-muted);
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────── */
@@ -540,7 +547,7 @@ button:focus-visible,
 }
 
 .main-wrapper .time {
-  color: var(--text-muted);
+  color: #475569;
   font-size: 11px;
   font-weight: var(--font-weight-medium);
   background: var(--background);
@@ -552,7 +559,7 @@ button:focus-visible,
 }
 
 .main-wrapper .company {
-  color: var(--primary-dark);
+  color: var(--primary-accessible);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-sm);
@@ -1164,7 +1171,7 @@ details.mobile-collapsible > *:not(summary) {
 .tech-tag {
   background: rgba(56,189,248,.08);
   border: 1px solid rgba(56,189,248,.18);
-  color: var(--primary-dark);
+  color: var(--primary-accessible);
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
   padding: 2px 8px;
@@ -1291,7 +1298,7 @@ html[data-theme="dark"] .tech-tag {
 }
 .project-card-desc {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
   flex-grow: 1;
@@ -1302,7 +1309,7 @@ html[data-theme="dark"] .tech-tag {
   gap: 5px;
   font-size: 11px;
   font-weight: var(--font-weight-semibold);
-  color: var(--primary-dark);
+  color: var(--primary-accessible);
   text-decoration: none;
   padding: 5px 0;
   border-top: 1px solid var(--divider);
@@ -1427,7 +1434,6 @@ html[data-theme="dark"] .domain-telecom { color: #C4B5FD; }
 .footer-updated {
   font-size: 11px;
   color: var(--text-muted);
-  opacity: .7;
   margin: 0;
 }
 .footer-social {
@@ -1472,7 +1478,7 @@ html[data-theme="dark"] .domain-telecom { color: #C4B5FD; }
 .footer-tech {
   background: var(--background);
   border: 1px solid var(--divider);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 10px;
   font-weight: var(--font-weight-semibold);
   padding: 1px 6px;
