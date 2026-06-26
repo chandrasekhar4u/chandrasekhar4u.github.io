@@ -49,27 +49,10 @@ jobs:
           cache: "npm"
           cache-dependency-path: tests/package-lock.json
 
-      - name: Install Playwright system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgtk-4-1 libgraphene-1-0 libatk1.0-0 libatk-bridge2.0-0 \
-            libxkbcommon-x11-0 libxdamage1 libxkbcommon0 libxext6 \
-            libxfixes3 libxi6 libxrandr2 libxrender1 libxcomposite1 \
-            libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 \
-            libglib2.0-0 libglib2.0-bin libexpat1 libfontconfig1 libfreetype6 \
-            libharfbuzz0b libfribidi0 libuuid1 libssl3 \
-            libevent-2.1-7 libopus0 libdav1d7 libvpx9 libvorbis0a libvorbisenc2 \
-            libflac12 libmpg123-0 libsndfile1 libspeex1 libtheora0 libogg0 \
-            libva2 libwayland-client0 libwayland-server0 libxcb1 libxcb-icccm4 \
-            libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render0 libxcb-render-util0 \
-            libxcb-shape0 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 \
-            libxkbcommon-x11-0 libdrm-common libgbm1 libegl1 libglvnd0 libglx0
-
       - name: Install Playwright test dependencies
         run: npm --prefix tests ci
 
-      - name: Install Playwright browsers
+      - name: Install Playwright browsers and system dependencies
         run: npm --prefix tests exec playwright install --with-deps chromium webkit
 
       - name: Run full Playwright suite (includes accessibility assertions)
