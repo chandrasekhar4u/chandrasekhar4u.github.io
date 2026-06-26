@@ -221,7 +221,7 @@ test.describe('Theme Toggle Functionality', () => {
     
     // The announcement should have been created and removed
     // We can check in the console or by monitoring DOM changes
-    const announcementExists = await announcement.count();
+    await announcement.count();
     
     // The announcement might be removed quickly, so we check if the script ran correctly
     // by verifying the console doesn't have errors
@@ -245,8 +245,6 @@ test.describe('Theme Toggle Functionality', () => {
 
   test('should handle rapid theme toggles correctly', async ({ page }) => {
     const themeToggle = page.locator('#theme-toggle');
-    const initialTheme = await page.getAttribute('html', 'data-theme');
-
     // Rapidly toggle theme multiple times
     for (let i = 0; i < 5; i++) {
       await themeToggle.click();
