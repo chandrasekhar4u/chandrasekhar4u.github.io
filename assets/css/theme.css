@@ -37,7 +37,7 @@
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont,
                       'Segoe UI', system-ui, sans-serif;
   --font-size-base: clamp(13px, .9vw + 11px, 15px);
-  --font-size-sm:   clamp(11px, .7vw + 9px,  13px);
+  --font-size-sm:   clamp(12px, .7vw + 9px,  13px);
   --font-size-lg:   clamp(15px, 1.1vw + 13px, 17px);
   --font-weight-normal:   400;
   --font-weight-medium:   500;
@@ -285,7 +285,7 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .container-block-title {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: var(--font-weight-bold);
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -369,7 +369,7 @@ button:focus-visible,
   color: #7DD3FC;
   padding: 2px 8px;
   border-radius: var(--radius-full);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
 }
 
@@ -402,7 +402,7 @@ button:focus-visible,
 
 .sidebar-wrapper .lang-desc {
   color: #475569;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 /* ─── Main Content ──────────────────────────────────────────────────────── */
@@ -442,7 +442,7 @@ button:focus-visible,
 
 /* ── Section Titles ── */
 .main-wrapper .section-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-bold);
   color: var(--text-muted);
   text-transform: uppercase;
@@ -548,7 +548,7 @@ button:focus-visible,
 
 .main-wrapper .time {
   color: #475569;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
   background: var(--background);
   border: 1px solid var(--divider);
