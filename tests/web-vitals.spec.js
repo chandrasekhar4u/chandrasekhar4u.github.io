@@ -366,7 +366,8 @@ test.describe('Best Practices', () => {
     // Filter out expected network errors (CDN resources unavailable in local test)
     const unexpectedErrors = consoleErrors.filter(error =>
       !error.includes('net::ERR_') &&
-      !error.includes('Failed to load resource')
+      !error.includes('Failed to load resource') &&
+      !error.includes('Failed to preconnect to ')
     );
     expect(unexpectedErrors).toHaveLength(0);
   });

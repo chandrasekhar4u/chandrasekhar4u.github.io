@@ -159,10 +159,10 @@
           // Show modern toast notification
           showToast(announcement, newTheme);
           
-          // Reset debounce flag after transition completes
+          // Reset debounce flag after the short visual feedback completes
           setTimeout(() => {
             isToggling = false;
-          }, 300); // Match CSS transition duration
+          }, 100);
           
         } catch (e) {
           console.error('Error in toggleTheme:', e);
