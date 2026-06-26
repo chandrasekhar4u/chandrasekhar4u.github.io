@@ -53,7 +53,7 @@ jobs:
         run: npm --prefix tests ci
 
       - name: Install Playwright system dependencies
-        run: npm --prefix tests exec playwright install-deps chromium webkit
+        run: sudo npm --prefix tests exec playwright install-deps chromium webkit
 
       - name: Install Playwright browsers
         run: npm --prefix tests exec playwright install chromium webkit
