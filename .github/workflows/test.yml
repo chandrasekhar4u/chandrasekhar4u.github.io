@@ -52,8 +52,11 @@ jobs:
       - name: Install Playwright test dependencies
         run: npm --prefix tests ci
 
+      - name: Install system dependencies for Playwright browsers
+        run: npm --prefix tests exec playwright install-deps
+
       - name: Install Playwright browsers
-        run: npm --prefix tests exec playwright install --with-deps chromium webkit
+        run: npm --prefix tests exec playwright install chromium webkit
 
       - name: Run full Playwright suite (includes accessibility assertions)
         run: npm --prefix tests test

@@ -209,22 +209,7 @@ test.describe('Theme Toggle Functionality', () => {
   test('should announce theme changes to screen readers', async ({ page }) => {
     const themeToggle = page.locator('#theme-toggle');
 
-    // Click to toggle theme
-    await themeToggle.click();
-    await page.waitForTimeout(200);
-
-    // Check if announcement element was created
-    const announcement = page.locator('.visually-hidden[aria-live="polite"]');
-    
-    // Wait a bit for the announcement to be added and then removed
-    await page.waitForTimeout(500);
-    
-    // The announcement should have been created and removed
-    // We can check in the console or by monitoring DOM changes
-    const announcementExists = await announcement.count();
-    
-    // The announcement might be removed quickly, so we check if the script ran correctly
-    // by verifying the console doesn't have errors
+    // Set up console error tracking
     const consoleErrors = [];
     page.on('console', msg => {
       if (msg.type() === 'error') {
@@ -232,7 +217,21 @@ test.describe('Theme Toggle Functionality', () => {
       }
     });
 
-    // Toggle again to test announcement
+    // Click to toggle theme
+    await themeToggle.click();
+
+    // Check if announcement element was created
+    const announcement = page.locator('.visually-hidden[aria-live="polite"]');
+    
+    // Wait for and assert announcement was created (should have text content)
+    await page.waitForTimeout(50); // Give the script time to create the element
+    const announcementCount = await announcement.count();
+    expect(announcementCount).toBeGreaterThan(0);
+    
+    // Wait for announcement to be cleared
+    await page.waitForTimeout(1100);
+
+    // Toggle again to ensure announcement works consistently
     await themeToggle.click();
     await page.waitForTimeout(1100); // Wait for announcement cleanup
 
@@ -245,8 +244,6 @@ test.describe('Theme Toggle Functionality', () => {
 
   test('should handle rapid theme toggles correctly', async ({ page }) => {
     const themeToggle = page.locator('#theme-toggle');
-    const initialTheme = await page.getAttribute('html', 'data-theme');
-
     // Rapidly toggle theme multiple times
     for (let i = 0; i < 5; i++) {
       await themeToggle.click();
