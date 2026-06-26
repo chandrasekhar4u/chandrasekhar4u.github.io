@@ -53,25 +53,7 @@ jobs:
         run: npm --prefix tests ci
 
       - name: Install system dependencies for Playwright browsers
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgtk-3-0 libgtk-4-1 \
-            libglib2.0-0 \
-            libcairo2 \
-            libnss3 libnspr4 \
-            libx11-6 libxrandr2 libxcomposite1 libxdamage1 libxext6 libxfixes3 \
-            libxkbcommon0 libxkbcommon-x11-0 \
-            libxrender1 \
-            fonts-noto-color-emoji \
-            xdg-utils \
-            libgstreamer1.0-0 libgstreamer-plugins-base1.0-0 \
-            libharfbuzz-icu0 \
-            libwayland-client0 libwayland-server0 \
-            libmanette-0.2-0 \
-            libflite1 \
-            libavif16 \
-            libc6 libgcc-s1 libstdc++6
+        run: npm --prefix tests exec playwright install-deps
 
       - name: Install Playwright browsers
         run: npm --prefix tests exec playwright install chromium webkit
