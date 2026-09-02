@@ -1709,8 +1709,10 @@ details.mobile-collapsible,
 }
 
 /* ─── AI Skill Category — violet accent ─────────────────────────────────── */
+/* Text uses --ai-dark (Purple 600, ~5.4:1 on white); --ai-color (Purple 500)
+   is kept for fills / borders / glows where contrast rules don't apply. */
 .skill-category.ai-category .skill-category-title {
-  color: var(--ai-color);
+  color: var(--ai-dark);
 }
 .skill-category.ai-category .skill-category-title .icon {
   margin-right: var(--spacing-xs);
@@ -1723,7 +1725,7 @@ details.mobile-collapsible,
   box-shadow: 0 0 6px var(--ai-glow);
 }
 .skill-category.ai-category .progress-bar::after {
-  color: var(--ai-color);
+  color: var(--ai-dark);
 }
 html[data-theme="dark"] .skill-category.ai-category .skill-category-title {
   color: var(--ai-light);
