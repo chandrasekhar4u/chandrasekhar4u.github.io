@@ -6,6 +6,13 @@
     <!-- Meta -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Set the theme before first paint so dark-mode users never see a light flash (no FOUC / no CLS) -->
+    <script>
+    (function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
+    </script>
+
     <meta name="description" content="Chandra Sekhar Kakarla — Full Stack Developer with 15+ years building enterprise Java, Spring and J2EE applications, now shipping with an AI-assisted workflow.">
     <meta name="keywords" content="Chandra Sekhar Kakarla, Kakarla, Chandra Profile, chandra sekhar kakarla resume, kakarla.in, Chandra Sekhar CV">
     <meta name="author" content="Chandra Sekhar Kakarla">
@@ -14,6 +21,8 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://kakarla.in/">
+    <link rel="author" href="/humans.txt">
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Machine-readable summary (llms.txt)">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -36,8 +45,9 @@
     <!-- Resource hints — only for the one deferred third party (analytics) -->
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
-    <!-- Preload LCP image + self-hosted variable font for a fast, shift-free first paint -->
-    <link rel="preload" as="image" href="assets/images/chandrasekhar.webp" fetchpriority="high">
+    <!-- Preload LCP image + self-hosted variable font for a fast, shift-free first paint.
+         The headshot renders at 120 CSS px, so a 240 px AVIF (~5 KB) is the 2x-perfect LCP. -->
+    <link rel="preload" as="image" href="assets/images/chandrasekhar-240.avif" type="image/avif" fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin>
 
     <!-- Favicon -->
@@ -85,32 +95,64 @@
 	<script type="application/ld+json">
 	{
 		"@context": "https://schema.org",
-		"@type": "Person",
-		"name": "Chandra Sekhar Kakarla",
-		"jobTitle": "Software Development Senior Specialist",
-		"description": "Full Stack Developer with 15+ years building enterprise Java, J2EE and Spring applications across Finance, Energy and Telecom, now working with an AI-assisted workflow",
-		"url": "https://kakarla.in/",
-		"image": "https://kakarla.in/assets/images/chandrasekhar.webp",
-		"worksFor": {
-			"@type": "Organization",
-			"name": "NTT DATA",
-			"url": "https://www.nttdata.com/"
-		},
-		"alumniOf": [
+		"@graph": [
 			{
-				"@type": "CollegeOrUniversity",
-				"name": "J.K.C College, Guntur, A.P"
+				"@type": "ProfilePage",
+				"@id": "https://kakarla.in/#profilepage",
+				"url": "https://kakarla.in/",
+				"name": "Chandra Sekhar Kakarla — Full Stack Developer",
+				"dateModified": "2026-09-02",
+				"inLanguage": "en",
+				"mainEntity": { "@id": "https://kakarla.in/#person" }
+			},
+			{
+				"@type": "Person",
+				"@id": "https://kakarla.in/#person",
+				"name": "Chandra Sekhar Kakarla",
+				"givenName": "Chandra Sekhar",
+				"familyName": "Kakarla",
+				"jobTitle": "Software Development Senior Specialist",
+				"description": "Full Stack Developer with 15+ years building enterprise Java, J2EE and Spring applications across Finance, Energy and Telecom, now working with an AI-assisted workflow",
+				"url": "https://kakarla.in/",
+				"image": "https://kakarla.in/assets/images/chandrasekhar.webp",
+				"email": "connect@kakarla.in",
+				"address": { "@type": "PostalAddress", "addressCountry": "IN" },
+				"knowsLanguage": ["Telugu", "English", "Hindi"],
+				"knowsAbout": [
+					"Java", "J2EE", "Spring Framework", "JSF", "Thymeleaf", "Hibernate",
+					"Oracle Database", "REST APIs", "JavaScript", "HTML", "CSS",
+					"AI-assisted development", "GitHub Copilot", "Prompt engineering",
+					"Master Data Management", "Financial services software", "Energy sector software", "Telecom billing"
+				],
+				"hasOccupation": {
+					"@type": "Occupation",
+					"name": "Full Stack Developer",
+					"skills": "Java, J2EE, Spring, JSF, Thymeleaf, REST APIs, JavaScript, AI-assisted development"
+				},
+				"worksFor": {
+					"@type": "Organization",
+					"name": "NTT DATA",
+					"url": "https://www.nttdata.com/"
+				},
+				"alumniOf": {
+					"@type": "CollegeOrUniversity",
+					"name": "J.K.C College, Guntur, Andhra Pradesh, India"
+				},
+				"sameAs": [
+					"https://twitter.com/chandrasekhar4u",
+					"https://stackoverflow.com/users/1213738/",
+					"https://in.linkedin.com/in/chandrasekhar4u",
+					"https://www.facebook.com/chandrasekhar4u",
+					"https://github.com/chandrasekhar4u"
+				],
+				"subjectOf": [
+					{ "@type": "CreativeWork", "name": "Wells Fargo Public Site", "url": "https://www.wellsfargo.com", "about": "Finance" },
+					{ "@type": "CreativeWork", "name": "DCC — Instant Energy", "url": "https://www.smartdcc.co.uk", "about": "Energy" },
+					{ "@type": "CreativeWork", "name": "OBE Web Tool", "url": "https://support.bell.ca/Billing-and-Accounts/Billing", "about": "Telecom" },
+					{ "@type": "CreativeWork", "name": "Prodis Entry Exit", "url": "https://www.bordgaisenergy.ie", "about": "Energy" }
+				]
 			}
-		],
-		"sameAs": [
-			"https://twitter.com/chandrasekhar4u",
-			"https://stackoverflow.com/users/1213738/",
-			"https://in.linkedin.com/in/chandrasekhar4u",
-			"https://www.facebook.com/chandrasekhar4u",
-			"https://github.com/chandrasekhar4u"
-		],
-		"email": "connect@kakarla.in",
-		"knowsLanguage": ["Telugu", "English", "Hindi"]
+		]
 	}
 	</script>
 	<!-- Breadcrumb Schema -->
@@ -173,14 +215,18 @@
     <div class="wrapper">
         <aside class="sidebar-wrapper" role="complementary" aria-label="Personal information and contact details">
             <div class="profile-container">
-                <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" fetchpriority="high" loading="eager"/>
+                <picture>
+                  <source type="image/avif" srcset="assets/images/chandrasekhar-240.avif">
+                  <source type="image/webp" srcset="assets/images/chandrasekhar-240.webp">
+                  <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" fetchpriority="high" loading="eager" decoding="async"/>
+                </picture>
                 <h1 class="name">Chandra Sekhar Kakarla</h1>
-                <h2 class="tagline">Full Stack Developer</h2>
-                <div class="availability-badge" aria-label="Current employment status">
+                <p class="tagline">Full Stack Developer</p>
+                <div class="availability-badge">
                   <span class="availability-dot" aria-hidden="true"></span>
                   Currently Employed · NTT DATA
                 </div>
-                <div class="ai-practitioner-badge" aria-label="AI practitioner">
+                <div class="ai-practitioner-badge">
                   <svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg>
                   AI Practitioner
                 </div>
@@ -205,11 +251,11 @@
                         <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
                       </button>
                     </li>
-                    <li class="website"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer" aria-current="page">kakarla.in</a></li>
-                    <li class="linkedin"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg> <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
-                    <li class="github"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg> <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">chandrasekhar4u</a></li>
-                	<li class="stackoverflow"><svg class="icon" aria-hidden="true"><use href="#i-stack-overflow"></use></svg> <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer">chandrasekhar</a></li>
-                	<li class="twitter"><svg class="icon" aria-hidden="true"><use href="#i-x-twitter"></use></svg> <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer">@chandrasekhar4u</a></li>
+                    <li class="website"><svg class="icon" aria-hidden="true"><use href="#i-globe"></use></svg> <a href="https://kakarla.in/" target="_blank" rel="noopener noreferrer" aria-current="page" aria-label="Website — kakarla.in">kakarla.in</a></li>
+                    <li class="linkedin"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"></use></svg> <a href="https://in.linkedin.com/in/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn — chandrasekhar4u">chandrasekhar4u</a></li>
+                    <li class="github"><svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg> <a href="https://github.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="GitHub — chandrasekhar4u">chandrasekhar4u</a></li>
+                	<li class="stackoverflow"><svg class="icon" aria-hidden="true"><use href="#i-stack-overflow"></use></svg> <a href="https://stackoverflow.com/users/1213738/" target="_blank" rel="noopener noreferrer" aria-label="Stack Overflow — chandrasekhar">chandrasekhar</a></li>
+                	<li class="twitter"><svg class="icon" aria-hidden="true"><use href="#i-x-twitter"></use></svg> <a href="https://twitter.com/chandrasekhar4u" target="_blank" rel="noopener noreferrer" aria-label="X, formerly Twitter — @chandrasekhar4u">@chandrasekhar4u</a></li>
                 </ul>
             </div><!--//contact-container-->
             <details class="education-container container-block mobile-collapsible" open>
@@ -249,8 +295,8 @@
         
         <main class="main-wrapper" id="main-content" role="main" aria-label="Resume content">
             
-            <section class="section summary-section" id="section-summary">
-                <h2 class="section-title"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg>Career Profile</h2>
+            <section class="section summary-section" id="section-summary" aria-labelledby="summary-title">
+                <h2 class="section-title" id="summary-title"><svg class="icon" aria-hidden="true"><use href="#i-user"></use></svg>Career Profile</h2>
                 <div class="summary">
                  <p class="summary-lead">I build and ship enterprise web applications &mdash; 15+ years across Finance, Energy and Telecom, most of it in Java, Spring and J2EE, now delivered with an AI-assisted workflow.</p>
                  <ul>
@@ -264,8 +310,8 @@
                 </div><!--//summary-->
             </section><!--//section-->
             
-            <section class="section experiences-section" id="section-experience">
-                <h2 class="section-title"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"></use></svg>Experiences</h2>
+            <section class="section experiences-section" id="section-experience" aria-labelledby="experience-title">
+                <h2 class="section-title" id="experience-title"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"></use></svg>Experiences</h2>
                
                 <div class="item">
                     <div class="meta">
@@ -276,16 +322,16 @@
                         <div class="company">NTT DATA, San Francisco</div>
                     </div><!--//meta-->
                     <details class="details-block" open>
-                      <summary class="details-summary">Details <svg class="icon details-chevron" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
+                      <summary class="details-summary" aria-label="Details — Software Development Senior Specialist">Details <svg class="icon details-chevron" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
                       <div class="details-body">
                         <p>Design and Development of web applications using Java, J2EE and Spring frameworks for enterprise Finance clients.</p>
-                        <div class="tech-tags" aria-label="Technologies used">
-                          <span class="tech-tag">Java</span>
-                          <span class="tech-tag">Spring</span>
-                          <span class="tech-tag">J2EE</span>
-                          <span class="tech-tag">Thymeleaf</span>
-                          <span class="tech-tag">REST APIs</span>
-                          <span class="tech-tag tech-tag-ai"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg> GitHub Copilot</span>
+                        <div class="tech-tags" role="list" aria-label="Technologies used">
+                          <span class="tech-tag" role="listitem">Java</span>
+                          <span class="tech-tag" role="listitem">Spring</span>
+                          <span class="tech-tag" role="listitem">J2EE</span>
+                          <span class="tech-tag" role="listitem">Thymeleaf</span>
+                          <span class="tech-tag" role="listitem">REST APIs</span>
+                          <span class="tech-tag tech-tag-ai" role="listitem"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg> GitHub Copilot</span>
                         </div>
                       </div>
                     </details>
@@ -300,15 +346,15 @@
                         <div class="company">CGI, India</div>
                     </div><!--//meta-->
                     <details class="details-block" open>
-                      <summary class="details-summary">Details <svg class="icon details-chevron" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
+                      <summary class="details-summary" aria-label="Details — Senior Software Engineer">Details <svg class="icon details-chevron" aria-hidden="true"><use href="#i-chevron-down"></use></svg></summary>
                       <div class="details-body">
                         <p>Developing web applications using Java, J2EE for clients in Energy and Telecom domains.</p>
-                        <div class="tech-tags" aria-label="Technologies used">
-                          <span class="tech-tag">Java</span>
-                          <span class="tech-tag">J2EE</span>
-                          <span class="tech-tag">JSF</span>
-                          <span class="tech-tag">Hibernate</span>
-                          <span class="tech-tag">Oracle DB</span>
+                        <div class="tech-tags" role="list" aria-label="Technologies used">
+                          <span class="tech-tag" role="listitem">Java</span>
+                          <span class="tech-tag" role="listitem">J2EE</span>
+                          <span class="tech-tag" role="listitem">JSF</span>
+                          <span class="tech-tag" role="listitem">Hibernate</span>
+                          <span class="tech-tag" role="listitem">Oracle DB</span>
                         </div>
                       </div>
                     </details>
@@ -316,8 +362,8 @@
                 
             </section><!--//section-->
             
-            <section class="section projects-section" id="section-projects">
-                <h2 class="section-title"><svg class="icon" aria-hidden="true"><use href="#i-archive"></use></svg>Projects</h2>
+            <section class="section projects-section" id="section-projects" aria-labelledby="projects-title">
+                <h2 class="section-title" id="projects-title"><svg class="icon" aria-hidden="true"><use href="#i-archive"></use></svg>Projects</h2>
                 <div class="intro">
                     <p>I got privileges to work in different projects in different domains.</p>
                 </div><!--//intro-->
@@ -325,7 +371,7 @@
                   <div class="project-card" role="listitem">
                     <div class="project-card-header">
                       <div class="project-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-landmark"></use></svg></div>
-                      <span class="project-domain-badge domain-finance">Finance</span>
+                      <span class="project-domain-badge domain-finance"><span class="visually-hidden">Domain: </span>Finance</span>
                     </div>
                     <h3 class="project-card-title"><a href="https://www.wellsfargo.com" target="_blank" rel="noopener noreferrer">Wells Fargo Public Site</a></h3>
                     <p class="project-card-desc">Wells Fargo's public-facing web platform for banking and financial services.</p>
@@ -334,7 +380,7 @@
                   <div class="project-card" role="listitem">
                     <div class="project-card-header">
                       <div class="project-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-bolt"></use></svg></div>
-                      <span class="project-domain-badge domain-energy">Energy</span>
+                      <span class="project-domain-badge domain-energy"><span class="visually-hidden">Domain: </span>Energy</span>
                     </div>
                     <h3 class="project-card-title"><a href="https://www.smartdcc.co.uk" target="_blank" rel="noopener noreferrer">DCC</a></h3>
                     <p class="project-card-desc">Instant Energy (IE) subsystem implementing primary smart meter functions.</p>
@@ -343,7 +389,7 @@
                   <div class="project-card" role="listitem">
                     <div class="project-card-header">
                       <div class="project-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-signal"></use></svg></div>
-                      <span class="project-domain-badge domain-telecom">Telecom</span>
+                      <span class="project-domain-badge domain-telecom"><span class="visually-hidden">Domain: </span>Telecom</span>
                     </div>
                     <h3 class="project-card-title"><a href="https://support.bell.ca/Billing-and-Accounts/Billing" target="_blank" rel="noopener noreferrer">OBE Web Tool</a></h3>
                     <p class="project-card-desc">New online presentation application for Bell Canada billing management.</p>
@@ -352,7 +398,7 @@
                   <div class="project-card" role="listitem">
                     <div class="project-card-header">
                       <div class="project-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-flame"></use></svg></div>
-                      <span class="project-domain-badge domain-energy">Energy</span>
+                      <span class="project-domain-badge domain-energy"><span class="visually-hidden">Domain: </span>Energy</span>
                     </div>
                     <h3 class="project-card-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase 3</a></h3>
                     <p class="project-card-desc">Gas transportation shipper management system for Bord Gáis Energy.</p>
@@ -361,7 +407,7 @@
                   <div class="project-card" role="listitem">
                     <div class="project-card-header">
                       <div class="project-card-icon"><svg class="icon" aria-hidden="true"><use href="#i-flame"></use></svg></div>
-                      <span class="project-domain-badge domain-energy">Energy</span>
+                      <span class="project-domain-badge domain-energy"><span class="visually-hidden">Domain: </span>Energy</span>
                     </div>
                     <h3 class="project-card-title"><a href="https://www.bordgaisenergy.ie" target="_blank" rel="noopener noreferrer">Prodis Entry Exit Phase 2</a></h3>
                     <p class="project-card-desc">Gas transportation core functionality for Bord Gáis Energy's shipper platform.</p>
@@ -370,8 +416,8 @@
                 </div><!--//project-cards-->
             </section><!--//section-->
             
-            <section class="skills-section section" id="section-skills">
-                <h2 class="section-title"><svg class="icon" aria-hidden="true"><use href="#i-rocket"></use></svg>Skills &amp; Proficiency</h2>
+            <section class="skills-section section" id="section-skills" aria-labelledby="skills-title">
+                <h2 class="section-title" id="skills-title"><svg class="icon" aria-hidden="true"><use href="#i-rocket"></use></svg>Skills &amp; Proficiency</h2>
                 <div class="skillset">
                   <div class="skill-category">
                     <h3 class="skill-category-title">Backend</h3>

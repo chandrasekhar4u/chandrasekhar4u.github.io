@@ -407,6 +407,7 @@ button:focus-visible,
   font-weight: var(--font-weight-semibold);
   letter-spacing: .07em;
   text-transform: uppercase;
+  margin-top: 0;
   margin-bottom: 0;
 }
 
@@ -792,10 +793,30 @@ button:focus-visible,
   height: 100%;
   background: linear-gradient(90deg, var(--primary-darker) 0%, var(--primary-color) 100%);
   border-radius: var(--radius-full);
-  transition: width var(--transition-slow) ease;
   display: block;
-  width: 0;
   position: relative;
+  min-width: 2px;
+}
+
+/* Target widths keyed to aria-valuenow (mirrors print.css) — the source of
+   truth for how full each bar is, with no dependency on JavaScript. */
+.skillset .progress-bar[aria-valuenow="90"] { width: 90%; }
+.skillset .progress-bar[aria-valuenow="85"] { width: 85%; }
+.skillset .progress-bar[aria-valuenow="80"] { width: 80%; }
+.skillset .progress-bar[aria-valuenow="75"] { width: 75%; }
+.skillset .progress-bar[aria-valuenow="70"] { width: 70%; }
+
+/* Reveal on scroll — CSS scroll-driven animation, no JS, no scroll handler.
+   Where `animation-timeline` isn't supported the bars just render full. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .skillset .progress-bar {
+      animation: skill-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 34%;
+    }
+    @keyframes skill-grow { from { width: 0; } }
+  }
 }
 
 /* Glowing dot at bar end */
@@ -811,14 +832,11 @@ button:focus-visible,
   background: var(--primary-color);
   border: 2px solid var(--background-alt);
   box-shadow: 0 0 6px var(--primary-glow);
-  display: none;
 }
-.skillset .progress-bar[style*="width"]::before { display: block; }
-.skillset .progress-bar[style*="width"]::after { content: attr(data-skill-level); }
 
 /* Proficiency-tier label outside the bar (e.g. "Expert", "Advanced") */
 .skillset .progress-bar::after {
-  content: '';
+  content: attr(data-skill-level);
   position: absolute;
   left: calc(100% + 10px);
   top: 50%;
@@ -830,9 +848,6 @@ button:focus-visible,
   text-transform: uppercase;
   white-space: nowrap;
 }
-
-/* Keep min-width so empty-state bars stay visible */
-.progress-bar[style*="width"] { min-width: 2px; }
 
 /* Striped pattern: replaced with clean gradient — keep class harmless */
 .progress-bar-striped { background-image: none; }
@@ -1627,13 +1642,11 @@ html[data-theme="dark"] .domain-telecom { color: #C4B5FD; }
   }
 }
 
-/* ─── Content Visibility (Performance) ──────────────────────────────────────
-   Off-screen sections skip rendering until near the viewport. The intrinsic
-   sizes are tuned to each section's real height so the scrollbar and anchor
-   offsets stay stable (no scroll jump as sections hydrate). */
-.experiences-section { content-visibility: auto; contain-intrinsic-size: auto 440px; }
-.projects-section    { content-visibility: auto; contain-intrinsic-size: auto 680px; }
-.skills-section      { content-visibility: auto; contain-intrinsic-size: auto 620px; }
+/* Note: `content-visibility: auto` was removed from the sections. On a page
+   this short (~2000 px of plain DOM) its render saving is negligible, and it
+   made fragment navigation (kakarla.in/#section-skills) and the accessibility
+   scanner land on the wrong scroll position. Layout stability (CLS) matters
+   more for both users and agents. */
 
 /* ─── High Contrast Mode ─────────────────────────────────────────────────── */
 @media (prefers-contrast: high) {
@@ -1709,8 +1722,10 @@ details.mobile-collapsible,
 }
 
 /* ─── AI Skill Category — violet accent ─────────────────────────────────── */
+/* Text uses --ai-dark (Purple 600, ~5.4:1 on white); --ai-color (Purple 500)
+   is kept for fills / borders / the glow dot, where contrast rules don't apply. */
 .skill-category.ai-category .skill-category-title {
-  color: var(--ai-color);
+  color: var(--ai-dark);
 }
 .skill-category.ai-category .skill-category-title .icon {
   margin-right: var(--spacing-xs);
@@ -1723,7 +1738,7 @@ details.mobile-collapsible,
   box-shadow: 0 0 6px var(--ai-glow);
 }
 .skill-category.ai-category .progress-bar::after {
-  color: var(--ai-color);
+  color: var(--ai-dark);
 }
 html[data-theme="dark"] .skill-category.ai-category .skill-category-title {
   color: var(--ai-light);
@@ -1951,12 +1966,6 @@ html[data-theme="dark"] .theme-toast {
   }
 }
 
-/* Skill Bar Animations - Progressive Enhancement */
-/* Only apply will-change during animation to save GPU memory */
-.skillset .progress-bar[style*="transition"] {
-  will-change: width;
-}
-
 /* Loading state skeleton for progressive disclosure */
 .skillset .item.loading .progress-bar {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
@@ -1978,25 +1987,8 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
   background-size: 200% 100%;
 }
 
-/* Smooth entrance animations for sections */
-@media (prefers-reduced-motion: no-preference) {
-  .section {
-    animation: fadeInUp 0.6s ease-out;
-  }
-  
-  .section:nth-child(2) {
-    animation-delay: 0.1s;
-  }
-  
-  .section:nth-child(3) {
-    animation-delay: 0.2s;
-  }
-  
-  .section:nth-child(4) {
-    animation-delay: 0.3s;
-  }
-}
-
+/* Section entrance — a real scroll-driven reveal (each section fades up as it
+   enters the viewport) where supported; a plain fade-in on load otherwise. */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -2005,6 +1997,19 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .section {
+    animation: fadeInUp 0.6s ease-out both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .section {
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
   }
 }
 
@@ -2029,18 +2034,93 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
   .skillset {
     container-type: inline-size;
   }
-  
+
   @container (min-width: 400px) {
     .skillset .level-title {
       display: inline-block;
       width: 30%;
       float: left;
     }
-    
+
     .skillset .progress {
       display: inline-block;
       width: 68%;
       float: right;
     }
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODERN UX — reduced transparency, deep-link affordance, type polish
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── prefers-reduced-transparency ──────────────────────────────────────────
+   Replace translucent tints with solid surfaces for users who ask for it. */
+@media (prefers-reduced-transparency: reduce) {
+  .theme-toggle,
+  .print-btn,
+  .back-to-top,
+  .theme-toast {
+    background: var(--background-alt);
+    border-color: var(--divider);
+  }
+  .availability-badge {
+    background: #ECFDF5;
+    border-color: var(--success);
+    color: #047857;
+  }
+  .ai-practitioner-badge,
+  .tech-tag.tech-tag-ai {
+    background: #F5F3FF;
+    border-color: var(--ai-dark);
+    color: var(--ai-dark);
+  }
+  .tech-tag {
+    background: var(--background);
+    border-color: var(--divider);
+    color: var(--text-secondary);
+  }
+  .project-domain-badge {
+    background: var(--background);
+    border-color: var(--divider);
+  }
+  .sidebar-wrapper .contact-list li .icon,
+  .main-wrapper .section-title .icon {
+    background: var(--primary-accessible);
+    color: #fff;
+  }
+  .sidebar-wrapper .profile-container {
+    background: none;
+  }
+  html[data-theme="dark"] .availability-badge {
+    background: #052e2b;
+    color: #6EE7B7;
+  }
+  html[data-theme="dark"] .ai-practitioner-badge,
+  html[data-theme="dark"] .tech-tag.tech-tag-ai {
+    background: #2e1065;
+    color: var(--ai-light);
+  }
+}
+
+/* ─── Deep-link affordance — highlight the section an agent/user lands on ─── */
+.main-wrapper .section:target {
+  scroll-margin-top: 72px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .main-wrapper .section:target {
+    animation: target-flash 1.4s ease-out 1;
+  }
+  @keyframes target-flash {
+    0%   { background: var(--primary-glow); box-shadow: -12px 0 0 var(--primary-glow); }
+    100% { background: transparent; box-shadow: -12px 0 0 transparent; }
+  }
+}
+
+/* ─── Typographic polish (progressive) ─────────────────────────────────────── */
+.summary-lead,
+.details-body p,
+.project-card-desc,
+.summary-section .summary ul li {
+  text-wrap: pretty;
 }

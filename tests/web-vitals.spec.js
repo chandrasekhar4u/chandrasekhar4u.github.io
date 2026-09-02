@@ -13,13 +13,19 @@ test.describe('Performance - Core Web Vitals', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('LCP image should be preloaded with fetchpriority="high"', async ({ page }) => {
-    const preloadLink = page.locator('link[rel="preload"][as="image"][href*="chandrasekhar.webp"]');
+  test('LCP image is preloaded (AVIF) with fetchpriority="high"', async ({ page }) => {
+    const preloadLink = page.locator('link[rel="preload"][as="image"]');
     await expect(preloadLink).toHaveCount(1);
+    await expect(preloadLink).toHaveAttribute('href', /chandrasekhar-240\.avif$/);
+    await expect(preloadLink).toHaveAttribute('type', 'image/avif');
     await expect(preloadLink).toHaveAttribute('fetchpriority', 'high');
   });
 
-  test('LCP image should have explicit width and height attributes', async ({ page }) => {
+  test('LCP image is a <picture> with AVIF + WebP sources and a sized fallback <img>', async ({ page }) => {
+    const picture = page.locator('picture:has(img.img-circle)');
+    await expect(picture).toHaveCount(1);
+    await expect(picture.locator('source[type="image/avif"]')).toHaveCount(1);
+    await expect(picture.locator('source[type="image/webp"]')).toHaveCount(1);
     const img = page.locator('img.img-circle');
     await expect(img).toHaveAttribute('width');
     await expect(img).toHaveAttribute('height');
@@ -27,18 +33,38 @@ test.describe('Performance - Core Web Vitals', () => {
     await expect(img).toHaveAttribute('loading', 'eager');
   });
 
-  test('all images should use WebP format', async ({ page }) => {
-    const images = await page.locator('img').all();
-    for (const img of images) {
-      const src = await img.getAttribute('src');
-      if (src && !src.startsWith('data:')) {
-        expect(src).toMatch(/\.webp$/);
-      }
+  test('all raster images use a modern format (WebP or AVIF)', async ({ page }) => {
+    const srcs = [];
+    for (const img of await page.locator('img').all()) {
+      const s = await img.getAttribute('src');
+      if (s && !s.startsWith('data:')) srcs.push(s);
+    }
+    for (const source of await page.locator('picture source').all()) {
+      const s = await source.getAttribute('srcset');
+      if (s) srcs.push(s);
+    }
+    expect(srcs.length).toBeGreaterThan(0);
+    for (const s of srcs) {
+      expect(s).toMatch(/\.(webp|avif)(\s|$)/);
     }
   });
 
+  test('the theme is set before first paint by an inline head script (no FOUC)', async ({ page }) => {
+    const html = await (await page.goto('http://localhost:8000/')).text();
+    const head = html.slice(0, html.indexOf('</head>'));
+    // an inline <script> in <head> that sets data-theme...
+    expect(head).toMatch(/<script>[\s\S]*?data-theme[\s\S]*?<\/script>/);
+    // ...and it runs before the stylesheet so there's no flash
+    expect(head.indexOf('data-theme')).toBeGreaterThan(-1);
+    expect(head.indexOf('data-theme')).toBeLessThan(head.indexOf('assets/css/bundle.css'));
+  });
+
+  test('has a color-scheme meta', async ({ page }) => {
+    await expect(page.locator('meta[name="color-scheme"]')).toHaveCount(1);
+  });
+
   test('the HTML ships no render-blocking or third-party <script src> (GTM is injected on load)', async ({ page }) => {
-    const html = await (await page.request.get('http://localhost:8000/')).text();
+    const html = await (await page.goto('http://localhost:8000/')).text();
     const scriptTags = html.match(/<script\b[^>]*\bsrc=[^>]*>/gi) || [];
     expect(scriptTags.length).toBeGreaterThan(0);
     for (const tag of scriptTags) {
@@ -196,6 +222,36 @@ test.describe('Accessibility - WCAG Compliance', () => {
     await expect(contactList).toHaveAttribute('role', 'list');
   });
 
+  test('social contact links name their network (unambiguous for SRs and agents)', async ({ page }) => {
+    const expected = {
+      linkedin: /LinkedIn/i,
+      github: /GitHub/i,
+      stackoverflow: /Stack Overflow/i,
+      twitter: /Twitter|^X\b/i,
+    };
+    for (const [cls, re] of Object.entries(expected)) {
+      const link = page.locator(`.contact-list li.${cls} a`);
+      const label = (await link.getAttribute('aria-label')) || (await link.textContent());
+      expect(label, cls).toMatch(re);
+    }
+  });
+
+  test('every section landmark has an accessible name', async ({ page }) => {
+    const sections = await page.locator('main section').all();
+    expect(sections.length).toBeGreaterThan(0);
+    for (const s of sections) {
+      const labelledby = await s.getAttribute('aria-labelledby');
+      expect(labelledby, 'section aria-labelledby').toBeTruthy();
+      await expect(page.locator(`#${labelledby}`)).toHaveCount(1);
+    }
+  });
+
+  test('badges expose their value, not a label that hides it', async ({ page }) => {
+    await expect(page.locator('.availability-badge')).toContainText('NTT DATA');
+    await expect(page.locator('.availability-badge')).not.toHaveAttribute('aria-label');
+    await expect(page.locator('.ai-practitioner-badge')).toContainText('AI Practitioner');
+  });
+
   test('sidebar navigation should expose current section with aria-current', async ({ page }) => {
     const navLinks = page.locator('.sidebar-nav-link');
     await expect(navLinks).toHaveCount(4);
@@ -262,27 +318,33 @@ test.describe('SEO - Search Engine Optimization', () => {
     await expect(page.locator('meta[name="twitter:description"]')).toHaveCount(1);
   });
 
-  test('should have structured data (JSON-LD Person schema)', async ({ page }) => {
+  test('should have valid structured data (ProfilePage + Person, in @graph)', async ({ page }) => {
     const jsonLdScripts = await page.locator('script[type="application/ld+json"]').all();
     expect(jsonLdScripts.length).toBeGreaterThanOrEqual(1);
 
-    let personSchema = null;
+    // Flatten every JSON-LD block, following @graph.
+    const nodes = [];
     for (const script of jsonLdScripts) {
       const text = await script.textContent();
-      try {
-        const data = JSON.parse(text);
-        if (data['@type'] === 'Person') {
-          personSchema = data;
-          break;
-        }
-      } catch (e) { /* skip invalid JSON */ }
+      let data;
+      try { data = JSON.parse(text); } catch (e) { continue; }
+      const items = Array.isArray(data['@graph']) ? data['@graph'] : [data];
+      for (const item of items) nodes.push(item);
     }
 
-    expect(personSchema).not.toBeNull();
-    expect(personSchema['@context']).toBe('https://schema.org');
-    expect(personSchema.name).toBeTruthy();
-    expect(personSchema.url).toBeTruthy();
-    expect(personSchema.jobTitle).toBeTruthy();
+    const person = nodes.find((n) => n['@type'] === 'Person');
+    const profilePage = nodes.find((n) => n['@type'] === 'ProfilePage');
+
+    expect(person, 'a Person node').toBeTruthy();
+    expect(person.name).toBeTruthy();
+    expect(person.url).toBeTruthy();
+    expect(person.jobTitle).toBeTruthy();
+    expect(Array.isArray(person.knowsAbout)).toBe(true);
+    expect(person.sameAs.length).toBeGreaterThan(2);
+
+    expect(profilePage, 'a ProfilePage node').toBeTruthy();
+    expect(profilePage.dateModified).toBeTruthy();
+    expect(profilePage.mainEntity['@id']).toBe(person['@id']);
   });
 
   test('should have robots meta tag with index/follow', async ({ page }) => {
