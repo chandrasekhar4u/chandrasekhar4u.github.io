@@ -51,11 +51,30 @@ test.describe('Machine-readable discovery files', () => {
 });
 
 test.describe('Layout stability for agents', () => {
-  test('skill bars reveal via CSS scroll-driven animation, with a no-JS fallback width', async ({ page }) => {
+  test('skill bar widths are CSS-driven — correct with no JS', async ({ page }) => {
     await page.goto(`${BASE}/`);
     const css = await (await page.request.get(`${BASE}/assets/css/bundle.css`)).text();
-    expect(css).toContain('animation-timeline: view()');
+    // width comes from [aria-valuenow] rules, not JavaScript
     expect(css).toMatch(/progress-bar\[aria-valuenow="90"\]\s*{\s*width:\s*90%/);
+    expect(css).toMatch(/progress-bar\[aria-valuenow="70"\]\s*{\s*width:\s*70%/);
+  });
+
+  test('every rendered skill bar shows its aria-valuenow width (no JS run)', async ({ page }) => {
+    await page.goto(`${BASE}/`);
+    await page.locator('.skills-section').scrollIntoViewIfNeeded();
+    // let the one-shot grow animation finish
+    await page.waitForTimeout(1200);
+    const bars = page.locator('.skillset .progress-bar');
+    const n = await bars.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      const bar = bars.nth(i);
+      const value = Number(await bar.getAttribute('aria-valuenow'));
+      const barBox = await bar.boundingBox();
+      const trackBox = await bar.locator('xpath=..').boundingBox();
+      const pct = (barBox.width / trackBox.width) * 100;
+      expect(Math.abs(pct - value)).toBeLessThan(4); // within rounding
+    }
   });
 
   test('no scroll event listeners are attached to window', async ({ page }) => {
