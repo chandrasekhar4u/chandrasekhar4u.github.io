@@ -12,7 +12,7 @@
 
 'use strict';
 
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_PREFIX = 'kakarla-static-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
@@ -24,9 +24,12 @@ const PRECACHE_ASSETS = [
   '/assets/css/print.css',
   '/assets/js/main.js',
   '/assets/fonts/inter-latin.woff2',
+  '/assets/images/chandrasekhar-240.avif',
+  '/assets/images/chandrasekhar-240.webp',
   '/assets/images/chandrasekhar.webp',
   '/favicon.ico',
   '/manifest.webmanifest',
+  '/llms.txt',
 ];
 
 // ---------------------------------------------------------------------------

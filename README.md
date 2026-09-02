@@ -28,11 +28,11 @@ A modern, responsive personal portfolio website showcasing professional experien
 - **Performance** - Minimal CSS with optimized loading
 
 ### JavaScript Features
-- **No jQuery Dependency** - Pure vanilla JavaScript
-- **Theme Management** - Persistent dark/light mode switching
-- **Intersection Observer** - Performant scroll-based animations
-- **Accessibility** - Screen reader announcements, keyboard support
-- **Progressive Enhancement** - Works with JavaScript disabled
+- **No jQuery Dependency** - Pure vanilla JavaScript, ~2&nbsp;KB gzipped
+- **No `scroll` handlers** - scroll-spy and back-to-top use `IntersectionObserver`; the skill-bar reveal is a pure CSS scroll-driven animation (`animation-timeline: view()`). Keeps INP low.
+- **No theme flash** - a tiny inline `<head>` script sets `data-theme` before first paint
+- **Accessibility** - Screen reader announcements, keyboard support, named landmarks
+- **Progressive Enhancement** - Works with JavaScript disabled (skill bars fall back to their target width)
 
 ## 🎨 Design System
 
@@ -129,8 +129,11 @@ npm --prefix tests test
 │   ├── images/             # Profile image, OG card, PWA icons
 │   └── config/             # Manifest and configuration files
 ├── sw.js                   # Service worker (offline cache)
+├── llms.txt                # Machine-readable profile summary for LLMs / agents
+├── humans.txt
 ├── favicon.ico
 ├── robots.txt
+├── sitemap.xml
 └── README.md
 ```
 
@@ -163,10 +166,17 @@ These thresholds are now enforced in CI using Lighthouse CI assertions.
 - **No third-party CSS/JS on the critical path**: Bootstrap, the FontAwesome CDN and the Google Fonts request were all removed
 - **Inline SVG icons**: a ~24-symbol sprite replaces a ~200&nbsp;KB icon-font download and eliminates icon FOIT
 - **Self-hosted variable font**: one preloaded ~47&nbsp;KB woff2 with `size-adjust`/`ascent-override` fallback metrics for near-zero CLS
-- **Modern Image Formats**: WebP everywhere, including a 1200×630 Open Graph card
-- **Optimized Loading**: `fetchpriority="high"` + `preload` for the LCP image and the font
-- **`content-visibility`**: off-screen sections skip rendering, with tuned `contain-intrinsic-size`
+- **Modern Image Formats**: AVIF + WebP; the LCP headshot is a 240&nbsp;px AVIF (~5&nbsp;KB, 2x for its 120&nbsp;px display size). Plus a 1200×630 Open Graph card.
+- **Optimized Loading**: `fetchpriority="high"` + `preload` for the LCP image (AVIF) and the font
+- **Low INP**: no `scroll` event listeners; CSS scroll-driven animations for reveals
 - **Service worker**: cache-first for static assets, network-first for HTML
+
+### Machine-readable / agentic
+
+- **`llms.txt`** at the domain root — an LLM/agent-friendly Markdown summary of the profile
+- **`humans.txt`**, and `robots.txt` pointers to both
+- **JSON-LD**: a `ProfilePage` + `Person` `@graph` with `knowsAbout`, `hasOccupation`, `address`, and the projects as `CreativeWork`s
+- **Clean accessibility tree**: every `<section>` is a named landmark; social links name their network; badges expose their value; tech-tag groups are lists — so an agent reading the a11y tree gets the same information a person does
 
 ## ♿ Accessibility
 
@@ -193,10 +203,10 @@ These thresholds are now enforced in CI using Lighthouse CI assertions.
 - Edge 90+
 
 ### Features
-- **CSS Variables**: Full support in target browsers
-- **CSS Grid/Flexbox**: Complete layout support
-- **ES6+ JavaScript**: Modern syntax and features
-- **Intersection Observer**: Progressive enhancement
+- **CSS Variables / Grid / Flexbox**: full support in target browsers
+- **Scroll-driven animations** (`animation-timeline: view()`): progressive — bars just render full where unsupported
+- **`prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast`**: all honoured
+- **IntersectionObserver**: scroll-spy + back-to-top (no `scroll` handlers)
 
 ### Fallbacks
 - Graceful degradation for older browsers

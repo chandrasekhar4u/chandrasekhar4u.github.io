@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# AI / LLM crawlers and agents are welcome.
+# Machine-readable summary: https://kakarla.in/llms.txt
+# Humans: https://kakarla.in/humans.txt
+
 Sitemap: https://kakarla.in/sitemap.xml

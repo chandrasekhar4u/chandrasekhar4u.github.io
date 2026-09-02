@@ -138,34 +138,40 @@
 
       // Debounce rapid theme toggles for better performance
       let isToggling = false;
-      
+
+      // Commit every observable bit of state synchronously. The visual
+      // cross-fade comes from the CSS `transition: background-color` already
+      // declared on <body>, .wrapper and .main-wrapper.
+      function commitTheme(newTheme) {
+        try {
+          localStorage.setItem('theme', newTheme);
+        } catch (e) {
+          console.error('Error saving theme to localStorage:', e);
+        }
+        applyTheme(newTheme);
+      }
+
       function toggleTheme() {
         if (isToggling) return; // Prevent rapid toggling
-        
+
         try {
           isToggling = true;
           const currentTheme = getCurrentTheme();
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          
-          try {
-            localStorage.setItem('theme', newTheme);
-          } catch (e) {
-            console.error('Error saving theme to localStorage:', e);
-          }
-          
-          applyTheme(newTheme);
+
+          commitTheme(newTheme);
 
           const announcement = newTheme === 'dark' ? 'Dark theme activated' : 'Light theme activated';
           announceToScreenReader(announcement);
-          
+
           // Show modern toast notification
           showToast(announcement, newTheme);
-          
+
           // Reset debounce flag after transition completes
           setTimeout(() => {
             isToggling = false;
           }, 300); // Match CSS transition duration
-          
+
         } catch (e) {
           console.error('Error in toggleTheme:', e);
           isToggling = false; // Reset on error
@@ -239,60 +245,9 @@
     }
   }
 
-  function initSkillBars() {
-    try {
-      const skillItems = document.querySelectorAll('.skillset .item');
-      
-      // Check if user prefers reduced motion
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      // Use Intersection Observer for scroll-triggered animations (modern UX pattern)
-      if ('IntersectionObserver' in window && !prefersReducedMotion) {
-        const observerOptions = {
-          root: null,
-          rootMargin: '0px',
-          threshold: 0.3 // Trigger when 30% visible
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const progressBar = entry.target.querySelector('.progress-bar');
-              if (!progressBar || progressBar.dataset.animated === 'true') return;
-              
-              const skillValue = progressBar.getAttribute('aria-valuenow');
-              // Animate skill bar on scroll
-              const currentStyle = progressBar.style.cssText;
-              progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-out;width:' + skillValue + '%';
-              progressBar.dataset.animated = 'true';
-              
-              // Unobserve after animation
-              observer.unobserve(entry.target);
-            }
-          });
-        }, observerOptions);
-        
-        skillItems.forEach(item => observer.observe(item));
-      } else {
-        // Fallback for older browsers or reduced motion preference
-        skillItems.forEach(item => {
-          try {
-            const progressBar = item.querySelector('.progress-bar');
-            if (!progressBar) return;
-            
-            const skillValue = progressBar.getAttribute('aria-valuenow');
-            const currentStyle = progressBar.style.cssText;
-            const transition = prefersReducedMotion ? '' : 'transition:width 1s ease-out;';
-            progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + transition + 'width:' + skillValue + '%';
-          } catch (e) {
-            console.error('Error initializing skill bar:', e, item);
-          }
-        });
-      }
-    } catch (e) {
-      console.error('Error initializing skill bars:', e);
-    }
-  }
+  // Skill bars: target widths come from CSS `[aria-valuenow]` rules and the
+  // reveal is a CSS scroll-driven animation (`animation-timeline: view()`),
+  // with an instant fallback where that isn't supported — no JS needed.
 
   // Initialize Back-to-Top Button (Modern UX Pattern)
   function initBackToTop() {
@@ -312,22 +267,22 @@
       arrowIcon.appendChild(arrowUse);
       backToTopBtn.appendChild(arrowIcon);
       document.body.appendChild(backToTopBtn);
-      
-      // Show/hide based on scroll position
-      let scrollTimeout;
-      const toggleBackToTop = () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          if (window.scrollY > 300) {
-            backToTopBtn.classList.add('visible');
-          } else {
-            backToTopBtn.classList.remove('visible');
-          }
-        }, 100); // Debounce scroll events
-      };
-      
-      window.addEventListener('scroll', toggleBackToTop, { passive: true });
-      
+
+      // Show/hide via an IntersectionObserver on a top sentinel — no scroll
+      // handler, so it never contends with the main thread during scroll (INP).
+      const sentinel = document.createElement('div');
+      sentinel.setAttribute('aria-hidden', 'true');
+      sentinel.style.cssText = 'position:absolute;top:300px;left:0;width:1px;height:1px;pointer-events:none;';
+      document.body.appendChild(sentinel);
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          backToTopBtn.classList.toggle('visible', !entries[0].isIntersecting);
+        }).observe(sentinel);
+      } else {
+        backToTopBtn.classList.add('visible');
+      }
+
       // Smooth scroll to top on click
       backToTopBtn.addEventListener('click', () => {
         window.scrollTo({
@@ -545,25 +500,38 @@
       });
       if (!sections.length) return;
 
-      function updateActiveNav() {
-        const scrollPos = window.scrollY + 80; // offset for fixed header
-        let current = sections[0];
-        sections.forEach(function(item) {
-          const top = item.section.getBoundingClientRect().top + window.scrollY;
-          if (scrollPos >= top) current = item;
-        });
+      function setActive(link) {
         navLinks.forEach(function(l) {
           l.classList.remove('active');
           l.removeAttribute('aria-current');
         });
-        if (current) {
-          current.link.classList.add('active');
-          current.link.setAttribute('aria-current', 'true');
+        if (link) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'true');
         }
       }
 
-      window.addEventListener('scroll', updateActiveNav, { passive: true });
-      updateActiveNav(); // run on load
+      // IntersectionObserver instead of a scroll handler — the browser does the
+      // geometry off the main thread, so scrolling stays responsive (INP).
+      if ('IntersectionObserver' in window) {
+        const visible = new Set();
+        const io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) { visible.add(entry.target); }
+            else { visible.delete(entry.target); }
+          });
+          // Pick the visible section closest to the top of the document.
+          let best = null;
+          sections.forEach(function(item) {
+            if (visible.has(item.section)) {
+              if (!best || item.section.offsetTop < best.section.offsetTop) best = item;
+            }
+          });
+          if (best) setActive(best.link);
+        }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+        sections.forEach(function(item) { io.observe(item.section); });
+      }
+      setActive(sections[0].link); // sensible default before first intersection
 
       // Smooth scroll for nav links
       navLinks.forEach(function(link) {
@@ -574,13 +542,7 @@
           if (target) {
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Update active immediately
-            navLinks.forEach(function(l) {
-              l.classList.remove('active');
-              l.removeAttribute('aria-current');
-            });
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'true');
+            setActive(link); // reflect the jump immediately
           }
         });
       });
@@ -592,19 +554,21 @@
   // ─── NEW: Ensure mobile-collapsible details stay open on desktop ───────
   function initMobileAccordion() {
     try {
+      const desktop = window.matchMedia('(min-width: 769px)');
       function ensureOpenOnDesktop() {
-        if (window.innerWidth >= 769) {
+        if (desktop.matches) {
           document.querySelectorAll('details.mobile-collapsible').forEach(function(el) {
             el.setAttribute('open', '');
           });
         }
       }
       ensureOpenOnDesktop();
-      let resizeTimer;
-      window.addEventListener('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(ensureOpenOnDesktop, 150);
-      });
+      // matchMedia change fires only at the breakpoint — no resize handler.
+      if (typeof desktop.addEventListener === 'function') {
+        desktop.addEventListener('change', ensureOpenOnDesktop);
+      } else if (typeof desktop.addListener === 'function') {
+        desktop.addListener(ensureOpenOnDesktop);
+      }
     } catch (e) {
       console.error('Error initializing mobile accordion:', e);
     }
@@ -613,7 +577,6 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
       initThemeToggle();
-      initSkillBars();
       initBackToTop();
       updateCopyrightYear();
       updateLastUpdated();
@@ -624,7 +587,6 @@
     }, { once: true });
   } else {
     initThemeToggle();
-    initSkillBars();
     initBackToTop();
     updateCopyrightYear();
     updateLastUpdated();

@@ -1,0 +1,47 @@
+# Chandra Sekhar Kakarla
+
+> Full Stack Developer with 15+ years building and shipping enterprise web applications across Finance, Energy and Telecom — most of it in Java, Spring and J2EE, now delivered with an AI-assisted workflow. Currently a Software Development Senior Specialist at NTT DATA. Based in India.
+
+This site is a single-page résumé / CV. Everything below is on one page at https://kakarla.in/ ; the anchors let you jump to a section.
+
+## Profile
+
+- [Career profile](https://kakarla.in/#section-summary): headline skills and a summary of experience.
+- [Full résumé](https://kakarla.in/): the complete single page — profile, experience, projects, skills, education, languages.
+
+## Contact
+
+- Email: connect@kakarla.in
+- [LinkedIn](https://in.linkedin.com/in/chandrasekhar4u): professional profile and work history.
+- [GitHub](https://github.com/chandrasekhar4u): open-source repositories and activity.
+- [Stack Overflow](https://stackoverflow.com/users/1213738/): Q&A reputation and tags.
+- [X / Twitter](https://twitter.com/chandrasekhar4u): posts.
+
+## Experience
+
+- Software Development Senior Specialist, NTT DATA (2015 – present): design and development of Java / J2EE / Spring web applications for enterprise Finance clients; uses GitHub Copilot and other AI tools in the delivery workflow.
+- Senior Software Engineer, CGI (2010 – 2015): Java / J2EE web applications for clients in the Energy and Telecom domains (JSF, Hibernate, Oracle DB).
+
+## Projects
+
+- [Wells Fargo public site](https://www.wellsfargo.com): public-facing banking and financial-services web platform (Finance).
+- [DCC — Instant Energy](https://www.smartdcc.co.uk): smart-meter subsystem implementing primary metering functions (Energy).
+- [OBE Web Tool](https://support.bell.ca/Billing-and-Accounts/Billing): online billing-presentation application for Bell Canada (Telecom).
+- [Prodis Entry Exit, phases 2 and 3](https://www.bordgaisenergy.ie): gas-transportation shipper-management system for Bord Gáis Energy (Energy).
+
+## Skills
+
+- Backend: Core Java (expert), J2EE, Spring Framework.
+- Frameworks & front-end: JSF MVC, JavaScript & jQuery, Thymeleaf, HTML, CSS.
+- AI-assisted development: GitHub Copilot, ChatGPT & Claude, prompt engineering.
+- Domains: Master Data Management (MDM), Finance, Energy, Telecom.
+
+## Education
+
+- Master of Computer Applications — J.K.C College, Guntur, A.P (2006 – 2009).
+- BSc in Mathematics — J.K.C College, Guntur, A.P (2003 – 2006).
+
+## Optional
+
+- [Print / PDF version](https://kakarla.in/): use the browser's print-to-PDF; the page has a dedicated single-page print stylesheet.
+- Languages: Telugu (native), English (professional), Hindi (professional).
