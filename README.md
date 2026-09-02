@@ -29,7 +29,7 @@ A modern, responsive personal portfolio website showcasing professional experien
 
 ### JavaScript Features
 - **No jQuery Dependency** - Pure vanilla JavaScript, ~2&nbsp;KB gzipped
-- **No `scroll` handlers** - scroll-spy and back-to-top use `IntersectionObserver`; the skill-bar reveal is a pure CSS scroll-driven animation (`animation-timeline: view()`). Keeps INP low.
+- **No `scroll` handlers** - scroll-spy and back-to-top use `IntersectionObserver`; skill-bar widths are pure CSS (`[aria-valuenow]` rules) with a one-shot grow animation. Keeps INP low.
 - **No theme flash** - a tiny inline `<head>` script sets `data-theme` before first paint
 - **Accessibility** - Screen reader announcements, keyboard support, named landmarks
 - **Progressive Enhancement** - Works with JavaScript disabled (skill bars fall back to their target width)
@@ -168,7 +168,7 @@ These thresholds are now enforced in CI using Lighthouse CI assertions.
 - **Self-hosted variable font**: one preloaded ~47&nbsp;KB woff2 with `size-adjust`/`ascent-override` fallback metrics for near-zero CLS
 - **Modern Image Formats**: AVIF + WebP; the LCP headshot is a 240&nbsp;px AVIF (~5&nbsp;KB, 2x for its 120&nbsp;px display size). Plus a 1200×630 Open Graph card.
 - **Optimized Loading**: `fetchpriority="high"` + `preload` for the LCP image (AVIF) and the font
-- **Low INP**: no `scroll` event listeners; CSS scroll-driven animations for reveals
+- **Low INP**: no `scroll` event listeners; CSS-only skill bars
 - **Service worker**: cache-first for static assets, network-first for HTML
 
 ### Machine-readable / agentic
@@ -204,7 +204,7 @@ These thresholds are now enforced in CI using Lighthouse CI assertions.
 
 ### Features
 - **CSS Variables / Grid / Flexbox**: full support in target browsers
-- **Scroll-driven animations** (`animation-timeline: view()`): progressive — bars just render full where unsupported
+- **Skill bars**: width from CSS `[aria-valuenow]` rules — correct with JS disabled, reduced-motion-safe
 - **`prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast`**: all honoured
 - **IntersectionObserver**: scroll-spy + back-to-top (no `scroll` handlers)
 

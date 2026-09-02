@@ -806,18 +806,9 @@ button:focus-visible,
 .skillset .progress-bar[aria-valuenow="75"] { width: 75%; }
 .skillset .progress-bar[aria-valuenow="70"] { width: 70%; }
 
-/* Reveal on scroll — CSS scroll-driven animation, no JS, no scroll handler.
-   Where `animation-timeline` isn't supported the bars just render full. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .skillset .progress-bar {
-      animation: skill-grow linear both;
-      animation-timeline: view();
-      animation-range: entry 8% cover 34%;
-    }
-    @keyframes skill-grow { from { width: 0; } }
-  }
-}
+/* No reveal animation: the width is always the value above, in every render
+   state (background tab, no JS, reduced motion). A grow-in effect here twice
+   caused "bars not working" reports and is pure decoration. */
 
 /* Glowing dot at bar end */
 .skillset .progress-bar::before {
@@ -1987,31 +1978,10 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
   background-size: 200% 100%;
 }
 
-/* Section entrance — a real scroll-driven reveal (each section fades up as it
-   enters the viewport) where supported; a plain fade-in on load otherwise. */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .section {
-    animation: fadeInUp 0.6s ease-out both;
-  }
-
-  @supports (animation-timeline: view()) {
-    .section {
-      animation-timeline: view();
-      animation-range: entry 0% entry 55%;
-    }
-  }
-}
+/* No section-entrance animation. A load-time fade animated every section
+   regardless of viewport (so it revealed nothing), and a `both`-fill keyframe
+   holds `opacity: 0` whenever the document's animations are paused (a
+   background tab) — i.e. blank sections. Sections just render. */
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
@@ -2019,11 +1989,7 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
   .back-to-top {
     transition: opacity 0.1s linear, visibility 0.1s linear;
   }
-  
-  .section {
-    animation: none;
-  }
-  
+
   .skillset .item.loading .progress-bar {
     animation: none;
   }
