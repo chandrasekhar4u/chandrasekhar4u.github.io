@@ -37,47 +37,45 @@ test.describe('Performance - Core Web Vitals', () => {
     }
   });
 
-  test('Bootstrap and main JavaScript files should use defer attribute', async ({ page }) => {
-    const scripts = await page.locator('script[src]').all();
-    let checkedScripts = 0;
-    for (const script of scripts) {
-      const src = await script.getAttribute('src');
-      if (src && (src.includes('bootstrap') || src.includes('assets/js/main.js'))) {
-        const hasDefer = await script.getAttribute('defer');
-        expect(hasDefer).not.toBeNull();
-        checkedScripts += 1;
-      }
+  test('the HTML ships no render-blocking or third-party <script src> (GTM is injected on load)', async ({ page }) => {
+    const html = await (await page.request.get('http://localhost:8000/')).text();
+    const scriptTags = html.match(/<script\b[^>]*\bsrc=[^>]*>/gi) || [];
+    expect(scriptTags.length).toBeGreaterThan(0);
+    for (const tag of scriptTags) {
+      const src = (tag.match(/\bsrc=["']([^"']+)["']/i) || [])[1] || '';
+      expect(src).not.toMatch(/^https?:\/\//); // no third-party script in the document
+      expect(/\bdefer\b/.test(tag) || /\basync\b/.test(tag)).toBeTruthy();
     }
-    expect(checkedScripts).toBeGreaterThan(0);
   });
 
-  test('FontAwesome CSS should be non-render-blocking', async ({ page }) => {
-    const faLink = page.locator('link[href*="font-awesome"]').first();
-    const media = await faLink.getAttribute('media');
-    const onload = await faLink.getAttribute('onload');
-    // Should be deferred via media="print" onload trick
-    expect(media === 'print' || onload !== null).toBeTruthy();
-  });
-
-  test('Google Fonts should be non-render-blocking', async ({ page }) => {
-    const fontLink = page.locator('link[href*="fonts.googleapis.com"][rel="stylesheet"]').first();
-    const media = await fontLink.getAttribute('media');
-    // media is 'print' before the stylesheet loads; once onload fires it becomes 'all'
-    expect(media === 'print' || media === 'all').toBeTruthy();
-    const onload = await fontLink.getAttribute('onload');
-    expect(onload).toContain("this.media='all'");
-  });
-
-  test('should have preconnect hints for external resources', async ({ page }) => {
-    const preconnects = await page.locator('link[rel="preconnect"]').all();
-    const hrefs = [];
-    for (const link of preconnects) {
-      hrefs.push(await link.getAttribute('href'));
+  test('no render-blocking third-party CSS (icons are an inline SVG sprite)', async ({ page }) => {
+    // No icon-font stylesheet at all
+    await expect(page.locator('link[href*="font-awesome"], link[href*="fontawesome"]')).toHaveCount(0);
+    // Every stylesheet <link> is same-origin (bundle.css + print.css)
+    const styleLinks = await page.locator('link[rel="stylesheet"]').all();
+    for (const link of styleLinks) {
+      const href = await link.getAttribute('href');
+      expect(href).not.toMatch(/^https?:\/\//);
     }
-    expect(hrefs).toContain('https://cdn.jsdelivr.net');
-    expect(hrefs).toContain('https://cdnjs.cloudflare.com');
-    expect(hrefs).toContain('https://fonts.googleapis.com');
-    expect(hrefs).toContain('https://fonts.gstatic.com');
+    // The icon sprite is inline in the document
+    await expect(page.locator('svg.icon-sprite symbol')).not.toHaveCount(0);
+  });
+
+  test('font is self-hosted and preloaded (no Google Fonts, no CLS)', async ({ page }) => {
+    // No Google Fonts requests
+    await expect(page.locator('link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]')).toHaveCount(0);
+    // The variable woff2 is preloaded with crossorigin
+    const fontPreload = page.locator('link[rel="preload"][as="font"]');
+    await expect(fontPreload).toHaveCount(1);
+    await expect(fontPreload).toHaveAttribute('href', /\.woff2$/);
+    await expect(fontPreload).toHaveAttribute('crossorigin', '');
+  });
+
+  test('should not preconnect to removed CDNs', async ({ page }) => {
+    // Bootstrap / FontAwesome / Google Fonts are gone — their preconnects should be too
+    for (const host of ['cdn.jsdelivr.net', 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com']) {
+      await expect(page.locator(`link[rel="preconnect"][href*="${host}"]`)).toHaveCount(0);
+    }
   });
 
   test('GTM should not use eager preconnect (uses dns-prefetch instead)', async ({ page }) => {
@@ -96,9 +94,11 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(wrapperContain).toContain('style');
   });
 
-  test('Bootstrap JS should use defer', async ({ page }) => {
-    const bootstrapScript = page.locator('script[src*="bootstrap"]');
-    await expect(bootstrapScript).toHaveAttribute('defer');
+  test('Bootstrap is no longer loaded', async ({ page }) => {
+    await expect(page.locator('script[src*="bootstrap"]')).toHaveCount(0);
+    await expect(page.locator('link[href*="bootstrap"]')).toHaveCount(0);
+    const hasBootstrapGlobal = await page.evaluate(() => typeof window.bootstrap !== 'undefined');
+    expect(hasBootstrapGlobal).toBe(false);
   });
 
   test('should have noscript fallbacks for deferred CSS', async ({ page }) => {
@@ -181,8 +181,10 @@ test.describe('Accessibility - WCAG Compliance', () => {
     }
   });
 
-  test('icons should have aria-hidden="true"', async ({ page }) => {
-    const icons = await page.locator('i[class*="fa-"]').all();
+  test('decorative icons should have aria-hidden="true"', async ({ page }) => {
+    // Every rendered icon instance (excludes the <symbol> defs in the sprite)
+    const icons = await page.locator('svg.icon').all();
+    expect(icons.length).toBeGreaterThan(0);
     for (const icon of icons) {
       const ariaHidden = await icon.getAttribute('aria-hidden');
       expect(ariaHidden).toBe('true');

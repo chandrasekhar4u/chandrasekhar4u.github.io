@@ -7,8 +7,10 @@ A modern, responsive personal portfolio website showcasing professional experien
 ### Frontend
 - **HTML5** - Semantic markup with accessibility best practices
 - **CSS3** - Modern CSS with variables, fluid typography, and responsive design
-- **JavaScript** - Vanilla JS (no jQuery dependency)
-- **Bootstrap 5.3.x** - Modern responsive framework
+- **JavaScript** - Vanilla JS, ~2&nbsp;KB gzipped (no framework, no jQuery)
+- **Zero render-blocking third parties** - no Bootstrap, no icon-font CDN, no Google Fonts request
+- **Inline SVG icon sprite** - ~24 icons (Lucide + Simple Icons) shipped in the document, no FOIT
+- **Self-hosted variable font** - one ~47&nbsp;KB Inter woff2, preloaded, with a metric-matched fallback (CLS ≈ 0)
 
 ### Features
 - 📱 **Fully Responsive** - Works on all devices and screen sizes
@@ -36,15 +38,15 @@ A modern, responsive personal portfolio website showcasing professional experien
 
 ### Colors
 The site uses a cohesive color system with CSS variables:
-- **Primary**: `#42A8C0` (Teal blue)
-- **Text**: `#3F4650` (Dark gray)
-- **Background**: `#f5f5f5` (Light gray)
-- **Accent**: `#fb866a` (Coral)
+- **Primary**: `#38BDF8` (Sky) with an accessible `#0369A1` text variant
+- **Sidebar**: `#0F172A` (Slate 900) deep navy
+- **AI accent**: `#A855F7` (Purple 500)
+- **Text / surfaces**: Slate scale (`#0F172A` → `#F1F5F9`)
 
 ### Typography
-- **Font Family**: Roboto with fallbacks to system fonts
+- **Font Family**: Inter (self-hosted variable woff2) with a metric-matched system fallback
 - **Fluid Scaling**: Responsive typography using `clamp()`
-- **Weight Hierarchy**: 400 (normal), 500 (medium), 700 (bold)
+- **Weight Hierarchy**: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
 
 ### Spacing
 Consistent spacing system using CSS variables:
@@ -114,15 +116,19 @@ npm --prefix tests test
 
 ### File Structure
 ```
-├── index.html              # Main HTML file
+├── index.html              # Main HTML file (inline SVG icon sprite lives here)
 ├── assets/
 │   ├── css/
-│   │   ├── theme.css       # Main theme and component styles
-│   │   └── styles.css      # Legacy styles (for reference)
+│   │   ├── bundle.css      # The single shipped stylesheet (layout + theme + components + icons + @font-face)
+│   │   ├── print.css       # Single-page print / PDF layout
+│   │   └── *.css           # Unbundled source fragments kept for reference (not linked)
+│   ├── fonts/
+│   │   └── inter-latin.woff2  # Self-hosted Inter variable font
 │   ├── js/
 │   │   └── main.js         # Custom JavaScript functionality
-│   ├── images/             # Profile images and icons
-│   └── config/            # Manifest and configuration files
+│   ├── images/             # Profile image, OG card, PWA icons
+│   └── config/             # Manifest and configuration files
+├── sw.js                   # Service worker (offline cache)
 ├── favicon.ico
 ├── robots.txt
 └── README.md
@@ -154,11 +160,13 @@ For other hosting providers:
 These thresholds are now enforced in CI using Lighthouse CI assertions.
 
 ### Optimizations
-- **Modern Image Formats**: WebP with AVIF fallbacks
-- **Optimized Loading**: `fetchpriority="high"` for LCP image
-- **Lazy Loading**: Non-critical images load on demand
-- **Efficient CSS**: CSS variables reduce file size
-- **Minimal JavaScript**: Only essential functionality
+- **No third-party CSS/JS on the critical path**: Bootstrap, the FontAwesome CDN and the Google Fonts request were all removed
+- **Inline SVG icons**: a ~24-symbol sprite replaces a ~200&nbsp;KB icon-font download and eliminates icon FOIT
+- **Self-hosted variable font**: one preloaded ~47&nbsp;KB woff2 with `size-adjust`/`ascent-override` fallback metrics for near-zero CLS
+- **Modern Image Formats**: WebP everywhere, including a 1200×630 Open Graph card
+- **Optimized Loading**: `fetchpriority="high"` + `preload` for the LCP image and the font
+- **`content-visibility`**: off-screen sections skip rendering, with tuned `contain-intrinsic-size`
+- **Service worker**: cache-first for static assets, network-first for HTML
 
 ## ♿ Accessibility
 

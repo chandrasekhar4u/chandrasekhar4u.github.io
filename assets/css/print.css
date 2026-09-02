@@ -26,6 +26,7 @@
     .ai-practitioner-badge,      /* AI badge is screen-only branding  */
     .skill-category.ai-category, /* AI skill category to keep 1 page  */
     .interests-container,        /* save vertical space */
+    .summary-lead,               /* screen intro — bullets carry the same facts */
     .projects-section .intro {   /* redundant intro text */
         display: none !important;
     }
@@ -202,8 +203,8 @@
         color: #1a1a1a !important;
     }
 
-    /* hide FontAwesome icons — let text labels stand alone cleanly */
-    .contact-list li i {
+    /* hide icons — let text labels stand alone cleanly */
+    .contact-list li .icon {
         display: none !important;
     }
 
@@ -297,7 +298,9 @@
         border-bottom: none !important;
     }
 
-    .section-title i {
+    .section-title .icon,
+    .details-chevron,
+    .mobile-collapsible-caret {
         display: none !important;
     }
 

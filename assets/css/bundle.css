@@ -98,9 +98,29 @@ body {
 /* =======================================================================
    Professional Resume Theme
    Palette : Dark Slate Navy (#0F172A) sidebar · Sky Blue (#38BDF8) accent
-   Font    : Inter (Google Fonts) / system-ui fallback
+   Font    : Inter (self-hosted woff2) with a metric-matched system fallback
    Layout  : 30 % sidebar (right) · 70 % main (left)
    ======================================================================= */
+
+/* ─── Self-hosted font ─────────────────────────────────────────────────────
+   One ~47 KB variable woff2 (latin, weights 100-900) replaces four Google
+   Fonts requests + two preconnects. The metric-matched fallback keeps the
+   layout from shifting while the webfont loads (CLS ≈ 0). */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/inter-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  ascent-override: 90.44%;
+  descent-override: 22.52%;
+  line-gap-override: 0%;
+  size-adjust: 107.12%;
+}
 
 /* ─── Design Tokens ────────────────────────────────────────────────────── */
 :root {
@@ -123,7 +143,7 @@ body {
   /* Text */
   --text-color:     #0F172A;        /* Slate 900 – headings / strong  */
   --text-secondary: #334155;        /* Slate 700 – body               */
-  --text-muted:     #64748B;        /* Slate 500 – meta / secondary   */
+  --text-muted:     #5E6A80;        /* meta / secondary – ≥4.9:1 on both #FFF and the #F1F5F9 page bg */
 
   /* Surfaces */
   --background:     #F1F5F9;        /* Slate 100 – page bg            */
@@ -131,7 +151,7 @@ body {
   --divider:        #E2E8F0;        /* Slate 200 – borders            */
 
   /* Typography */
-  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont,
+  --font-family-base: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont,
                       'Segoe UI', system-ui, sans-serif;
   --font-size-base: clamp(13px, .9vw + 11px, 15px);
   --font-size-sm:   clamp(11px, .7vw + 9px,  13px);
@@ -263,6 +283,23 @@ button:focus-visible,
   box-shadow: 0 0 0 4px var(--primary-glow) !important;
 }
 
+/* ─── Inline SVG Icons ─────────────────────────────────────────────────────
+   Replaces the FontAwesome icon-font. Icons inherit colour via currentColor
+   and scale with font-size, so every former `.fa-*` rule keeps working. */
+.icon-sprite {
+  display: none;
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+  pointer-events: none;
+}
+/* Each <symbol> carries its own paint: line-style (Lucide) symbols use
+   stroke="currentColor" fill="none"; brand (Simple Icons) symbols use
+   fill="currentColor". Both track the element's text colour. */
+
 /* ─── Layout Wrapper ────────────────────────────────────────────────────── */
 .wrapper {
   background: var(--sidebar-bg);
@@ -355,12 +392,13 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .name {
-  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: var(--font-weight-bold);
-  letter-spacing: -.02em;
+  letter-spacing: -.025em;
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-xs);
   color: #F1F5F9;
+  text-wrap: balance;
 }
 
 .sidebar-wrapper .tagline {
@@ -407,20 +445,18 @@ button:focus-visible,
 .sidebar-wrapper .contact-list li:last-child { margin-bottom: 0; }
 
 /* Icon badge */
-.sidebar-wrapper .contact-list li i {
+.sidebar-wrapper .contact-list li .icon {
   width: 26px;
   height: 26px;
+  padding: 7px;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: rgba(56,189,248,.10);
   border-radius: var(--radius-md);
   color: var(--primary-color);
-  font-size: 11px;
   flex-shrink: 0;
   transition: background var(--transition-fast);
 }
-.sidebar-wrapper .contact-list li:hover i {
+.sidebar-wrapper .contact-list li:hover .icon {
   background: rgba(56,189,248,.20);
 }
 
@@ -551,21 +587,27 @@ button:focus-visible,
 }
 
 /* Icon badge on section-title icons */
-.main-wrapper .section-title i {
+.main-wrapper .section-title .icon {
   width: 28px;
   height: 28px;
+  padding: 7px;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
   color: #fff;
   border-radius: var(--radius-md);
-  font-size: 12px;
   flex-shrink: 0;
   box-shadow: var(--shadow-primary);
 }
 
 /* ── Career Profile ── */
+.summary-lead {
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--font-size-lg);
+  line-height: 1.55;
+  color: var(--text-color);
+  font-weight: var(--font-weight-medium);
+}
+.summary-lead strong { color: var(--primary-accessible); }
 .summary-section .summary ul {
   padding: 0;
   margin: 0;
@@ -698,18 +740,9 @@ button:focus-visible,
   display: inline;
 }
 
-/* Append external link arrow */
 .main-wrapper .project-title a {
   color: var(--primary-dark);
   text-decoration: none;
-}
-.main-wrapper .project-title a::after {
-  content: '\00a0\f35d';            /* non-breaking space + FA arrow  */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  font-size: 9px;
-  opacity: .45;
-  margin-left: 2px;
 }
 .main-wrapper .project-title a:hover {
   color: var(--primary-color);
@@ -752,7 +785,7 @@ button:focus-visible,
   box-shadow: none;
   position: relative;
   margin-bottom: 0;
-  margin-right: 40px;              /* Room for percentage label      */
+  margin-right: 84px;             /* Room for proficiency-tier label */
 }
 
 .skillset .progress-bar {
@@ -781,17 +814,20 @@ button:focus-visible,
   display: none;
 }
 .skillset .progress-bar[style*="width"]::before { display: block; }
+.skillset .progress-bar[style*="width"]::after { content: attr(data-skill-level); }
 
-/* Percentage label outside the bar */
+/* Proficiency-tier label outside the bar (e.g. "Expert", "Advanced") */
 .skillset .progress-bar::after {
-  content: attr(aria-valuenow) '%';
+  content: '';
   position: absolute;
-  right: -42px;
+  left: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: var(--font-weight-semibold);
+  letter-spacing: .04em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -810,7 +846,7 @@ button:focus-visible,
     scroll-behavior: auto !important;
   }
   .skillset .progress-bar { transition: none !important; }
-  .theme-toggle, .theme-toggle i, .theme-toggle:hover {
+  .theme-toggle, .theme-toggle .icon, .theme-toggle:hover {
     transition: none !important;
     transform: none !important;
   }
@@ -866,10 +902,10 @@ button:focus-visible,
   outline-offset: 4px;
   box-shadow: var(--shadow-lg), 0 0 0 4px var(--primary-glow);
 }
-.theme-toggle i {
+.theme-toggle .icon {
   transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
-.theme-toggle:hover i { transform: rotate(20deg); }
+.theme-toggle:hover .icon { transform: rotate(20deg); }
 
 @keyframes theme-toggle-click {
   0%   { transform: scale(1); }
@@ -1193,15 +1229,13 @@ details.mobile-collapsible > summary.mobile-collapsible-header {
   transition: color var(--transition-fast);
 }
 details.mobile-collapsible > summary.mobile-collapsible-header::-webkit-details-marker { display: none; }
-details.mobile-collapsible > summary.mobile-collapsible-header::after {
-  content: '\f078';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  font-size: 9px;
+.mobile-collapsible-caret {
+  width: .7em;
+  height: .7em;
   opacity: .5;
   transition: transform var(--transition-fast);
 }
-details.mobile-collapsible[open] > summary.mobile-collapsible-header::after {
+details.mobile-collapsible[open] > summary.mobile-collapsible-header .mobile-collapsible-caret {
   transform: rotate(180deg);
 }
 details.mobile-collapsible > summary.mobile-collapsible-header:hover {
@@ -1216,7 +1250,7 @@ details.mobile-collapsible > *:not(summary) {
     cursor: default;
     pointer-events: none;
   }
-  details.mobile-collapsible > summary.mobile-collapsible-header::after {
+  .mobile-collapsible-caret {
     display: none;
   }
 }
@@ -1418,11 +1452,12 @@ html[data-theme="dark"] .tech-tag {
   text-decoration: none;
   gap: 8px;
 }
-.project-card-cta i {
-  font-size: 9px;
+.project-card-cta .icon {
+  width: .8em;
+  height: .8em;
   transition: transform var(--transition-fast);
 }
-.project-card-cta:hover i { transform: translateX(3px); }
+.project-card-cta:hover .icon { transform: translateX(3px); }
 
 /* ─── Domain Badges ──────────────────────────────────────────────────────── */
 .project-domain-badge {
@@ -1570,7 +1605,8 @@ html[data-theme="dark"] .domain-telecom { color: #C4B5FD; }
 }
 .footer-heart {
   color: #F87171;
-  font-size: 12px;
+  width: .9em;
+  height: .9em;
 }
 .footer-tech {
   background: var(--background);
@@ -1591,13 +1627,13 @@ html[data-theme="dark"] .domain-telecom { color: #C4B5FD; }
   }
 }
 
-/* ─── Content Visibility (Performance) ──────────────────────────────────── */
-.experiences-section,
-.projects-section,
-.skills-section {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 300px;
-}
+/* ─── Content Visibility (Performance) ──────────────────────────────────────
+   Off-screen sections skip rendering until near the viewport. The intrinsic
+   sizes are tuned to each section's real height so the scrollbar and anchor
+   offsets stay stable (no scroll jump as sections hydrate). */
+.experiences-section { content-visibility: auto; contain-intrinsic-size: auto 440px; }
+.projects-section    { content-visibility: auto; contain-intrinsic-size: auto 680px; }
+.skills-section      { content-visibility: auto; contain-intrinsic-size: auto 620px; }
 
 /* ─── High Contrast Mode ─────────────────────────────────────────────────── */
 @media (prefers-contrast: high) {
@@ -1658,8 +1694,7 @@ details.mobile-collapsible,
   letter-spacing: .02em;
   transition: all var(--transition-fast);
 }
-.ai-practitioner-badge i {
-  font-size: 11px;
+.ai-practitioner-badge .icon {
   color: var(--ai-light);
 }
 .ai-practitioner-badge:hover {
@@ -1677,9 +1712,8 @@ details.mobile-collapsible,
 .skill-category.ai-category .skill-category-title {
   color: var(--ai-color);
 }
-.skill-category.ai-category .skill-category-title i {
+.skill-category.ai-category .skill-category-title .icon {
   margin-right: var(--spacing-xs);
-  font-size: 10px;
 }
 .skill-category.ai-category .progress-bar {
   background: linear-gradient(90deg, var(--ai-dark) 0%, var(--ai-color) 100%);
@@ -1701,7 +1735,8 @@ html[data-theme="dark"] .skill-category.ai-category .progress-bar::after {
 /* ─── Footer AI sparkle icon ─────────────────────────────────────────────── */
 .footer-ai {
   color: var(--ai-color);
-  font-size: 12px;
+  width: .9em;
+  height: .9em;
 }
 html[data-theme="dark"] .footer-ai {
   color: var(--ai-light);
