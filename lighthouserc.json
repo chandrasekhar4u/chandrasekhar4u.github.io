@@ -1,9 +1,7 @@
 {
   "ci": {
     "collect": {
-      "url": [
-        "http://localhost:8000/"
-      ],
+      "url": ["http://localhost:8000/"],
       "startServerCommand": "python3 -m http.server 8000",
       "numberOfRuns": 2,
       "settings": {
