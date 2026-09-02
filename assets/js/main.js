@@ -35,9 +35,11 @@
 
       function setIcon(isDark) {
         try {
-          // Use toggle for more efficient class manipulation
-          themeIcon.classList.toggle('fa-sun', isDark);
-          themeIcon.classList.toggle('fa-moon', !isDark);
+          // Point the inline <use> at the sun / moon symbol in the SVG sprite
+          var use = themeIcon.querySelector('use');
+          if (use) {
+            use.setAttribute('href', isDark ? '#i-sun' : '#i-moon');
+          }
         } catch (e) {
           console.error('Error setting theme icon:', e);
         }
@@ -262,7 +264,6 @@
               // Animate skill bar on scroll
               const currentStyle = progressBar.style.cssText;
               progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + 'transition:width 1s ease-out;width:' + skillValue + '%';
-              progressBar.textContent = skillValue + '%';
               progressBar.dataset.animated = 'true';
               
               // Unobserve after animation
@@ -283,7 +284,6 @@
             const currentStyle = progressBar.style.cssText;
             const transition = prefersReducedMotion ? '' : 'transition:width 1s ease-out;';
             progressBar.style.cssText = currentStyle + (currentStyle ? ';' : '') + transition + 'width:' + skillValue + '%';
-            progressBar.textContent = skillValue + '%';
           } catch (e) {
             console.error('Error initializing skill bar:', e, item);
           }
@@ -303,9 +303,13 @@
       backToTopBtn.className = 'back-to-top';
       backToTopBtn.setAttribute('aria-label', 'Scroll back to top');
       backToTopBtn.setAttribute('title', 'Back to top');
-      const arrowIcon = document.createElement('i');
-      arrowIcon.className = 'fa-solid fa-arrow-up';
+      var SVGNS = 'http://www.w3.org/2000/svg';
+      var arrowIcon = document.createElementNS(SVGNS, 'svg');
+      arrowIcon.setAttribute('class', 'icon');
       arrowIcon.setAttribute('aria-hidden', 'true');
+      var arrowUse = document.createElementNS(SVGNS, 'use');
+      arrowUse.setAttribute('href', '#i-arrow-up');
+      arrowIcon.appendChild(arrowUse);
       backToTopBtn.appendChild(arrowIcon);
       document.body.appendChild(backToTopBtn);
       
@@ -454,13 +458,13 @@
           const handleSuccess = function() {
             try {
               btn.classList.add('copied');
-              const origIcon = btn.querySelector('i');
-              if (origIcon) {
-                origIcon.className = 'fa-solid fa-check';
+              const iconUse = btn.querySelector('use');
+              if (iconUse) {
+                iconUse.setAttribute('href', '#i-check');
               }
               setTimeout(function() {
                 btn.classList.remove('copied');
-                if (origIcon) origIcon.className = 'fa-solid fa-copy';
+                if (iconUse) iconUse.setAttribute('href', '#i-copy');
               }, 2000);
               // Show toast
               showEmailCopiedToast();

@@ -22,9 +22,10 @@ test.describe('Theme Toggle Functionality', () => {
     const themeToggle = page.locator('#theme-toggle');
     await expect(themeToggle).toBeVisible();
 
-    // Check if theme icon exists and has expected class
+    // Check if theme icon exists and references a sprite symbol
     const themeIcon = page.locator('#theme-icon');
-    await expect(themeIcon).toHaveClass(/fa-solid/);
+    await expect(themeIcon).toHaveClass(/icon/);
+    await expect(themeIcon.locator('use')).toHaveAttribute('href', /#i-(moon|sun)/);
 
     // Check if button has proper accessibility attributes
     await expect(themeToggle).toHaveAttribute('aria-label');
@@ -38,7 +39,7 @@ test.describe('Theme Toggle Functionality', () => {
 
     // Capture initial state
     const initialTheme = await page.getAttribute('html', 'data-theme');
-    const initialIconClass = await themeIcon.getAttribute('class');
+    const initialIconHref = await themeIcon.locator('use').getAttribute('href');
     const initialAriaLabel = await themeToggle.getAttribute('aria-label');
 
     // Click to toggle theme
@@ -47,12 +48,12 @@ test.describe('Theme Toggle Functionality', () => {
 
     // Verify theme changed
     const newTheme = await page.getAttribute('html', 'data-theme');
-    const newIconClass = await themeIcon.getAttribute('class');
+    const newIconHref = await themeIcon.locator('use').getAttribute('href');
     const newAriaLabel = await themeToggle.getAttribute('aria-label');
 
     // Assert changes occurred
     expect(newTheme).not.toBe(initialTheme);
-    expect(newIconClass).not.toBe(initialIconClass);
+    expect(newIconHref).not.toBe(initialIconHref);
     expect(newAriaLabel).not.toBe(initialAriaLabel);
 
     // Toggle back and verify
@@ -60,11 +61,11 @@ test.describe('Theme Toggle Functionality', () => {
     await page.waitForTimeout(200);
 
     const finalTheme = await page.getAttribute('html', 'data-theme');
-    const finalIconClass = await themeIcon.getAttribute('class');
+    const finalIconHref = await themeIcon.locator('use').getAttribute('href');
     const finalAriaLabel = await themeToggle.getAttribute('aria-label');
 
     expect(finalTheme).toBe(initialTheme);
-    expect(finalIconClass).toBe(initialIconClass);
+    expect(finalIconHref).toBe(initialIconHref);
     expect(finalAriaLabel).toBe(initialAriaLabel);
   });
 
@@ -75,7 +76,7 @@ test.describe('Theme Toggle Functionality', () => {
     // Test light theme (moon icon)
     const lightTheme = await page.getAttribute('html', 'data-theme');
     if (lightTheme === null || lightTheme === 'light') {
-      await expect(themeIcon).toHaveClass(/fa-moon/);
+      await expect(themeIcon.locator('use')).toHaveAttribute('href', '#i-moon');
       await expect(themeToggle).toHaveAttribute('aria-label', /Switch to dark theme/);
     }
 
@@ -84,7 +85,7 @@ test.describe('Theme Toggle Functionality', () => {
     await page.waitForTimeout(200);
 
     // Test dark theme (sun icon)
-    await expect(themeIcon).toHaveClass(/fa-sun/);
+    await expect(themeIcon.locator('use')).toHaveAttribute('href', '#i-sun');
     await expect(themeToggle).toHaveAttribute('aria-label', /Switch to light theme/);
   });
 
@@ -110,7 +111,7 @@ test.describe('Theme Toggle Functionality', () => {
 
     // Verify UI state matches
     const themeIcon = page.locator('#theme-icon');
-    await expect(themeIcon).toHaveClass(/fa-sun/);
+    await expect(themeIcon.locator('use')).toHaveAttribute('href', '#i-sun');
     await expect(themeToggle).toHaveAttribute('aria-label', /Switch to light theme/);
   });
 
@@ -256,15 +257,15 @@ test.describe('Theme Toggle Functionality', () => {
     // Verify final state is consistent
     const finalTheme = await page.getAttribute('html', 'data-theme');
     const themeIcon = page.locator('#theme-icon');
-    const iconClass = await themeIcon.getAttribute('class');
+    const iconHref = await themeIcon.locator('use').getAttribute('href');
     const ariaLabel = await themeToggle.getAttribute('aria-label');
 
     // Verify consistency between theme, icon, and aria-label
     if (finalTheme === 'dark') {
-      expect(iconClass).toContain('fa-sun');
+      expect(iconHref).toContain('#i-sun');
       expect(ariaLabel).toContain('Switch to light theme');
     } else {
-      expect(iconClass).toContain('fa-moon');
+      expect(iconHref).toContain('#i-moon');
       expect(ariaLabel).toContain('Switch to dark theme');
     }
   });
