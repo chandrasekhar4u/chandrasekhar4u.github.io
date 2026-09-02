@@ -245,9 +245,8 @@
     }
   }
 
-  // Skill bars: target widths come from CSS `[aria-valuenow]` rules and the
-  // reveal is a CSS scroll-driven animation (`animation-timeline: view()`),
-  // with an instant fallback where that isn't supported — no JS needed.
+  // Skill bars are pure CSS: their width comes from `[aria-valuenow]` rules in
+  // bundle.css (mirrored in print.css). No JS, no reveal animation.
 
   // Initialize Back-to-Top Button (Modern UX Pattern)
   function initBackToTop() {
