@@ -143,7 +143,7 @@ body {
   /* Text */
   --text-color:     #0F172A;        /* Slate 900 – headings / strong  */
   --text-secondary: #334155;        /* Slate 700 – body               */
-  --text-muted:     #64748B;        /* Slate 500 – meta / secondary   */
+  --text-muted:     #5E6A80;        /* meta / secondary – ≥4.9:1 on both #FFF and the #F1F5F9 page bg */
 
   /* Surfaces */
   --background:     #F1F5F9;        /* Slate 100 – page bg            */
