@@ -127,6 +127,57 @@ test.describe('Performance - Core Web Vitals', () => {
     expect(hasBootstrapGlobal).toBe(false);
   });
 
+  test.describe('ambient starfield', () => {
+    test('is decorative, non-interactive, and does not affect layout', async ({ page }) => {
+      const sf = page.locator('.starfield');
+      await expect(sf).toHaveAttribute('aria-hidden', 'true');
+      // measure in dark theme, where it renders
+      await page.evaluate(() => localStorage.setItem('theme', 'dark'));
+      await page.reload();
+      const info = await sf.evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return { pe: cs.pointerEvents, position: cs.position, box: el.getBoundingClientRect() };
+      });
+      expect(info.pe).toBe('none');
+      expect(info.position).toBe('fixed'); // fixed + full-viewport → never in document flow
+      expect(info.box.width).toBeGreaterThan(0);
+    });
+
+    test('shows only in the dark theme', async ({ page }) => {
+      await page.evaluate(() => localStorage.setItem('theme', 'light'));
+      await page.reload();
+      await expect(page.locator('.starfield')).toBeHidden();
+
+      await page.evaluate(() => localStorage.setItem('theme', 'dark'));
+      await page.reload();
+      await expect(page.locator('.starfield')).toBeVisible();
+    });
+
+    test('is off under prefers-reduced-motion', async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.evaluate(() => localStorage.setItem('theme', 'dark'));
+      await page.reload();
+      await expect(page.locator('.starfield')).toBeHidden();
+    });
+
+    test('animates only transform (stays on the compositor)', async ({ page }) => {
+      const css = await (await page.request.get('http://localhost:8000/assets/css/bundle.css')).text();
+      const kf = css.match(/@keyframes starfall\s*{([^}]*)}/);
+      expect(kf).not.toBeNull();
+      // every declaration inside the keyframes is a transform
+      const decls = kf[1].match(/[a-z-]+\s*:/g) || [];
+      expect(decls.length).toBeGreaterThan(0);
+      for (const d of decls) expect(d.trim()).toBe('transform:');
+    });
+
+    test('is hidden in print', async ({ page }) => {
+      await page.evaluate(() => localStorage.setItem('theme', 'dark'));
+      await page.reload();
+      await page.emulateMedia({ media: 'print' });
+      await expect(page.locator('.starfield')).toBeHidden();
+    });
+  });
+
   test('should have noscript fallbacks for deferred CSS', async ({ page }) => {
     const noscriptElements = await page.locator('noscript').all();
     expect(noscriptElements.length).toBeGreaterThanOrEqual(1);

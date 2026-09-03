@@ -2090,3 +2090,171 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
 .summary-section .summary ul li {
   text-wrap: pretty;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AMBIENT STARFIELD
+   Decorative only. Two box-shadow layers (no extra DOM, no JS) drift down on
+   the compositor. Shown ONLY in the dark theme, where the deep-navy ground
+   reads as a night sky; the light theme stays clean. Off entirely under
+   prefers-reduced-motion, prefers-reduced-transparency and print. It sits at
+   z-index 0 behind the opaque .wrapper, so it's visible only in the margin
+   around the card.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.starfield {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="dark"] .starfield {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    contain: layout style paint;
+  }
+
+  html[data-theme="dark"] .starfield::before,
+  html[data-theme="dark"] .starfield::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    animation: starfall linear infinite;
+    will-change: transform;
+  }
+
+  /* near layer — 2 px, a touch brighter, faster */
+  html[data-theme="dark"] .starfield::before {
+    width: 2px;
+    height: 2px;
+    opacity: .55;
+    animation-duration: 55s;
+    box-shadow:
+      77px 808px #38BDF8,
+      77px -592px #38BDF8,
+      274px 192px #A855F7,
+      274px -1208px #A855F7,
+      1329px 439px #38BDF8,
+      1329px -961px #38BDF8,
+      214px 143px #7DD3FC,
+      214px -1257px #7DD3FC,
+      217px 121px #34D399,
+      217px -1279px #34D399,
+      114px 1291px #34D399,
+      114px -109px #34D399,
+      1181px 1199px #A855F7,
+      1181px -201px #A855F7,
+      113px 95px #D8B4FE,
+      113px -1305px #D8B4FE,
+      593px 858px #38BDF8,
+      593px -542px #38BDF8,
+      1362px 631px #D8B4FE,
+      1362px -769px #D8B4FE,
+      370px 211px #34D399,
+      370px -1189px #34D399,
+      1166px 762px #38BDF8,
+      1166px -638px #38BDF8,
+      1102px 1155px #38BDF8,
+      1102px -245px #38BDF8,
+      1324px 1393px #D8B4FE,
+      1324px -7px #D8B4FE,
+      1230px 953px #34D399,
+      1230px -447px #34D399,
+      740px 613px #7DD3FC,
+      740px -787px #7DD3FC,
+      1431px 499px #38BDF8,
+      1431px -901px #38BDF8,
+      1338px 1013px #7DD3FC,
+      1338px -387px #7DD3FC,
+      589px 1247px #38BDF8,
+      589px -153px #38BDF8,
+      214px 337px #7DD3FC,
+      214px -1063px #7DD3FC,
+      250px 863px #38BDF8,
+      250px -537px #38BDF8,
+      158px 1142px #34D399,
+      158px -258px #34D399,
+      642px 696px #A855F7,
+      642px -704px #A855F7,
+      1366px 934px #38BDF8,
+      1366px -466px #38BDF8,
+      552px 970px #38BDF8,
+      552px -430px #38BDF8,
+      359px 634px #34D399,
+      359px -766px #34D399,
+      912px 582px #A855F7,
+      912px -818px #A855F7,
+      710px 46px #A855F7,
+      710px -1354px #A855F7,
+      1382px 239px #D8B4FE,
+      1382px -1161px #D8B4FE,
+      393px 588px #38BDF8,
+      393px -812px #38BDF8;
+  }
+
+  /* far layer — 1 px, dimmer, slower (parallax depth) */
+  html[data-theme="dark"] .starfield::after {
+    width: 1px;
+    height: 1px;
+    opacity: .32;
+    animation-duration: 88s;
+    animation-delay: -37s;
+    box-shadow:
+      814px 800px #D8B4FE,
+      814px -600px #D8B4FE,
+      229px 822px #D8B4FE,
+      229px -578px #D8B4FE,
+      70px 881px #D8B4FE,
+      70px -519px #D8B4FE,
+      212px 734px #A855F7,
+      212px -666px #A855F7,
+      309px 169px #38BDF8,
+      309px -1231px #38BDF8,
+      337px 477px #38BDF8,
+      337px -923px #38BDF8,
+      1371px 373px #7DD3FC,
+      1371px -1027px #7DD3FC,
+      74px 858px #D8B4FE,
+      74px -542px #D8B4FE,
+      1359px 652px #38BDF8,
+      1359px -748px #38BDF8,
+      1055px 1264px #38BDF8,
+      1055px -136px #38BDF8,
+      1469px 1393px #D8B4FE,
+      1469px -7px #D8B4FE,
+      1274px 807px #38BDF8,
+      1274px -593px #38BDF8,
+      1275px 127px #7DD3FC,
+      1275px -1273px #7DD3FC,
+      106px 902px #38BDF8,
+      106px -498px #38BDF8,
+      307px 107px #38BDF8,
+      307px -1293px #38BDF8,
+      77px 1098px #38BDF8,
+      77px -302px #38BDF8,
+      1256px 52px #38BDF8,
+      1256px -1348px #38BDF8,
+      1257px 770px #38BDF8,
+      1257px -630px #38BDF8,
+      1247px 1233px #A855F7,
+      1247px -167px #A855F7,
+      1129px 999px #A855F7,
+      1129px -401px #A855F7;
+  }
+}
+
+@keyframes starfall {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, 1400px, 0); }
+}
+
+/* Opt out for viewers who reduce transparency */
+@media (prefers-reduced-transparency: reduce) {
+  .starfield { display: none !important; }
+}
+
+/* Keep the card and every fixed control above the starfield */
+.wrapper { z-index: 1; }
