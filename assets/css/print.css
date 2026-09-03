@@ -13,6 +13,7 @@
 @media print {
 
     /* Hide interactive / screen-only elements */
+    .starfield,
     .theme-toggle,
     .print-btn,
     .d-print-none,
