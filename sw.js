@@ -1,18 +1,22 @@
 /**
  * sw.js — Service Worker for kakarla.in
  *
- * Implements a caching strategy that:
- *  - Pre-caches critical static assets on install (equivalent to long Expires headers).
- *  - Uses cache-first for static assets (CSS, JS, images) to avoid repeat network requests.
- *  - Uses network-first for HTML so content stays fresh.
- *  - Cleans up outdated cache versions on activate.
+ * Caching strategy:
+ *  - HTML  → network-first (always try the latest markup; fall back to cache offline).
+ *  - Static assets (CSS / JS / fonts / images) → stale-while-revalidate: serve the
+ *    cached copy instantly, then refresh it from the network in the background so a
+ *    new deployment propagates on the *next* load. The site's asset filenames are
+ *    not content-hashed, so a plain cache-first strategy would pin every returning
+ *    visitor to the version cached at install time — forever. That is the bug this
+ *    revision fixes (a deployed CSS change never reached returning visitors).
+ *  - Outdated cache versions are purged on activate.
  *
- * Bump CACHE_VERSION whenever a new deployment changes static asset content.
+ * Bump CACHE_VERSION on every deploy that changes any precached asset.
  */
 
 'use strict';
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_PREFIX = 'kakarla-static-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
@@ -33,19 +37,24 @@ const PRECACHE_ASSETS = [
 ];
 
 // ---------------------------------------------------------------------------
-// Install — pre-cache static assets
+// Install — pre-cache static assets (bypassing the HTTP cache so a bumped
+// version always fetches the freshly deployed files)
 // ---------------------------------------------------------------------------
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_ASSETS))
+      .then((cache) =>
+        cache.addAll(
+          PRECACHE_ASSETS.map((url) => new Request(url, { cache: 'reload' })),
+        ),
+      )
       .then(() => self.skipWaiting()),
   );
 });
 
 // ---------------------------------------------------------------------------
-// Activate — purge caches from previous versions
+// Activate — purge caches from previous versions, take control immediately
 // ---------------------------------------------------------------------------
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -54,9 +63,7 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter(
-              (key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME,
-            )
+            .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
             .map((key) => caches.delete(key)),
         ),
       )
@@ -65,12 +72,12 @@ self.addEventListener('activate', (event) => {
 });
 
 // ---------------------------------------------------------------------------
-// Fetch — serve from cache or network
+// Fetch
 // ---------------------------------------------------------------------------
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // Only handle GET requests from the same origin.
+  // Only handle same-origin GET requests.
   if (request.method !== 'GET') return;
   let requestUrl;
   try {
@@ -85,7 +92,7 @@ self.addEventListener('fetch', (event) => {
     : request.destination === 'document';
 
   if (isHtmlRequest) {
-    // Network-first for HTML: serve the latest version; fall back to cache if offline.
+    // Network-first for HTML.
     event.respondWith(
       fetch(request)
         .then((networkResponse) => {
@@ -99,22 +106,31 @@ self.addEventListener('fetch', (event) => {
         })
         .catch(() => caches.match(request, { ignoreSearch: true })),
     );
-  } else {
-    // Cache-first for static assets: serve cached copy; cache network response on miss.
-    event.respondWith(
-      caches.match(request).then((cached) => {
-        if (cached) return cached;
-
-        return fetch(request).then((networkResponse) => {
-          if (networkResponse.ok) {
-            const clone = networkResponse.clone();
-            event.waitUntil(
-              caches.open(CACHE_NAME).then((cache) => cache.put(request, clone)),
-            );
-          }
-          return networkResponse;
-        });
-      }),
-    );
+    return;
   }
+
+  // Stale-while-revalidate for static assets: serve cache now, refresh in the
+  // background, so the next load always has the latest deployed file.
+  event.respondWith(
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.match(request).then((cached) => {
+        const networkFetch = fetch(request)
+          .then((networkResponse) => {
+            if (networkResponse.ok) {
+              cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+          })
+          .catch(() => cached);
+
+        // If we have a cached copy, return it immediately but let the refresh
+        // run to completion; otherwise wait for the network.
+        if (cached) {
+          event.waitUntil(networkFetch);
+          return cached;
+        }
+        return networkFetch;
+      }),
+    ),
+  );
 });
