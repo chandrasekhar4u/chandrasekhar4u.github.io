@@ -47,7 +47,7 @@
 
     <!-- Preload LCP image + self-hosted variable font for a fast, shift-free first paint.
          The headshot renders at 120 CSS px, so a 240 px AVIF (~5 KB) is the 2x-perfect LCP. -->
-    <link rel="preload" as="image" href="assets/images/chandrasekhar-240.avif" type="image/avif" fetchpriority="high">
+	<link rel="preload" as="image" href="assets/images/chandrasekhar-240.avif" fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin>
 
     <!-- Favicon -->
@@ -222,7 +222,7 @@
                 <picture>
                   <source type="image/avif" srcset="assets/images/chandrasekhar-240.avif">
                   <source type="image/webp" srcset="assets/images/chandrasekhar-240.webp">
-                  <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" fetchpriority="high" loading="eager" decoding="async"/>
+                  <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar-240.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" loading="eager" decoding="async"/>
                 </picture>
                 <h1 class="name">Chandra Sekhar Kakarla</h1>
                 <p class="tagline">Full Stack Developer</p>
