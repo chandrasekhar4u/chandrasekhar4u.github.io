@@ -1,0 +1,5 @@
+# Security contact for kakarla.in (RFC 9116)
+Contact: mailto:connect@kakarla.in
+Expires: 2027-06-30T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://kakarla.in/.well-known/security.txt
