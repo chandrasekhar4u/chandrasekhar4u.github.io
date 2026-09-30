@@ -26,6 +26,8 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Chandra Sekhar Kakarla">
+    <meta property="og:locale" content="en_US">
     <meta property="og:url" content="https://kakarla.in/">
     <meta property="og:title" content="Chandra Sekhar Kakarla - Full Stack Developer">
     <meta property="og:description" content="Full Stack Developer with 15+ years shipping enterprise Java/Spring applications, now building with an AI-assisted workflow.">
@@ -47,7 +49,7 @@
 
     <!-- Preload LCP image + self-hosted variable font for a fast, shift-free first paint.
          The headshot renders at 120 CSS px, so a 240 px AVIF (~5 KB) is the 2x-perfect LCP. -->
-	<link rel="preload" as="image" href="assets/images/chandrasekhar-240.avif" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/chandrasekhar-240.avif" type="image/avif" fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin>
 
     <!-- Favicon -->
@@ -72,15 +74,7 @@
     <link rel="stylesheet" href="assets/css/print.css" media="print">
     
     <!-- Apple Touch Icons -->
-	<link rel="apple-touch-icon" sizes="57x57" href="assets/images/apple-icon-57x57.webp">
-	<link rel="apple-touch-icon" sizes="60x60" href="assets/images/apple-icon-60x60.webp">
-	<link rel="apple-touch-icon" sizes="72x72" href="assets/images/apple-icon-72x72.webp">
-	<link rel="apple-touch-icon" sizes="76x76" href="assets/images/apple-icon-76x76.webp">
-	<link rel="apple-touch-icon" sizes="114x114" href="assets/images/apple-icon-114x114.webp">
-	<link rel="apple-touch-icon" sizes="120x120" href="assets/images/apple-icon-120x120.webp">
-	<link rel="apple-touch-icon" sizes="144x144" href="assets/images/apple-icon-144x144.webp">
-	<link rel="apple-touch-icon" sizes="152x152" href="assets/images/apple-icon-152x152.webp">
-	<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-icon-180x180.webp">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
 	<link rel="icon" type="image/webp" sizes="192x192" href="assets/images/android-icon-192x192.webp">
 	<link rel="icon" type="image/webp" sizes="32x32" href="assets/images/favicon-32x32.webp">
 	<link rel="icon" type="image/webp" sizes="96x96" href="assets/images/favicon-96x96.webp">
@@ -101,7 +95,7 @@
 				"@id": "https://kakarla.in/#profilepage",
 				"url": "https://kakarla.in/",
 				"name": "Chandra Sekhar Kakarla — Full Stack Developer",
-				"dateModified": "2026-09-02",
+				"dateModified": "2026-09-30",
 				"inLanguage": "en",
 				"mainEntity": { "@id": "https://kakarla.in/#person" }
 			},
@@ -222,7 +216,7 @@
                 <picture>
                   <source type="image/avif" srcset="assets/images/chandrasekhar-240.avif">
                   <source type="image/webp" srcset="assets/images/chandrasekhar-240.webp">
-                  <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar-240.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" loading="eager" decoding="async"/>
+                  <img class="img-circle" height="220" width="220" src="assets/images/chandrasekhar-240.webp" alt="Professional headshot of Chandra Sekhar Kakarla, Full Stack Developer" fetchpriority="high" loading="eager" decoding="async"/>
                 </picture>
                 <h1 class="name">Chandra Sekhar Kakarla</h1>
                 <p class="tagline">Full Stack Developer</p>

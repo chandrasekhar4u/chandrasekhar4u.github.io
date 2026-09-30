@@ -1,1 +1,16 @@
 theme: jekyll-theme-minimal
+
+# Jekyll skips dot-directories by default; publish /.well-known/security.txt.
+include:
+  - .well-known
+
+# Keep dev/test tooling out of the published site (it is not part of the CV).
+exclude:
+  - node_modules
+  - tests
+  - package.json
+  - package-lock.json
+  - playwright.config.js
+  - lighthouserc.json
+  - lighthouserc-desktop.json
+  - README.md
