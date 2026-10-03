@@ -14,6 +14,6 @@ exclude:
   - lighthouserc.json
   - lighthouserc-desktop.json
   - README.md
-  - eslint.config.js
+  - eslint.config.mjs
   - SECURITY.md
   - docs

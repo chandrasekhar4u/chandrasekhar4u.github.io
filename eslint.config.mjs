@@ -13,11 +13,7 @@ export default [
     rules: {
       'no-inner-declarations': 'off',
       'no-console': 'off',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^(_|e)$' }],
     },
-  },
-  {
-    files: ['tests/**/*.js', 'playwright.config.js'],
-    languageOptions: { globals: { test: 'readonly', expect: 'readonly' } },
   },
 ];
