@@ -99,7 +99,7 @@ Consistent spacing system using CSS variables:
 Run from repository root:
 
 ```bash
-npm install
+npm ci
 npm run lint
 npm run format:check
 npm run linkcheck
@@ -113,6 +113,11 @@ npm --prefix tests ci
 npm --prefix tests exec playwright install --with-deps chromium
 npm --prefix tests test
 ```
+
+CI also runs CodeQL (`.github/workflows/codeql.yml`) and Dependabot keeps npm and
+GitHub Actions dependencies current. Security contact: see `SECURITY.md`; response
+headers for Cloudflare are documented in `docs/cloudflare-security-headers.md`.
+After changing any shipped static asset, bump `CACHE_VERSION` in `sw.js`.
 
 ### File Structure
 ```

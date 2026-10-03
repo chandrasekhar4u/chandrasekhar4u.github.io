@@ -8,8 +8,8 @@
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "htmlhint index.html",
     "lint:css": "stylelint \"assets/css/**/*.css\"",
-    "lint:js": "eslint assets/js/main.js tests/**/*.js",
-    "format:check": "prettier --check \"package*.json\" \"tests/package.json\" \".github/workflows/**/*.yml\" \".stylelintrc.json\" \".eslintrc.json\" \"lighthouserc.json\" \"lighthouserc-desktop.json\"",
+    "lint:js": "eslint assets/js/main.js \"tests/**/*.js\" sw.js",
+    "format:check": "prettier --check \"package*.json\" \"tests/package.json\" \".github/workflows/**/*.yml\" \".stylelintrc.json\" \"lighthouserc.json\" \"lighthouserc-desktop.json\"",
     "linkcheck": "linkinator . --recurse --markdown --timeout 15000 --retry-errors --retry-errors-count 2 --skip \"(node_modules|vendor|kakarla\\\\.in|cdn\\\\.jsdelivr\\\\.net|cdnjs\\\\.cloudflare\\\\.com|fonts\\\\.googleapis\\\\.com|fonts\\\\.gstatic\\\\.com|googletagmanager\\\\.com|linkedin\\\\.com|stackoverflow\\\\.com|wellsfargo\\\\.com|smartdcc\\\\.co\\\\.uk|support\\\\.bell\\\\.ca|bordgaisenergy\\\\.ie|twitter\\\\.com|x\\\\.com|facebook\\\\.com|github\\\\.com)\"",
     "test:ui": "npm --prefix tests test",
     "test:a11y": "npm --prefix tests test -- --grep \"Accessibility - WCAG Compliance\"",
@@ -17,12 +17,17 @@
     "lighthouse:ci": "lhci autorun --config=./lighthouserc.json && lhci autorun --config=./lighthouserc-desktop.json"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
-    "eslint": "^8.57.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
     "htmlhint": "^1.7.1",
     "linkinator": "^6.1.4",
-    "prettier": "^3.6.2",
-    "stylelint": "^16.25.0",
-    "stylelint-config-standard": "^39.0.1"
+    "prettier": "^3.9.9",
+    "stylelint": "^17.15.0",
+    "stylelint-config-standard": "^40.0.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

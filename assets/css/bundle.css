@@ -2245,3 +2245,21 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
 
 /* Keep the card and every fixed control above the starfield */
 .wrapper { z-index: 1; }
+
+/* Windows High Contrast / forced-colors: keep controls visibly bounded and
+   the focus ring in a system colour, and hide decorative starfield. */
+@media (forced-colors: active) {
+  .theme-toggle,
+  .print-btn,
+  .copy-email-btn,
+  .back-to-top {
+    border: 1px solid ButtonText;
+  }
+
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .starfield { display: none !important; }
+}

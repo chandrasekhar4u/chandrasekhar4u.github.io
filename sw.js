@@ -12,7 +12,7 @@
 
 'use strict';
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_PREFIX = 'kakarla-static-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 
@@ -60,6 +60,12 @@ self.addEventListener('activate', (event) => {
             .map((key) => caches.delete(key)),
         ),
       )
+      // Navigation preload: start the HTML request in parallel with SW boot-up.
+      .then(() =>
+        self.registration.navigationPreload
+          ? self.registration.navigationPreload.enable()
+          : undefined,
+      )
       .then(() => self.clients.claim()),
   );
 });
@@ -85,10 +91,13 @@ self.addEventListener('fetch', (event) => {
     : request.destination === 'document';
 
   if (isHtmlRequest) {
-    // Network-first for HTML: serve the latest version; fall back to cache if offline.
+    // Network-first for HTML: serve the latest version (using the navigation
+    // preload response when available); fall back to cache if offline.
     event.respondWith(
-      fetch(request)
-        .then((networkResponse) => {
+      (async () => {
+        try {
+          const preloaded = await event.preloadResponse;
+          const networkResponse = preloaded || (await fetch(request));
           if (networkResponse.ok) {
             const clone = networkResponse.clone();
             event.waitUntil(
@@ -96,8 +105,13 @@ self.addEventListener('fetch', (event) => {
             );
           }
           return networkResponse;
-        })
-        .catch(() => caches.match(request, { ignoreSearch: true })),
+        } catch (_) {
+          return (
+            (await caches.match(request, { ignoreSearch: true })) ||
+            (await caches.match('/'))
+          );
+        }
+      })(),
     );
   } else {
     // Cache-first for static assets: serve cached copy; cache network response on miss.
