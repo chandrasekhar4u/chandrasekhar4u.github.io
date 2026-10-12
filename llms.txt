@@ -1,6 +1,6 @@
 # Chandra Sekhar Kakarla
 
-> Full Stack Developer with 15+ years building and shipping enterprise web applications across Finance, Energy and Telecom — most of it in Java, Spring and J2EE, now delivered with an AI-assisted workflow. Currently a Software Development Senior Specialist at NTT DATA. Based in India.
+> Full Stack Developer with 15+ years building and shipping enterprise web applications across Finance, Energy and Telecom — most of it in Java, Spring and J2EE, now delivered with an AI-assisted workflow. Currently a Senior Software Engineer at Wells Fargo. Based in India.
 
 This site is a single-page résumé / CV. Everything below is on one page at https://kakarla.in/ ; the anchors let you jump to a section.
 
@@ -19,7 +19,8 @@ This site is a single-page résumé / CV. Everything below is on one page at htt
 
 ## Experience
 
-- Software Development Senior Specialist, NTT DATA (2015 – present): design and development of Java / J2EE / Spring web applications for enterprise Finance clients; uses GitHub Copilot and other AI tools in the delivery workflow.
+- Senior Software Engineer, Wells Fargo (Feb 2023 – present): design and development of Java / J2EE / Spring web applications in financial services; uses GitHub Copilot and other AI tools in the delivery workflow.
+- Software Development Senior Specialist, NTT DATA (2015 – 2023): design and development of Java / J2EE / Spring web applications for enterprise Finance clients.
 - Senior Software Engineer, CGI (2010 – 2015): Java / J2EE web applications for clients in the Energy and Telecom domains (JSF, Hibernate, Oracle DB).
 
 ## Projects

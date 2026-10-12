@@ -280,7 +280,7 @@
        MAIN — SECTION LAYOUT
     ═══════════════════════════════════════════════════════════════════════ */
     .section {
-        margin-bottom: 8pt !important;
+        margin-bottom: 4pt !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
         content-visibility: visible !important;
@@ -328,7 +328,7 @@
        MAIN — EXPERIENCE
     ═══════════════════════════════════════════════════════════════════════ */
     .experiences-section .item {
-        margin-bottom: 6pt !important;
+        margin-bottom: 4pt !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
     }

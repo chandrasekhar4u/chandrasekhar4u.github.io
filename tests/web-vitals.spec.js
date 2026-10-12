@@ -298,7 +298,7 @@ test.describe('Accessibility - WCAG Compliance', () => {
   });
 
   test('badges expose their value, not a label that hides it', async ({ page }) => {
-    await expect(page.locator('.availability-badge')).toContainText('NTT DATA');
+    await expect(page.locator('.availability-badge')).toContainText('Wells Fargo');
     await expect(page.locator('.availability-badge')).not.toHaveAttribute('aria-label');
     await expect(page.locator('.ai-practitioner-badge')).toContainText('AI Practitioner');
   });

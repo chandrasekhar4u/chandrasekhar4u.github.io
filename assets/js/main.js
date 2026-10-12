@@ -562,6 +562,14 @@
         }
       }
       ensureOpenOnDesktop();
+      // On small screens start the secondary sidebar sections (Education,
+      // Languages, Interests) collapsed so the résumé content is reached sooner.
+      // They are open in the markup so no-JS visitors and print still see them.
+      if (!desktop.matches) {
+        document.querySelectorAll('details.mobile-collapsible').forEach(function(el) {
+          el.removeAttribute('open');
+        });
+      }
       // matchMedia change fires only at the breakpoint — no resize handler.
       if (typeof desktop.addEventListener === 'function') {
         desktop.addEventListener('change', ensureOpenOnDesktop);

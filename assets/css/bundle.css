@@ -426,7 +426,7 @@ button:focus-visible,
   letter-spacing: .12em;
   text-transform: uppercase;
   margin-bottom: var(--spacing-md);
-  color: #475569;
+  color: #94A3B8; /* ≥5:1 on the sidebar gradient (was #475569, ~2.5:1) */
 }
 
 /* ── Contact List ── */
@@ -491,7 +491,7 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .meta {
-  color: #64748B;
+  color: #94A3B8; /* was #64748B (<4.5:1 on the lighter end of the gradient) */
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-sm);
   margin-bottom: var(--spacing-xs);
@@ -535,7 +535,7 @@ button:focus-visible,
 }
 
 .sidebar-wrapper .lang-desc {
-  color: #475569;
+  color: #94A3B8; /* was #475569 (~2.5:1) */
   font-size: 11px;
 }
 
@@ -1226,7 +1226,7 @@ details.mobile-collapsible > summary.mobile-collapsible-header {
   letter-spacing: .12em;
   text-transform: uppercase;
   margin-bottom: 0;
-  color: #475569;
+  color: #94A3B8; /* was #475569 (~2.5:1 on the sidebar) */
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -1482,7 +1482,7 @@ html[data-theme="dark"] .tech-tag {
 }
 .domain-energy {
   background: rgba(52,211,153,.12);
-  color: #059669;
+  color: #047857; /* was #059669 (3.4:1 at 9px) */
   border: 1px solid rgba(52,211,153,.2);
 }
 .domain-telecom {
