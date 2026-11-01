@@ -66,9 +66,14 @@ test.describe('Print Layout', () => {
     await expect(tagline).toContainText('Full Stack Developer');
   });
 
-  test('contact email link should be present', async ({ page }) => {
-    const emailLink = page.locator('.contact-list a[href^="mailto:"]');
-    await expect(emailLink).toHaveCount(1);
+  test('no email address or mailto link is exposed', async ({ page }) => {
+    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+    const html = await page.content();
+    expect(html).not.toMatch(/connect@kakarla\.in/i);
+  });
+
+  test('education section lists the Master of Computer Applications only', async ({ page }) => {
+    await expect(page.locator('.education-container .degree')).toHaveText(['Master of Computer Applications']);
   });
 
   test('career profile section should be present', async ({ page }) => {

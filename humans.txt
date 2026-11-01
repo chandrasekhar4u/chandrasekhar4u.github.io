@@ -1,13 +1,12 @@
 /* TEAM */
   Name: Chandra Sekhar Kakarla
   Role: Full Stack Developer
-  Contact: connect [at] kakarla.in
   LinkedIn: in.linkedin.com/in/chandrasekhar4u
   GitHub: github.com/chandrasekhar4u
   Location: India
 
 /* SITE */
-  Last updated: 2026-10-11
+  Last updated: 2026-11-01
   Language: English
   Doctype: HTML5
   Standards: HTML5, CSS3, WCAG 2.2 AA

@@ -61,7 +61,7 @@ body {
 /* Utility classes
    .d-print-none only hides an element when printing. It must NOT force
    `display` on screen: a base `display: block !important` here overrode the
-   flex / inline-flex layout of .print-btn and .copy-email-btn and pushed their
+   flex / inline-flex layout of .print-btn and pushed its
    icons off-centre. */
 @media print {
   .d-print-none {
@@ -1170,48 +1170,6 @@ html[data-theme="dark"] .print-btn:hover {
 }
 .sidebar-nav-link.active::before { height: 100%; border-radius: var(--radius-md) 0 0 var(--radius-md); width: 3px; }
 
-/* ─── Copy Email Button ──────────────────────────────────────────────────── */
-.copy-email-btn {
-  background: none;
-  border: 1px solid rgba(56,189,248,.2);
-  border-radius: var(--radius-sm);
-  color: #64748B;
-  width: 24px;
-  height: 24px;
-  min-height: 24px;  /* WCAG 2.2 SC 2.5.8 (Target Size, Minimum): 24x24 CSS px */
-  min-width: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-  font-size: 10px;
-  margin-left: auto;
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-}
-.copy-email-btn:hover {
-  background: rgba(56,189,248,.12);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-.copy-email-btn:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-.copy-email-btn.copied {
-  color: #34D399;
-  border-color: rgba(52,211,153,.3);
-  background: rgba(52,211,153,.1);
-}
-
-/* Email list item layout for copy button */
-.contact-list li.email {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
 /* ─── Mobile Collapsible Sidebar Sections ────────────────────────────────── */
 details.mobile-collapsible {
   padding: var(--spacing-md) var(--spacing-xl);
@@ -2251,7 +2209,6 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
 @media (forced-colors: active) {
   .theme-toggle,
   .print-btn,
-  .copy-email-btn,
   .back-to-top {
     border: 1px solid ButtonText;
   }

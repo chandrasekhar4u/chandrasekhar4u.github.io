@@ -400,89 +400,6 @@
     }
   }
 
-  // ─── NEW: Copy email to clipboard ─────────────────────────────────────
-  function initCopyEmail() {
-    try {
-      const copyBtns = document.querySelectorAll('.copy-email-btn');
-      copyBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          const email = btn.getAttribute('data-email');
-          if (!email) return;
-
-          const handleSuccess = function() {
-            try {
-              btn.classList.add('copied');
-              const iconUse = btn.querySelector('use');
-              if (iconUse) {
-                iconUse.setAttribute('href', '#i-check');
-              }
-              setTimeout(function() {
-                btn.classList.remove('copied');
-                if (iconUse) iconUse.setAttribute('href', '#i-copy');
-              }, 2000);
-              // Show toast
-              showEmailCopiedToast();
-            } catch (e) { /* ignore */ }
-          };
-
-          if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(email).then(handleSuccess).catch(function() {
-              fallbackCopy(email, handleSuccess);
-            });
-          } else {
-            fallbackCopy(email, handleSuccess);
-          }
-        });
-      });
-    } catch (e) {
-      console.error('Error initializing copy email:', e);
-    }
-  }
-
-  function fallbackCopy(text, callback) {
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      if (callback) callback();
-    } catch (e) {
-      console.error('Fallback copy failed:', e);
-    }
-  }
-
-  function showEmailCopiedToast() {
-    try {
-      const existing = document.querySelector('.email-copy-toast');
-      if (existing) existing.remove();
-
-      const toast = document.createElement('div');
-      toast.className = 'theme-toast email-copy-toast';
-      toast.setAttribute('role', 'status');
-      toast.setAttribute('aria-live', 'polite');
-
-      const icon = document.createElement('span');
-      icon.className = 'toast-icon';
-      icon.textContent = '✅';
-      const msg = document.createElement('span');
-      msg.className = 'toast-message';
-      msg.textContent = 'Email copied to clipboard!';
-
-      toast.appendChild(icon);
-      toast.appendChild(msg);
-      document.body.appendChild(toast);
-      setTimeout(function() { toast.classList.add('show'); }, 10);
-      setTimeout(function() {
-        toast.classList.remove('show');
-        setTimeout(function() { toast.remove(); }, 300);
-      }, 2500);
-    } catch (e) { /* ignore */ }
-  }
-
   // ─── NEW: Scroll-Spy for Sidebar Nav ──────────────────────────────────
   function initScrollSpy() {
     try {
@@ -588,7 +505,6 @@
       updateCopyrightYear();
       updateLastUpdated();
       initPrintButton();
-      initCopyEmail();
       initScrollSpy();
       initMobileAccordion();
     }, { once: true });
@@ -598,7 +514,6 @@
     updateCopyrightYear();
     updateLastUpdated();
     initPrintButton();
-    initCopyEmail();
     initScrollSpy();
     initMobileAccordion();
   }
