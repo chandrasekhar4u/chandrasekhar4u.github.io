@@ -55,6 +55,12 @@ jobs:
       - name: Install Playwright test dependencies
         run: npm --prefix tests ci
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('tests/package-lock.json') }}
+
       - name: Install system dependencies for Playwright browsers
         run: npm --prefix tests exec playwright install-deps
 

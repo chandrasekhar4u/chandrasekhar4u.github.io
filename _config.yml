@@ -17,3 +17,9 @@ exclude:
   - eslint.config.mjs
   - SECURITY.md
   - docs
+  # Unlinked legacy stylesheet fragments (bundle.css is the only shipped sheet).
+  - assets/css/theme.css
+  - assets/css/styles.css
+  - assets/css/enhancements.css
+  - assets/css/bootstrap-fallback.css
+  - assets/css/icons-fallback.css

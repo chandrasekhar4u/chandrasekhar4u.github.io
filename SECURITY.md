@@ -2,9 +2,9 @@
 
 ## Reporting a vulnerability
 
-Please report security issues privately by email to **connect@kakarla.in**
-(also published at <https://kakarla.in/.well-known/security.txt>) or via
-GitHub's private vulnerability reporting on this repository.
+Please report security issues privately using GitHub's private vulnerability
+reporting: <https://github.com/chandrasekhar4u/chandrasekhar4u.github.io/security/advisories/new>
+(also published at <https://kakarla.in/.well-known/security.txt>).
 Please do not open public issues for security problems.
 
 This is a static personal site (no server-side code, no user data stored),

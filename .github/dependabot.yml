@@ -4,6 +4,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Wait a week before adopting brand-new releases (supply-chain hygiene);
+    # security updates are not delayed by cooldown.
+    cooldown:
+      default-days: 7
     groups:
       npm-root:
         patterns: ["*"]
@@ -11,6 +15,10 @@ updates:
     directory: /tests
     schedule:
       interval: weekly
+    # Wait a week before adopting brand-new releases (supply-chain hygiene);
+    # security updates are not delayed by cooldown.
+    cooldown:
+      default-days: 7
     groups:
       npm-tests:
         patterns: ["*"]
@@ -18,6 +26,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Wait a week before adopting brand-new releases (supply-chain hygiene);
+    # security updates are not delayed by cooldown.
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ["*"]

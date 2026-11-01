@@ -11,7 +11,6 @@ This site is a single-page résumé / CV. Everything below is on one page at htt
 
 ## Contact
 
-- Email: connect@kakarla.in
 - [LinkedIn](https://in.linkedin.com/in/chandrasekhar4u): professional profile and work history.
 - [GitHub](https://github.com/chandrasekhar4u): open-source repositories and activity.
 - [Stack Overflow](https://stackoverflow.com/users/1213738/): Q&A reputation and tags.
@@ -40,7 +39,6 @@ This site is a single-page résumé / CV. Everything below is on one page at htt
 ## Education
 
 - Master of Computer Applications — J.K.C College, Guntur, A.P (2006 – 2009).
-- BSc in Mathematics — J.K.C College, Guntur, A.P (2003 – 2006).
 
 ## Optional
 
