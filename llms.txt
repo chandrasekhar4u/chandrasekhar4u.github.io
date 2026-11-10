@@ -14,7 +14,7 @@ This site is a single-page résumé / CV. Everything below is on one page at htt
 - [LinkedIn](https://in.linkedin.com/in/chandrasekhar4u): professional profile and work history.
 - [GitHub](https://github.com/chandrasekhar4u): open-source repositories and activity.
 - [Stack Overflow](https://stackoverflow.com/users/1213738/): Q&A reputation and tags.
-- [X / Twitter](https://twitter.com/chandrasekhar4u): posts.
+- [X / Twitter](https://x.com/chandrasekhar4u): posts.
 
 ## Experience
 
