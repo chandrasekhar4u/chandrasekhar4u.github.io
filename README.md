@@ -58,7 +58,7 @@ Consistent spacing system using CSS variables:
 ### Prerequisites
 - Modern web browser
 - Simple HTTP server (for local development)
-- Node.js 22+ and npm (for quality checks and automated tests)
+- Node.js 22+ (CI runs Node 26 LTS) and npm (for quality checks and automated tests)
 
 ### Local Development
 
