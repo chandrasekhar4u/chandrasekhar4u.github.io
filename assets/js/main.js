@@ -303,19 +303,6 @@
     }
   }
 
-  // ─── NEW: Update footer last-updated date ──────────────────────────────
-  function updateLastUpdated() {
-    try {
-      const el = document.getElementById('last-updated');
-      if (!el) return;
-      const now = new Date();
-      const opts = { month: 'long', year: 'numeric' };
-      el.textContent = now.toLocaleDateString('en-US', opts);
-    } catch (e) {
-      console.error('Error updating last-updated:', e);
-    }
-  }
-
   // ─── NEW: Print button & before/after print hooks ─────────────────────
   function initPrintButton() {
     try {
@@ -503,7 +490,6 @@
       initThemeToggle();
       initBackToTop();
       updateCopyrightYear();
-      updateLastUpdated();
       initPrintButton();
       initScrollSpy();
       initMobileAccordion();
@@ -512,7 +498,6 @@
     initThemeToggle();
     initBackToTop();
     updateCopyrightYear();
-    updateLastUpdated();
     initPrintButton();
     initScrollSpy();
     initMobileAccordion();

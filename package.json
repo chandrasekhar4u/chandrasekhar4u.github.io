@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "python3 -m http.server 8000",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
-    "lint:html": "htmlhint index.html",
+    "lint:html": "htmlhint index.html 404.html",
     "lint:css": "stylelint \"assets/css/**/*.css\"",
     "lint:js": "eslint assets/js/main.js \"tests/**/*.js\" sw.js",
     "format:check": "prettier --check \"package*.json\" \"tests/package.json\" \".github/workflows/**/*.yml\" \".stylelintrc.json\" \"lighthouserc.json\" \"lighthouserc-desktop.json\"",
