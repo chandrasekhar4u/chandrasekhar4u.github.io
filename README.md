@@ -118,6 +118,8 @@ CI also runs CodeQL (`.github/workflows/codeql.yml`) and Dependabot keeps npm an
 GitHub Actions dependencies current. Security contact: see `SECURITY.md`; response
 headers for Cloudflare are documented in `docs/cloudflare-security-headers.md`.
 After changing any shipped static asset, bump `CACHE_VERSION` in `sw.js`.
+After editing page content, update the last-edited date in four places (a test checks they agree):
+the footer `<time id="last-updated">`, JSON-LD `dateModified`, `sitemap.xml` `<lastmod>` and `humans.txt`.
 
 ### File Structure
 ```
