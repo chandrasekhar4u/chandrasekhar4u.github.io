@@ -1,9 +1,9 @@
 /* TEAM */
   Name: Chandra Sekhar Kakarla
   Role: Full Stack Developer
-  LinkedIn: in.linkedin.com/in/chandrasekhar4u
+  LinkedIn: www.linkedin.com/in/chandrasekhar4u
   GitHub: github.com/chandrasekhar4u
-  Location: India
+  Location: USA
 
 /* SITE */
   Last updated: 2026-11-15
