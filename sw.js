@@ -12,7 +12,7 @@
 
 'use strict';
 
-const CACHE_VERSION = 'v11';
+const CACHE_VERSION = 'v12';
 const CACHE_PREFIX = 'kakarla-static-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 

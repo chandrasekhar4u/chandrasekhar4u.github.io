@@ -528,6 +528,7 @@
     /* Progress bar widths keyed to aria-valuenow */
     .progress-bar[aria-valuenow="90"] { width: 90% !important; }
     .progress-bar[aria-valuenow="85"] { width: 85% !important; }
+    .progress-bar[aria-valuenow="80"] { width: 80% !important; }
     .progress-bar[aria-valuenow="75"] { width: 75% !important; }
     .progress-bar[aria-valuenow="70"] { width: 70% !important; }
 

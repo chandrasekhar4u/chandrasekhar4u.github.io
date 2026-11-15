@@ -758,7 +758,7 @@ button:focus-visible,
 /* ── Skills ── */
 .skillset .item {
   display: grid;
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 150px 1fr;
   align-items: center;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
@@ -838,6 +838,17 @@ button:focus-visible,
   letter-spacing: .04em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* Screen only: line the tier labels up in one column just past the end of the
+   track instead of floating over it. The bar is N% of the track, so the track
+   end is at (100 / N * 100)% of the bar's own width. */
+@media screen {
+  .skillset .progress-bar[aria-valuenow="90"]::after { left: calc(111.11% + 12px); }
+  .skillset .progress-bar[aria-valuenow="85"]::after { left: calc(117.65% + 12px); }
+  .skillset .progress-bar[aria-valuenow="80"]::after { left: calc(125% + 12px); }
+  .skillset .progress-bar[aria-valuenow="75"]::after { left: calc(133.33% + 12px); }
+  .skillset .progress-bar[aria-valuenow="70"]::after { left: calc(142.86% + 12px); }
 }
 
 /* Striped pattern: replaced with clean gradient — keep class harmless */
@@ -1950,27 +1961,6 @@ html[data-theme="dark"] .skillset .item.loading .progress-bar {
 
   .skillset .item.loading .progress-bar {
     animation: none;
-  }
-}
-
-/* Container queries for modern layout */
-@supports (container-type: inline-size) {
-  .skillset {
-    container-type: inline-size;
-  }
-
-  @container (min-width: 400px) {
-    .skillset .level-title {
-      display: inline-block;
-      width: 30%;
-      float: left;
-    }
-
-    .skillset .progress {
-      display: inline-block;
-      width: 68%;
-      float: right;
-    }
   }
 }
 
