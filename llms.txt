@@ -31,8 +31,8 @@ This site is a single-page résumé / CV. Everything below is on one page at htt
 
 ## Skills
 
-- Backend: Core Java (expert), J2EE, Spring Framework.
-- Frameworks & front-end: JSF MVC, JavaScript & jQuery, Thymeleaf, HTML, CSS.
+- Backend: Core Java (expert), J2EE, Spring Framework, Python.
+- Frameworks & front-end: React, JSF MVC, Thymeleaf, HTML, CSS.
 - AI-assisted development: GitHub Copilot, ChatGPT & Claude, prompt engineering.
 - Domains: Master Data Management (MDM), Finance, Energy, Telecom.
 
