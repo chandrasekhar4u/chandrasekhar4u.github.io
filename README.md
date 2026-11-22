@@ -246,7 +246,7 @@ These thresholds are now enforced in CI using Lighthouse CI assertions.
 
 ### Best Practices
 - **External Links**: `rel="noopener noreferrer"` on all external links
-- **Content Security**: No inline scripts or styles
+- **Content Security Policy**: hash-based strict CSP (`'strict-dynamic'`, no `'unsafe-eval'`, no inline styles) in a `<meta>` tag; `tests/csp.spec.js` checks the hashes and fails on any violation. If you edit an inline `<script>` in `index.html`, update its `sha256-` hash in the CSP (the failing test prints the new value). Header-only protections (`frame-ancestors`, HSTS) are set in Cloudflare: see `docs/cloudflare-security-headers.md`.
 - **HTTPS**: Enforced via GitHub Pages
 - **No Sensitive Data**: No credentials or personal data in code
 
