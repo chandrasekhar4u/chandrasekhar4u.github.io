@@ -20,7 +20,11 @@ Tag Manager CSP guide (updated 2026-11-10):
   that understand hashes or `'strict-dynamic'` ignore them.
 - Styles, fonts, manifest, service worker: same origin only. No inline styles.
 - Images and beacons: same origin plus the Google Tag Manager / Google
-  Analytics 4 endpoints from Google's guide.
+  Analytics 4 endpoints from Google's guide, and `*.clarity.ms` for the
+  Microsoft Clarity tag that the GTM container (GTM-N7SV3CF) loads. If a tag is
+  added to the container that sends data to another host, add that host to
+  `img-src` / `connect-src` here and in `index.html`; the CI test
+  `tests/csp.spec.js` loads the real container and fails on any violation.
 - `object-src 'none'`, `base-uri 'none'`, `form-action 'none'`.
 
 `tests/csp.spec.js` fails if an inline script changes without its hash being
@@ -46,8 +50,8 @@ sites framing the page), `report-to` / `report-uri`, `sandbox`, and the
 default-src 'self';
 script-src 'sha256-IL7ZFoYSQj1gDWQ9FaUnZD88IhTrPCnIfN4C3G/H3Zg=' 'sha256-dhT/tAtX6Pcb5ZfSwtz8RRqmPtBPMKS2v4nLHMd3Yo4=' 'sha256-1OemphecNqRA+y9f4R6750xH/Pi1JKuEbncorSpIe6k=' 'strict-dynamic' 'unsafe-inline' https:;
 style-src 'self';
-img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.g.doubleclick.net;
-connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.g.doubleclick.net;
+img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.g.doubleclick.net https://*.clarity.ms;
+connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://*.g.doubleclick.net https://*.clarity.ms;
 font-src 'self';
 manifest-src 'self';
 worker-src 'self';
